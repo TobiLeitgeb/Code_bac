@@ -40,13 +40,16 @@ def main():
     q_1 = kernel_rbf(x_star,x_u,t_star,t_u,thetha[0], thetha[1], thetha[2]) 
     q_2 = kernel_rbf(x_star,x_f,t_star,t_f, thetha[0], thetha[1], thetha[2]) * dk_uf(x_star,x_f,t_star,t_f, thetha[0], thetha[1], thetha[3])
     q = np.hstack((q_1,q_2))
-    print(q.shape)
     
     alpha = np.linalg.solve(L.T, np.linalg.solve(L, targets))
-    print(alpha.shape)
     f_star = q@alpha
-    print(f_star.shape)
     f_star = f_star.reshape(100,100)
+    alpha_var = np.linalg.solve(L.T, np.linalg.solve(L, q.T))
+    var = kernel_rbf(x_star,x_star,t_star,t_star, thetha[0], thetha[1], thetha[2]) - q@alpha_var
+    var = np.diag(var)
+    
+    var = var.reshape(100,100)
+    #std = np.sqrt(var)
     fig, ax = plt.subplots(1,2,subplot_kw={"projection": "3d"})
     ax[0].plot_surface(x_star.reshape(100,100), t_star.reshape(100,100), f_star, cmap='viridis', edgecolor='none', alpha=0.5)
     ax[1].plot_surface(x_star.reshape(100,100), t_star.reshape(100,100), np.exp(-t_star.reshape(100,100))*np.sin(2*np.pi*x_star.reshape(100,100)), cmap="viridis", edgecolor='none', alpha=0.5)
@@ -60,11 +63,20 @@ def main():
     ax[1].set_ylabel('t')
     plt.show()
    
-    #f_star = 
+    fig, ax = plt.subplots()
+    cont = ax.contourf(x_star.reshape(100,100), t_star.reshape(100,100), var, cmap='viridis')
+    ax.scatter(x_u, t_u, c='r', marker='o')
+    ax.set_title('Predictive variance')
+    ax.set_xlabel('x')
+    ax.set_ylabel('t')
+    fig.colorbar(cont)
+    
 
-    
-    
-    
+    analytical_solution = np.exp(-t_star)*np.sin(2*np.pi*x_star)
+    difference_analytical_predicted_solution = np.abs(analytical_solution.reshape(100,100) - f_star)
+    fig, ax = plt.subplots()
+    cont = ax.contourf(x_star.reshape(100,100), t_star.reshape(100,100), difference_analytical_predicted_solution, cmap='viridis')
+    plt.colorbar(cont)
     
 
    
@@ -92,21 +104,20 @@ def dk_uf(X, X_bar, t, t_bar, gamma_x, gamma_t, alpha):
         # Compute dk_uf for this pair of points
             dk_uf[i, j] = -alpha * (gamma_x**4 * diff_X**2 - 2*gamma_x) + 2*gamma_t * diff_t
 
-    return  dk_uf
+    return  dk_uf 
 def dk_fu(X, X_bar, t, t_bar, gamma_x, gamma_t, alpha):
     n, m = X.shape[0], X_bar.shape[0]
     dk_uf = np.zeros((n, m))
 
-# Loop over each pair of points
     for i in range(n):
         for j in range(m):
-            diff_X = X[i] - X_bar[j]  # Squared distance between points
-            diff_t = t[i] - t_bar[j]  # Difference in time
+            diff_X = X[i] - X_bar[j]  
+            diff_t = (t[i] - t_bar[j])
         
         # Compute dk_uf for this pair of points
             dk_uf[i, j] = -alpha * (gamma_x**4 * diff_X**2 - 2*gamma_x) - 2*gamma_t * diff_t
 
-    return  dk_uf
+    return  dk_uf 
 
    
 def dk_ff(X, X_bar, t, t_bar, gamma_x, gamma_t, alpha):
@@ -115,6 +126,7 @@ def dk_ff(X, X_bar, t, t_bar, gamma_x, gamma_t, alpha):
     dk_ff = np.zeros((n, m))
     for i in range(n):
         for j in range(m):
+            
             diff_X = X[i] - X_bar[j]
             diff_t = t[i] - t_bar[j]
             #first part d/dt d/dt' 
@@ -123,7 +135,7 @@ def dk_ff(X, X_bar, t, t_bar, gamma_x, gamma_t, alpha):
             second_part = 4*gamma_x**2*(4*gamma_x*diff_X**2*(gamma_x*diff_X**2-3)+3)
             dk_ff[i, j] = first_part + alpha**2 * second_part
 
-    return  dk_ff   
+    return  dk_ff 
 
 def ensure_psd(K):
     jitter = 1e-6  # Small constant
@@ -133,8 +145,8 @@ def ensure_psd(K):
         i += 1
         K += np.eye(K.shape[0]) * jitter
         jitter *= 10
-    #if i > 4:
-        #print(f"Attention! Added {i} times jitter to K matrix")
+    if i > 4:
+        print(f"Attention! Added {i} times jitter to K matrix")
     return K
     
 def create_K_matrix(X_u, X_f, t_u, t_f,sigma_u, sigma_f, gamma_x, gamma_t,sigma_rbf, alpha):
@@ -191,7 +203,9 @@ def rbf_kernel_second_derivative(X1, X2, gamma):
     return d2_kernel_fu
 
 
+def difference_analytical_predicted_solution():
 
+    pass
 
 
 
@@ -216,7 +230,7 @@ def get_data_set(n_training_points,noise):
 
     
     # create the training data u
-    rng_u = np.random.default_rng(seed=42)
+    rng_u = np.random.default_rng(seed=123)
     t_u = rng_u.uniform(0,1,n_training_points).reshape(-1,1)
     x_u = rng_u.uniform(0,1,n_training_points).reshape(-1,1)
     #t_u = np.sort(t_u).reshape(-1,1)
