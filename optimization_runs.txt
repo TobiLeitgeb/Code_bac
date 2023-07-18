@@ -1,0 +1,100 @@
+      fun: 8.129083633422852
+ hess_inv: <4x4 LbfgsInvHessProduct with dtype=float64>
+      jac: array([ 0.,  0., -0.,  0.])
+  message: 'CONVERGENCE: NORM_OF_PROJECTED_GRADIENT_<=_PGTOL'
+     nfev: 5
+      nit: 0
+     njev: 1
+   status: 0
+  success: True
+        x: array([0.29780465, 0.85587777, 1.        , 0.98160491])
+      fun: 9.940051078796387
+ hess_inv: <4x4 LbfgsInvHessProduct with dtype=float64>
+      jac: array([0., 0., 0., 0.])
+  message: 'CONVERGENCE: NORM_OF_PROJECTED_GRADIENT_<=_PGTOL'
+     nfev: 5
+      nit: 0
+     njev: 1
+   status: 0
+  success: True
+        x: array([0.26142338, 0.87829645, 1.24299109, 0.98190128])
+      fun: 9.607755661010742
+ hess_inv: <4x4 LbfgsInvHessProduct with dtype=float64>
+      jac: array([0., 0., 0., 0.])
+  message: 'CONVERGENCE: NORM_OF_PROJECTED_GRADIENT_<=_PGTOL'
+     nfev: 5
+      nit: 0
+     njev: 1
+   status: 0
+  success: True
+        x: array([0.28098577, 0.6618564 , 0.79714704, 0.99601505])
+      fun: 8.598841667175293
+ hess_inv: <4x4 LbfgsInvHessProduct with dtype=float64>
+      jac: array([0., 0., 0., 0.])
+  message: 'CONVERGENCE: NORM_OF_PROJECTED_GRADIENT_<=_PGTOL'
+     nfev: 55
+      nit: 1
+     njev: 11
+   status: 0
+  success: True
+        x: array([0.2982372 , 0.71097243, 0.93922663, 0.98236782])
+      fun: 17.039321899414062
+ hess_inv: <4x4 LbfgsInvHessProduct with dtype=float64>
+      jac: array([0., 0., 0., 0.])
+  message: 'CONVERGENCE: NORM_OF_PROJECTED_GRADIENT_<=_PGTOL'
+     nfev: 10
+      nit: 1
+     njev: 2
+   status: 0
+  success: True
+        x: array([0.31520677, 0.27369653, 0.73087966, 1.07984533])
+      fun: 19.308517456054688
+ hess_inv: <4x4 LbfgsInvHessProduct with dtype=float64>
+      jac: array([     0.        ,      0.        ,      0.        , 409317.01454484])
+  message: 'ABNORMAL_TERMINATION_IN_LNSRCH'
+     nfev: 255
+      nit: 1
+     njev: 51
+   status: 2
+  success: False
+        x: array([0.33670318, 0.2982622 , 0.57711595, 0.97837248])
+      fun: 16.619564056396484
+ hess_inv: <4x4 LbfgsInvHessProduct with dtype=float64>
+      jac: array([0., 0., 0., 0.])
+  message: 'CONVERGENCE: NORM_OF_PROJECTED_GRADIENT_<=_PGTOL'
+     nfev: 50
+      nit: 1
+     njev: 10
+   status: 0
+  success: True
+        x: array([0.27565315, 0.95450355, 0.76097572, 0.88865019])
+      fun: 13.834716796875
+ hess_inv: <4x4 LbfgsInvHessProduct with dtype=float64>
+      jac: array([0., 0., 0., 0.])
+  message: 'CONVERGENCE: NORM_OF_PROJECTED_GRADIENT_<=_PGTOL'
+     nfev: 5
+      nit: 0
+     njev: 1
+   status: 0
+  success: True
+        x: array([0.30427241, 0.33621769, 0.84368753, 0.98285032])
+      fun: 9.106449127197266
+ hess_inv: <4x4 LbfgsInvHessProduct with dtype=float64>
+      jac: array([0., 0., 0., 0.])
+  message: 'CONVERGENCE: NORM_OF_PROJECTED_GRADIENT_<=_PGTOL'
+     nfev: 10
+      nit: 1
+     njev: 2
+   status: 0
+  success: True
+        x: array([0.27055877, 0.87023761, 1.11955798, 0.9987662 ])
+      fun: 10.837591171264648
+ hess_inv: <4x4 LbfgsInvHessProduct with dtype=float64>
+      jac: array([0., 0., 0., 0.])
+  message: 'CONVERGENCE: NORM_OF_PROJECTED_GRADIENT_<=_PGTOL'
+     nfev: 10
+      nit: 1
+     njev: 2
+   status: 0
+  success: True
+        x: array([0.27388743, 0.64672811, 1.11214387, 1.0534682 ])

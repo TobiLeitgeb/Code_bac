@@ -10,13 +10,13 @@ def main():
     L = 10.0  # Length of the domain
     N = 100  # Number of grid points
     n = 5     # Mode parameter
-
+    A = 0.5
 # Discretization
     x = np.linspace(0, L, N)
 
     # Compute the wave number
     k = n * np.pi / L
-
+    print(k, "k")
 # Compute the analytical solution
     def analytical_solution(x, k):
         return np.sin(k * x)
@@ -29,10 +29,10 @@ def main():
     plt.grid(True)
     plt.show()
 
-    x_train = np.arange(0,L,7).reshape(-1,1)
+    x_train = np.arange(0,L,0.5).reshape(-1,1)
     x_train = np.sort(x_train, axis=0)
 
-    noise = 0.0001
+    noise = 0.1
 
     u_train = analytical_solution(x_train, k) + noise*np.random.randn(len(x_train)).reshape(-1,1)
     plt.scatter(x_train, u_train)
@@ -64,23 +64,42 @@ def main():
 ######################functions######################
 def helmholtz_equation_kernel(x, y, gamma,nu,sigma_f_sq=1.0):
     kernel_value = rbf_kernel_sklearn(x, y, gamma)
-    euc_dist = euclidean_distances(x, y)**2
-    first_part = 16*gamma**4  * euc_dist**2
-    second_part = -48*gamma**3  * euc_dist + 12*gamma**2 * kernel_value
-    third_part = 12*gamma**2 
-    return sigma_f_sq*(first_part + second_part + third_part + nu**2) * kernel_value
+    
+    n, m = x.shape[0], y.shape[0]
+    dk_ff = np.zeros((n, m))
+    for i in range(n):
+        for j in range(m):
+            diff_t = x[i] - y[j]
+            double_dev = 16*gamma**4*diff_t**4 - 48*gamma**2*diff_t**2 + 12*gamma**2
+            single_dev = 2*nu**2*(4*gamma**2 * diff_t**2 - 2*gamma)
+            no_dev = -nu**4
+            dk_ff_t = double_dev + single_dev + no_dev
+            
+            dk_ff[i, j] = dk_ff_t
+    return  dk_ff*kernel_value*sigma_f_sq
+
 
 
 def test_helmholtz(x,x_prime,alpha,sigma_f_sq=1.0):
     return sigma_f_sq*np.cos(alpha*(x - x_prime))
 
-
+def ensure_psd(K):
+    jitter = 1e-6  # Small constant
+    i = 0
+    while np.any(np.linalg.eigvals(K) <= 0):
+        
+        i += 1
+        K += np.eye(K.shape[0]) * jitter
+        jitter *= 10
+    if i > 2:
+        print(f"Attention! Added {i} times jitter to K matrix")
+    return K
 
 def posterior_distribution(X, targets,x_test, k,gamma = 1,nu = 1, sigma_f=1, sigma_n = 1):
     K = k(X, X, gamma,nu, sigma_f_sq = sigma_f) + sigma_n * np.eye(len(X))
     K_s = k(X, x_test,gamma,nu, sigma_f_sq = sigma_f)
-    K_ss = k(x_test, x_test,gamma,nu, sigma_f_sq = sigma_f)
-
+    K_ss = k(x_test, x_test,gamma,nu, sigma_f_sq = sigma_f) 
+    ensure_psd(K)
     L = np.linalg.cholesky(K)
     alpha = np.linalg.solve(L.T, np.linalg.solve(L, targets))
 
@@ -107,6 +126,7 @@ def posterior_distribution_test(X, targets,x_test, k,gamma = 1, sigma_f=1, sigma
 def marg_log_likelihood(X, targets, k, sigma_n_sq,theta):
 
     K = k(X,X, gamma=theta[0], nu=theta[1], sigma_f_sq = theta[2]) + sigma_n_sq * np.eye(len(X))
+    ensure_psd(K)
     L = np.linalg.cholesky(K)
     alpha = np.linalg.solve(L.T, np.linalg.solve(L, targets))
     
