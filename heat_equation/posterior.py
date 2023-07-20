@@ -1,4 +1,6 @@
 from gram_matrix import k_uu, k_uf, k_ff,k_fu
+import os
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "1"
 from jax import jit, grad, vmap
 import jax.numpy as jnp
 

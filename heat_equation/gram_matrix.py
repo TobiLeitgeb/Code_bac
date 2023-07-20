@@ -1,5 +1,6 @@
 # This file contains the functions to compute the gram matrix of the kernel.
-
+import os
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "1"
 
 from jax import numpy as jnp
 from jax import jit, grad, vmap
@@ -113,7 +114,7 @@ def gram_Matrix(X, Y, T, S, params, noise = [0,0]):
     """
     k_uu_matrix = k_uu(X, X, T, T, params) + noise[0] * jnp.eye(len(X))
     k_uf_matrix = k_uf(X, Y, T, S, params)
-    k_fu_matrix = k_uf_matrix.T #k_fu(Y, X, S, T, params) 
+    k_fu_matrix = k_fu(Y, X, S, T, params) 
     k_ff_matrix = k_ff(Y, Y, S, S, params) + noise[1] * jnp.eye(len(Y))
     #combine all the matrices to the full gram matrix
     K = jnp.block([[k_uu_matrix, k_uf_matrix], [k_fu_matrix, k_ff_matrix]])
