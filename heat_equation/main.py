@@ -38,7 +38,7 @@ def main():
                            }
     
     #now we can optimize the hyperparameters
-    n_restarts = 30
+    n_restarts = 100
     n_threads = 10
     
     #BFGS_result = optimization_restarts_parallel_LBFGS(gram_Matrix,n_restarts, n_threads, dictionary_BFGS_CG_TNC, X=x_u, Y=x_f, T=t_u, S=t_f, targets=targets_train, noise=noise)
@@ -80,15 +80,6 @@ def main():
     plot_prediction(x_u, t_u, x_f, t_f, u_train, f_train, x_star, t_star, mean_u, mean_f, title='Predictive mean and variance', save_path='test.png')
     plot_variance(x_u, t_u, x_f, t_f, u_train, f_train, x_star, t_star, var_u, var_f, title='Predictive mean and variance', save_path='test_variance.png')
     plot_difference_analytical(x_u, t_u, x_f, t_f, u_train, f_train, x_star, t_star, mean_u, mean_f, title='Difference between the analytical solution and the predicted mean', save_path='test_difference.png')
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     

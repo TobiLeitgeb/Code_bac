@@ -34,6 +34,7 @@ def k_uu(X, Y, T, S, params):
 @jit
 def k_ff(X, Y, T, S, params):
     """computes k_ff part of the block matrix K. It corresponds to the part with double the operator L: k_ff = L k_uu L'^T
+    #k_ff = d^2/dtds K_uu + alpha^2 d^2/dx^2 d^2/dy^2 K_uu
        params = [l_x, sigma_f_sq, l_t, alpha]
     """
     alpha = params[-1]
@@ -60,7 +61,9 @@ def k_ff(X, Y, T, S, params):
 
 @jit
 def k_uf(X, Y, T, S, params):
-    """computes the cross kernel k_uf. It corresponds to the part with single operator L: k_uf = k_uu L'^T"""
+    """computes the cross kernel k_uf. It corresponds to the part with single operator L: k_uf = k_uu L'^T
+    K_uf = d/ds K_uu - alpha d^2/dy^2 K_uu
+    """
     
     alpha = params[-1]
     l_t = params[2]
@@ -84,7 +87,8 @@ def k_uf(X, Y, T, S, params):
 
 @jit
 def k_fu(X, Y, T, S, params):
-    """computes the cross kernel k_fu. It corresponds to the part with single operator L: k_fu = L k_uu """
+    """computes the cross kernel k_fu. It corresponds to the part with single operator L: k_fu = L k_uu 
+    K_fu = d/dt K_uu - alpha d^2/dx^2 K_uu"""
     alpha = params[-1]
     l_t = params[2]
     params = params[:-1]

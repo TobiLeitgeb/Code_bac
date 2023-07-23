@@ -1,6 +1,6 @@
 import numpy as np
 from scipy.stats import qmc
-from create_data import f,u
+from create_data import u,f
 from posterior import posterior_distribution_u, posterior_distribution_f
 from sklearn.metrics import mean_squared_error
 

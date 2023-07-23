@@ -1,0 +1,51 @@
+\documentclass{article}
+
+% Language setting
+% Replace `english' with e.g. `spanish' to change the document language
+\usepackage[english]{babel}
+
+% Set page size and margins
+% Replace `letterpaper' with `a4paper' for UK/EU standard size
+\usepackage[letterpaper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+% Useful packages
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{caption}
+\usepackage{tabularx}
+\usepackage{bm}
+\usepackage{float}
+\title{Your Paper}
+\author{You}
+
+\begin{document}
+\maketitle
+
+\newpage
+\begin{abstract}
+
+\end{abstract}
+
+\section{Introduction}\cite{bishop}
+
+\section{Problem Formulation}
+    test\cite{bishop}
+\begin{equation}
+    \begin{aligned}
+        \mathbf{u} K_3 \mathbf{u}^\intercal &=  \mathbf{u}^\intercal(A + B)\mathbf{u}\\
+        &= \mathbf{u}^\intercal A\mathbf{u} + \mathbf{u}^\intercal B\mathbf{u} \ge 0
+    \end{aligned}
+\end{equation}
+    
+
+
+
+
+\bibliographystyle{plain}
+\bibliography{library}
+
+
+\end{document}
