@@ -41,7 +41,7 @@ def main():
                            }
     
     #now we can optimize the hyperparameters
-    n_restarts = 20
+    n_restarts = 200
     n_threads = -1
     
     #BFGS_result = optimization_restarts_parallel_LBFGS(gram_Matrix,n_restarts, n_threads, dictionary_BFGS_CG_TNC, X=x_u, Y=x_f, T=t_u, S=t_f, targets=targets_train, noise=noise)

@@ -74,7 +74,7 @@ def optimization_restarts_parallel_CG(Kernel: callable, n_restarts: int, n_threa
         theta_initial = opt_dictionary['theta_initial']()
         
         res = minimize(log_marginal_likelihood_to_optimize(Kernel, X, Y, T, S, targets,noise), x0=theta_initial,
-                       method='CG')# jac=jit(grad_log_marginal_likelihood(Kernel, X, Y, T, S, targets,noise)),bounds=opt_dictionary['bounds']
+                       method='CG')
         return res
 
     
