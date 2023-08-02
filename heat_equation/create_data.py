@@ -42,7 +42,7 @@ import pandas as pd
 
 
 
-def get_data_set(n_training_points, noise,filename):
+def get_data_set2(n_training_points, noise,filename):
     #load data from mathematica calculation
     try:
         df= pd.read_csv("heat_equation/"+filename)

@@ -5,4 +5,37 @@ Christopher~M. Bishop.
 \newblock {\em Pattern Recognition and Machine Learning}.
 \newblock 2006.
 
+\bibitem{Duvenaud}
+D.~Duvenaud.
+\newblock Automatic model construction with gaussian processes.
+\newblock 2014.
+
+\bibitem{garnett_2023_full}
+Roman Garnett.
+\newblock {\em Bayesian Optimization}.
+\newblock Cambridge University Press, 2023.
+
+\bibitem{görtler2019a}
+Jochen Görtler, Rebecca Kehlbeck, and Oliver Deussen.
+\newblock A visual exploration of gaussian processes.
+\newblock {\em Distill}, 2019.
+\newblock https://distill.pub/2019/visual-exploration-gaussian-processes.
+
+\bibitem{RAISSI}
+Maziar Raissi, Paris Perdikaris, and George~Em Karniadakis.
+\newblock Machine learning of linear differential equations using gaussian
+  processes.
+\newblock {\em Journal of Computational Physics}, 348:683--693, 2017.
+
+\bibitem{RasmussenCarlEdward}
+Carl~Edward Rasmussen.
+\newblock {\em Gaussian processes for machine learning}.
+\newblock Adaptive computation and machine learning. 2006.
+
+\bibitem{Särkkä}
+Simo Särkkä.
+\newblock Linear operators and stochastic partial differential equations in
+  gaussian process regression.
+\newblock pages 151--158, 06 2011.
+
 \end{thebibliography}

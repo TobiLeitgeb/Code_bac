@@ -29,17 +29,124 @@
 
 \end{abstract}
 
-\section{Introduction}\cite{bishop}
+\section{Introduction}
 
-\section{Problem Formulation}
-    test\cite{bishop}
+\section{Fundamentals}
+\subsection{Gaussian Process} %~\cite{pml1Book}\cite{RasmussenCarlEdward}
+As defined in~\cite{RasmussenCarlEdward} a Gaussian Process is a collection of random variables for which every finite set of variables have a joint multivariate Gaussian distribution. For a Regression model we define a function $f(\bm{x}): \mathcal{X}\rightarrow \mathbb{R}$ with the input set ${\bm{X}}$ = $\{\bm{x_n} \in \mathcal{X} \}_{n=1}^N$. We now let $f: \mathcal{X}\rightarrow \mathbb{R}$ be our Gaussian Process.
+To fully define the GP we need to specify a mean function $m(\bm{x})$ and a covariance function or kernel $k(\bm{x},\bm{x'})$ for $f(\bm{x})$:
+\begin{equation}
+\begin{aligned}
+    m(\bm{x}) &= \mathbb{E}[f(\bm{x})]\\
+    k(\bm{x},\bm{x'}) &= \mathbb{E}[(f(\bm{x})-m(\bm{x}))(f(\bm{x'})-m(\bm{x'}))]
+\end{aligned}
+\end{equation}
+In this work the mean function $m(\bm{x})$ of the GP is set to zero. This is quite common, mainly for notational reasons~\cite{RasmussenCarlEdward}.\\
+So what we are left with for  $m(\bm{x})$ and $ k(\bm{x},\bm{x'})$ is:
 \begin{equation}
     \begin{aligned}
-        \mathbf{u} K_3 \mathbf{u}^\intercal &=  \mathbf{u}^\intercal(A + B)\mathbf{u}\\
-        &= \mathbf{u}^\intercal A\mathbf{u} + \mathbf{u}^\intercal B\mathbf{u} \ge 0
+        m(\bm{x}) &= 0\\
+        k(\bm{x},\bm{x'}) &= \mathbb{E}[f(\bm{x})f(\bm{x'})]
+    \end{aligned}
+    \end{equation}
+We now write our Gaussian Process $f(\bm{x})$ as:
+\begin{equation}
+    f(\bm{x})\thicksim \mathcal{G} \mathcal{P}(0,k(\bm{x},\bm{x'})) 
+\end{equation}
+It is important to note that $ k(\bm{x},\bm{x'})$ has to be a positive definite in order to be a valid kernel function.
+Because of the definition of the GP we can now generate a joint Gaussian distribution for a finite set of points $\bm{X_*}$:
+\begin{equation}
+    \label{eq:f_star_random_vector}
+    p(\bm{f_*|\bm{X_*}}) = \mathcal{N}(\bm{f_*}|\bm{0},\bm{K_*})
+\end{equation}
+with ${[\bm{K}]}_{i,j} = k(\bm{x_{i*}},\bm{x_{j*}})$.
+
+\subsection{Regression}
+The goal of regression is given a training dataset $\mathcal{D} = \{(\bm{x_i},y_i)|i = 1,\ldots,N\}$ we want to make predictions for new test points $\bm{x_*}$ which are not in the training set. There are several methods which can be used to tackle this kind of problem. For example the basic linear regression using least squares and specific basis functions or a neural network that does regression. In this work we make use of the Gaussian process which is a non-parametric model. We will start with a Gaussian Process prior and then use the rules for Gaussian multivariate distributions to define a posterior predictive distribution, which we can then use to make predictions for new test points. 
+
+The general setup for regression is that we make observations/measurements $y$ of an underlying function $f(\bm{x})$ at points $\bm{x}$ which are corrupted by a zero mean Gaussian noise with variance $\sigma_n^2$:
+\begin{equation}
+    \bm{y} = \bm{f}(\bm{X}) + \mathcal{N}(0|\sigma_n^2 \bm{I})
+\end{equation}
+When we set the GP Prior onto the function $f$ we have to add the normally distributed noise. To get the prior for the observations $\bm{y}$ we simply need to change the covariance function to cov($\bm{y_p,y_q}$) = $k(\bm{x_p,x_q}) + \sigma_n^2\delta_{pq}$.\\
+As described before in equation~\ref{eq:f_star_random_vector} we can generate a Gaussian random vector for new test data $\bm{X_*}$. Both $\bm{y}$ and $\bm{f_*}$ are now multivariate Gaussians. We can therefore introduce the joint distribution of the observed data and the values of $f$ at the test points $\bm{X_*}$ as:
+\begin{equation}
+    \begin{aligned}
+        \begin{bmatrix}
+            \bm{y}\\
+            \bm{f_*}
+        \end{bmatrix}
+        \thicksim  \mathcal{N}\left(\bm{0},
+        \begin{bmatrix}
+            K(\bm{X},\bm{X}) + \sigma_n^2 \bm{I} & K(\bm{X},\bm{X_*})\\
+            K(\bm{X_*},\bm{X}) & K(\bm{X_*},\bm{X_*})
+        \end{bmatrix}
+        \right)
     \end{aligned}
 \end{equation}
-    
+From this joint Gaussian prior we can then calculate the predictive posterior distribution by applying the rules for conditioning Gaussians. A good description for this conditioning can be found in~\cite{bishop} (chapter 2.3.1). The predictive distribution is then given by:
+\begin{equation}
+    \begin{aligned}
+        \label{eq:general_kernel}
+        p(\bm{f_*}|\bm{X},\bm{y},\bm{X_*}) &= \mathcal{N}(\bm{f_*|\bm{\mu_*}},\bm{\Sigma_*})\\
+        \bm{\mu_*} &=  K(\bm{X_*},\bm{X}){[K(\bm{X},\bm{X}) + \sigma_n^2 \bm{I}]}^{-1} \bm{y}\\
+        \bm{\Sigma_*} &= K(\bm{X_*},\bm{X_*}) - K(\bm{X_*},\bm{X}){[K(\bm{X},\bm{X}) + \sigma_n^2 \bm{I}]}^{-1}K(\bm{X},\bm{X_*})
+    \end{aligned}
+\end{equation}
+We can see that with the training data
+\subsection{Kernels}
+The general covariance function used in this work is the squared exponential covariance function (SE) as defined in~\cite{RasmussenCarlEdward}:
+\begin{equation}
+    k(\bm{x_p}, \bm{x_q}) = \sigma_f^2  \exp({-0.5{(\bm{x_p}-\bm{x_q} )}^\intercal M (\bm{x_p}- \bm{x_q})})
+\end{equation}
+with the variance hyperparameter $\sigma_f^2$ and the matrix $M = {\mathrm{diag}(\bm{l})}^{-2}$ containing the vector with the characteristic length scales $l_i$. The hyperparameters are collected in the vector $\bm{\theta} = (\bm{l},\sigma_f^2)$. \\
+For the one dimensional case the SE covariance function simply becomes:
+\begin{equation}
+    k(x_p, x_q) = \sigma_f^2  \exp\left({-\frac{0.5}{l^2} {(x_p-x_q)}^2}\right)
+\end{equation}
+For a two-dimensional case with time being the second dimension, two independent length scale parameters are used for the separate space and time domains $\bm{l} = (l_x,l_t)$. For this case, we can re-write equation~\ref{eq:general_kernel} the covariance function with $\bm{x_p} = {(x_p, t_p)}^\intercal$ and  $\bm{x_q} = {(x_q, t_q)}^\intercal$ as the product of two single SE covariance functions:
+\begin{equation}
+    k(\bm{x_p}, \bm{x_q}) = \sigma_f^2  \exp\left({-\frac{0.5}{l_x^2} {(x_p-x_q)}^2}\right) \exp\left({-\frac{0.5}{l_t^2} {(t_p-t_q)}^2}\right)
+\end{equation}
+There are many kernels one can choose from. A good overview over some kernel functions can be found in~\cite{Duvenaud} as well as in~\cite{görtler2019a}. 
+\subsection{Marginal likelihood}
+\begin{equation}
+    \log p(\bm{y}|\bm{X},\bm{\theta}) = -\frac{1}{2}\bm{y}^\intercal K_y^{-1}\bm{y} - \frac{1}{2}\log\left\lvert K_y\right\rvert - \frac{n}{2}\log(2\pi)
+\end{equation}
+with $K_y$ = $K_f + \sigma_n^2 \bm{I}$.
+\section{Physics informed framework}
+Our problem setup is the same as proposed in~\cite{RAISSI}. We have some sort of linear differential equation or ODE of a physical model:
+\begin{equation}
+    \label{eq:Lu=f}
+    \mathcal{L}_{\bm{x}}^\phi u(\bm{x}) = f(\bm{x})
+\end{equation}
+with $\mathcal{L}_{\bm{x}}^\phi$ being the differential operator that resembles the differential equation and $\phi$ being a list containing the a-priori unknown parameters which also define the differential equation. \\
+\\
+We now start by assuming that $u(x)$ is a Gaussian Process of the form:
+\begin{equation}
+    u(\bm{x}) \thicksim \mathcal{G}\mathcal{P}(\bm{0},k_{uu}(\bm{x},\bm{x'};\bm{\theta}))
+\end{equation}
+with $k_{uu}(\bm{x},\bm{x'};\bm{\theta})$ being the kernel depending on its hyperparameters $\theta$ for the $\mathcal{G}\mathcal{P}$ (on) $u(\bm{x})$. With the known linear relation between $u$ and $f$ from equation~\ref{eq:Lu=f}, we can now say that $f(\bm{x})$ must also be $\mathcal{G}\mathcal{P}$~\cite{RasmussenCarlEdward} of form:
+\begin{equation}
+    f(\bm{x}) \thicksim \mathcal{G}\mathcal{P}(\bm{0},k_{ff}(\bm{x},\bm{x'};\bm{\theta}))
+\end{equation}
+with now $k_{ff}$ being the kernel defining the $\mathcal{G}\mathcal{P}$ (on) $f(\bm{x})$. As shown in~\cite{garnett_2023_full},~\cite{Särkkä} and as proposed in~\cite{RAISSI} 
+\subsection{Optimization/Finding of the hyperparameters}
+
+\section{Results}
+\subsection{Heat Equation}
+The one dimensional time dependent heat equation with a forcing term is: 
+\begin{equation}
+    \frac{\partial u(x,t)}{\partial t} - \alpha \frac{\partial^2 u(x,t)}{\partial x^2} = f(x,t)
+\end{equation}
+with $\alpha$ as the thermal diffusivity.
+
+
+\subsection{Wave Equation}
+\begin{equation}
+    \frac{1}{c^2} \frac{\partial^2 u(x,t)}{\partial t^2} - \frac{\partial^2 u(x,t)}{\partial x^2} = f(x,t)
+\end{equation}
+\subsection{Damped Oscillator}
 
 
 

@@ -25,9 +25,9 @@ def k_uu(X, Y, params):
 def k_ff_jax(X, Y, params):
     X, Y = X.flatten(), Y.flatten()
     #m = params[2]
-    m = 1
-    b = params[2]
-    k = params[3]
+    m = params[2]
+    b = params[3]
+    k = params[4]
     #dt^2 dt'^2
     dk_yy = grad(grad(rbf_kernel_single, argnums=1), argnums=1)
     dk_xxyy = grad(grad(dk_yy, argnums=0), argnums=(0))
@@ -47,9 +47,9 @@ def k_ff_jax(X, Y, params):
 @jit
 def k_uf_jax(X, Y, params):
     X, Y = X.flatten(), Y.flatten()
-    m = 1
-    b = params[2]
-    k = params[3]
+    m = params[2]
+    b = params[3]
+    k = params[4]
     #dt'^2
     dk_yy = grad(grad(rbf_kernel_single, argnums=1), argnums=1)
     k_yy = vmap(vmap(dk_yy, (None, 0, None)), (0, None, None))
@@ -63,9 +63,9 @@ def k_uf_jax(X, Y, params):
 @jit
 def k_fu_jax(X, Y, params):
     X, Y = X.flatten(), Y.flatten()
-    m = 1
-    b = params[2]
-    k = params[3]
+    m = params[2]
+    b = params[3]
+    k = params[4]
     #dt^2
     dk_xx = grad(grad(rbf_kernel_single, argnums=0), argnums=0)
     k_xx = vmap(vmap(dk_xx, (None, 0, None)), (0, None, None))
@@ -77,9 +77,9 @@ def k_fu_jax(X, Y, params):
     return m * k_xx(X, Y, params) + b * k_x(X, Y, params) + k * k_normal(X, Y, params)
 
 def k_uf(x, y, params):
-    m = 1
-    b = params[2]
-    k = params[3]
+    m = params[2]
+    b = params[3]
+    k = params[4]
     gamma = 0.5 / params[0]**2
     #dt'^2
     k_yy = 2*gamma*(2*gamma * (x-y)**2 - 1) * rbf_kernel_single(x, y, params)
@@ -92,9 +92,9 @@ k_uf = vmap(vmap(k_uf, (None, 0, None)), (0, None, None))
 k_uf = jit(k_uf)
 
 def k_fu(x,y,params):
-    m = 1
-    b = params[2]
-    k = params[3]
+    m = params[2]
+    b = params[3]
+    k = params[4]
     gamma = 0.5 / params[0]**2
     #dt^2
     k_xx = 2*gamma*(2*gamma * (x-y)**2 - 1) * rbf_kernel_single(x, y, params)
@@ -107,9 +107,9 @@ k_fu = vmap(vmap(k_fu, (None, 0, None)), (0, None, None))
 k_fu = jit(k_fu)
 
 def k_ff(x,y,params):
-    m = 1
-    b = params[2]
-    k = params[3]
+    m = params[2]
+    b = params[3]
+    k = params[4]
     gamma = 0.5 / params[0]**2
     #dt^2 dt'^2
     dif = (x-y)

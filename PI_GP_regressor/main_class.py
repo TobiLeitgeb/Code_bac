@@ -8,6 +8,7 @@ from joblib import Parallel, delayed
 from scipy.optimize import minimize
 import pandas as pd
 from scipy.stats import qmc
+import GPy
 
 class PhysicsInformedGP_regressor():
     """class for the GP"""
@@ -34,6 +35,8 @@ class PhysicsInformedGP_regressor():
         self.validation_set = None
         self.MSE = {"u":None,"f":None}
         self.filename = None
+        self.results_list = None
+        
     def __str__(self) -> str:
         string = "-----------------------------------------------\n"
         string += "GP with kernel: " + str(self.__class__._name_kernel) + "\n"
@@ -48,7 +51,7 @@ class PhysicsInformedGP_regressor():
         """sets the name of the kernel"""
         self._name_kernel = name
         pass
-    def set_training_data(self,filename:str, n_training_points,noise):
+    def set_training_data(self,filename:str, n_training_points,noise,seeds_training: list = [40,14]):
         """sets the training data and the raw data"""
         if self.timedependence:
             x_u, x_f, t_u, t_f, u_train, f_train,self.raw_data  = self.get_data_set_2d(filename, n_training_points,noise)
@@ -60,7 +63,7 @@ class PhysicsInformedGP_regressor():
             assert self.X.shape[1] == 2, "Please provide a valid training data set"
 
         else:
-            x_u, u_train, x_f, f_train,self.raw_data = self.get_data_set_1d(filename, n_training_points,noise)
+            x_u, u_train, x_f, f_train,self.raw_data = self.get_data_set_1d(filename, n_training_points,noise,seeds_training)
             self.X = x_u
             self.Y = x_f
             self.targets = np.concatenate([u_train, f_train])
@@ -91,7 +94,7 @@ class PhysicsInformedGP_regressor():
         """computes the log marginal likelihood of the GP"""
         K = self.gram_matrix(self.X, self.Y, params,self.noise)
     
-        L = jnp.linalg.cholesky(K + 1e-6 * jnp.zeros(K.shape)) #add some jitter for stability
+        L = jnp.linalg.cholesky(K + 1e-10 * jnp.zeros(K.shape)) #add some jitter for stability
     
         alpha = jnp.linalg.solve(L.T, jnp.linalg.solve(L, self.targets))
         mll = 1/2 * jnp.dot(self.targets.T,alpha) +0.5*jnp.sum(jnp.log(jnp.diagonal(L))) + len(self.X)/2 * jnp.log(2*jnp.pi)
@@ -140,8 +143,8 @@ class PhysicsInformedGP_regressor():
     
         results = Parallel(n_jobs=n_threads)(delayed(single_optimization_run)() for _ in tqdm(range(n_restarts)))
         #all positive parameters
-        results = [res for res in results if  np.all(res.x > 0) and res.success]
-        
+        results = [res for res in results if  np.all(res.x > 0) ]#and res.success
+        self.result_list = results
         best_result = min(results, key=lambda x: x.fun)
         print(best_result)
         
@@ -159,12 +162,13 @@ class PhysicsInformedGP_regressor():
             """performs a single optimization run with random initialization of the hyperparameters"""
             theta_initial = opt_dictionary['theta_initial']()
             res = minimize(self.log_marginal_likelihood_to_optimize(), x0=theta_initial,
-                        method='TNC', jac=jit(self.grad_log_marginal_likelihood()),bounds=opt_dictionary['bounds'])
+                        method='TNC', jac=jit(self.grad_log_marginal_likelihood()),bounds=opt_dictionary['bounds'],
+                        tol = opt_dictionary['gtol'])
             return res
         results = Parallel(n_jobs=n_threads)(delayed(single_optimization_run)() for _ in tqdm(range(n_restarts)))
         #all positive parameters
         results = [res for res in results if  np.all(res.x > 0) and res.success]
-        
+        self.results_list = results
         best_result = min(results, key=lambda x: x.fun)
         print(best_result)
         
@@ -276,6 +280,35 @@ class PhysicsInformedGP_regressor():
         self.MSE["u"] = np.mean((mean_validation_set_u.ravel() - u_values.ravel())**2).item()
         self.MSE["f"] = np.mean((mean_validation_set_f.ravel() - f_values.ravel())**2).item()
 
+
+    def use_GPy(self,X_star):
+        """uses the GPy library to compute the GP"""
+        if not self.timedependence:
+            kernel = GPy.kern.RBF(input_dim=1, variance=1., lengthscale=1.)
+            model_GPy = GPy.models.GPRegression(self.X, self.u_train, kernel)
+            model_GPy.Gaussian_noise.variance.fix(self.noise[0])
+            model_GPy.optimize_restarts(num_restarts = 20, verbose=False)
+
+            fig, ax = plt.subplots(1,2,figsize=(12, 6))
+            model_GPy.plot(ax  = ax[0])
+            ax[0].scatter(self.validation_set[0],self.validation_set[1], label = "validation set", color = "orange", marker = "x", s = 15)
+            ax[0].set_xlim(0,max(X_star))
+            ax[0].set_title("u(t) prediction")
+            ax[0].grid(alpha = 0.7)
+            ax[0].legend()
+
+            kernel2 = GPy.kern.RBF(input_dim=1, variance=1., lengthscale=1.)
+            model_GPy2 = GPy.models.GPRegression(self.Y, self.f_train, kernel2)
+            model_GPy2.Gaussian_noise.variance.fix(self.noise[1])
+            model_GPy2.optimize_restarts(num_restarts = 20, verbose=False)
+
+            model_GPy2.plot(ax = ax[1])
+            ax[1].scatter(self.validation_set[2],self.validation_set[3], label = "validation set", color = "orange", marker = "x", s = 15)
+            ax[1].set_xlim(0,max(X_star))
+            ax[1].set_title("f(t) prediction")
+            ax[1].grid(alpha = 0.7)
+            ax[1].legend()
+            pass
     
     def plot_prediction(self,X_star, title:str, save_path:str):
         """plots the prediction of the GP at the points X_star"""
@@ -400,10 +433,12 @@ class PhysicsInformedGP_regressor():
         plt.suptitle(title)
         if save_path != None:
             plt.savefig(save_path)
-    def grad_log_marginal_likelihood(self):
-        return jacfwd(self.log_marginal_likelihood_to_optimize())
+
     
-    def plot_raw_data(self):
+    def grad_log_marginal_likelihood(self):
+        return grad(self.log_marginal_likelihood_to_optimize())
+    
+    def plot_raw_data(self,Training_points=False):
         if self.timedependence:
             x_star, t_star = self.raw_data[0].reshape(-1,1), self.raw_data[1].reshape(-1,1)
             u_grid = self.raw_data[2]
@@ -414,13 +449,17 @@ class PhysicsInformedGP_regressor():
             ax[0].set_title('u(t,x)')
             ax[0].set_xlabel('x')
             ax[0].set_ylabel('t')
-            fig.colorbar(cont, ax=ax[0])
+           
 
             cont2 = ax[1].plot_surface(x_star.reshape(size), t_star.reshape(size), f_grid.reshape(size), cmap="viridis", alpha=0.8)
             ax[1].set_title('f(t,x)')
             ax[1].set_xlabel('x')
             ax[1].set_ylabel('t')
-            fig.colorbar(cont2, ax=ax[1])
+            
+            if Training_points:
+                ax[0].scatter(self.X[:,0], self.X[:,1], self.u_train, c='r', marker='o', label='Training points')
+                ax[1].scatter(self.Y[:,0], self.Y[:,1], self.f_train, c='b', marker='o', label='Training points')
+            plt.legend()
         else:
             x_star = self.raw_data[0]
             u_grid = self.raw_data[1]
@@ -437,6 +476,10 @@ class PhysicsInformedGP_regressor():
             ax[1].set_ylabel('$f(t)$')
             ax[1].set_title("f(t) raw data")
             ax[1].grid(alpha = 0.7)
+            if Training_points:
+                ax[0].scatter(self.X, self.u_train, c='r', marker='o', label='Training points')
+                ax[1].scatter(self.Y, self.f_train, c='b', marker='o', label='Training points')
+            plt.legend()
     def plot_validation_set(self):
         assert self.validation_set is not None, "Please set the validation set first"
         if self.timedependence:
@@ -474,7 +517,7 @@ class PhysicsInformedGP_regressor():
             ax[1].set_title("f(t) validation set")
             ax[1].grid(alpha = 0.7)
     @staticmethod
-    def get_data_set_1d(filename, n_training_points, noise:list ):
+    def get_data_set_1d(filename, n_training_points, noise:list,seeds = [50,41] ):
         try:
             df= pd.read_csv("PI_Kernels_class/"+filename)
         except:
@@ -487,7 +530,7 @@ class PhysicsInformedGP_regressor():
 
         d = 1 # number of dimensions in your Sobol sequence. You have a 2D grid, so d=2
         # training data for u(t,x)
-        engine = qmc.Sobol(d,seed=50)
+        engine = qmc.Sobol(d,seed=seeds[0],scramble=True)
         sample = engine.random(n_training_points)
         # sample is in [0,1]^d, so we need to scale it to the range of x and t
         indices = sample * np.array(len(t))
@@ -496,7 +539,7 @@ class PhysicsInformedGP_regressor():
         u_train_u = u[indices] + np.random.normal(0,noise[0],u[indices].shape)
 
         # training data for f(t)
-        engine = qmc.Sobol(d,seed=7)
+        engine = qmc.Sobol(d,seed=seeds[1])
         sample = engine.random(n_training_points)
         indices = sample * np.array(len(t))
         indices = np.floor(indices).astype(int)
@@ -572,7 +615,7 @@ class PhysicsInformedGP_regressor():
         u_train = u_grid[indices[:,1],indices[:,0]] + np.random.normal(0, noise[0], u_grid[indices[:,1],indices[:,0]].shape)
         
         #same thing for f(t,x)
-        engine = qmc.Sobol(d,seed=100)
+        engine = qmc.Sobol(d,seed=10)
         sample = engine.random(n_training_points)
         indices = sample * np.array([len(x_axis),len(t_axis)])
         indices = np.floor(indices).astype(int)
