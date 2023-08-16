@@ -1,0 +1,1 @@
+{"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QFor all cases, the training and validation points will be samples from the numerical solution using a sobol sequence[cite], as well as the addition of some noise.\\E$"}

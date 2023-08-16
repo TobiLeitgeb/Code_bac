@@ -30,28 +30,39 @@
 \end{abstract}
 
 \section{Introduction}
-Our situation is that we have obtained measurements, potentially noisy, of both the $u$ and $f$. However, we do not have knowledge of the ODE parameters $\phi$. This is a typical situation in for example lab work, where we have measurements and want to determine an underlying physical parameter or interpolate the data. This is often done with typical linear regression techniques. 
+Our situation is that we have obtained measurements, potentially noisy, of both
+the $u$ and $f$. However, we do not have knowledge of the ODE parameters
+$\phi$. This is a typical situation in for example lab work, where we have
+measurements and want to determine an underlying physical parameter or
+interpolate the data. This is often done with typical linear regression
+techniques.
 \section{Fundamentals}
 \subsection{Gaussian Process} %~\cite{pml1Book}\cite{RasmussenCarlEdward}
-As defined in~\cite{RasmussenCarlEdward} a Gaussian Process is a collection of random variables for which every finite set of variables have a joint multivariate Gaussian distribution. For a Regression model we define a function $f(\bm{x}): \mathcal{X}\rightarrow \mathbb{R}$ with the input set ${\bm{X}}$ = $\{\bm{x_n} \in \mathcal{X} \}_{n=1}^N$. We now let $f: \mathcal{X}\rightarrow \mathbb{R}$ be our Gaussian Process.
-To fully define the GP we need to specify a mean function $m(\bm{x})$ and a covariance function or kernel $k(\bm{x},\bm{x'})$ for $f(\bm{x})$:
+As defined in~\cite{RasmussenCarlEdward} a Gaussian Process is a collection of
+random variables for which every finite set of variables have a joint
+multivariate Gaussian distribution. For a Regression model we define a function
+$f(\bm{x}): \mathcal{X}\rightarrow \mathbb{R}$ with the input set ${\bm{X}}$ =
+$\{\bm{x_n} \in \mathcal{X} \}_{n=1}^N$. We now let $f: \mathcal{X}\rightarrow
+    \mathbb{R}$ be our Gaussian Process. To fully define the GP we need to specify
+a mean function $m(\bm{x})$ and a covariance function or kernel
+$k(\bm{x},\bm{x'})$ for $f(\bm{x})$:
 \begin{equation}
-\begin{aligned}
-    m(\bm{x}) &= \mathbb{E}[f(\bm{x})]\\
-    k(\bm{x},\bm{x'}) &= \mathbb{E}[(f(\bm{x})-m(\bm{x}))(f(\bm{x'})-m(\bm{x'}))]
-\end{aligned}
+    \begin{aligned}
+        m(\bm{x})         & = \mathbb{E}[f(\bm{x})]                                    \\
+        k(\bm{x},\bm{x'}) & = \mathbb{E}[(f(\bm{x})-m(\bm{x}))(f(\bm{x'})-m(\bm{x'}))]
+    \end{aligned}
 \end{equation}
 In this work the mean function $m(\bm{x})$ of the GP is set to zero. This is quite common, mainly for notational reasons~\cite{RasmussenCarlEdward}.\\
 So what we are left with for  $m(\bm{x})$ and $ k(\bm{x},\bm{x'})$ is:
 \begin{equation}
     \begin{aligned}
-        m(\bm{x}) &= 0\\
-        k(\bm{x},\bm{x'}) &= \mathbb{E}[f(\bm{x})f(\bm{x'})]
+        m(\bm{x})         & = 0                               \\
+        k(\bm{x},\bm{x'}) & = \mathbb{E}[f(\bm{x})f(\bm{x'})]
     \end{aligned}
-    \end{equation}
+\end{equation}
 We now write our Gaussian Process $f(\bm{x})$ as:
 \begin{equation}
-    f(\bm{x})\thicksim \mathcal{G} \mathcal{P}(0,k(\bm{x},\bm{x'})) 
+    f(\bm{x})\thicksim \mathcal{G} \mathcal{P}(0,k(\bm{x},\bm{x'}))
 \end{equation}
 It is important to note that $ k(\bm{x},\bm{x'})$ has to be a positive definite in order to be a valid kernel function.
 Because of the definition of the GP we can now generate a joint Gaussian distribution for a finite set of points $\bm{X_*}$:
@@ -62,9 +73,20 @@ Because of the definition of the GP we can now generate a joint Gaussian distrib
 with ${[\bm{K}]}_{i,j} = k(\bm{x_{i*}},\bm{x_{j*}})$.
 
 \subsection{Regression}\label{sec:Regression}
-The goal of regression is given a training dataset $\mathcal{D} = \{(\bm{x_i},y_i)|i = 1,\ldots,N\}$ we want to make predictions for new test points $\bm{x_*}$ which are not in the training set. There are several methods which can be used to tackle this kind of problem. For example the basic linear regression using least squares and specific basis functions or a neural network that does regression. In this work we make use of the Gaussian process which is a non-parametric model. We will start with a Gaussian Process prior and then use the rules for Gaussian multivariate distributions to define a posterior predictive distribution, which we can then use to make predictions for new test points. 
+The goal of regression is given a training dataset $\mathcal{D} =
+    \{(\bm{x_i},y_i)|i = 1,\ldots,N\}$ we want to make predictions for new test
+points $\bm{x_*}$ which are not in the training set. There are several methods
+which can be used to tackle this kind of problem. For example the basic linear
+regression using least squares and specific basis functions or a neural network
+that does regression. In this work we make use of the Gaussian process which is
+a non-parametric model. We will start with a Gaussian Process prior and then
+use the rules for Gaussian multivariate distributions to define a posterior
+predictive distribution, which we can then use to make predictions for new test
+points.
 
-The general setup for regression is that we make observations/measurements $y$ of an underlying function $f(\bm{x})$ at points $\bm{x}$ which are corrupted by a zero mean Gaussian noise with variance $\sigma_n^2$:
+The general setup for regression is that we make observations/measurements $y$
+of an underlying function $f(\bm{x})$ at points $\bm{x}$ which are corrupted by
+a zero mean Gaussian noise with variance $\sigma_n^2$:
 \begin{equation}
     \bm{y} = \bm{f}(\bm{X}) + \mathcal{N}(0|\sigma_n^2 \bm{I})
 \end{equation}
@@ -74,13 +96,13 @@ As described before in equation~\ref{eq:f_star_random_vector} we can generate a 
     \label{eq:joint_f,X_*}
     \begin{aligned}
         \begin{bmatrix}
-            \bm{y}\\
+            \bm{y} \\
             \bm{f_*}
         \end{bmatrix}
         \thicksim  \mathcal{N}\left(\bm{0},
         \begin{bmatrix}
-            K(\bm{X},\bm{X}) + \sigma_n^2 \bm{I} & K(\bm{X},\bm{X_*})\\
-            K(\bm{X_*},\bm{X}) & K(\bm{X_*},\bm{X_*})
+            K(\bm{X},\bm{X}) + \sigma_n^2 \bm{I} & K(\bm{X},\bm{X_*})   \\
+            K(\bm{X_*},\bm{X})                   & K(\bm{X_*},\bm{X_*})
         \end{bmatrix}
         \right)
     \end{aligned}
@@ -89,17 +111,22 @@ From this joint Gaussian prior we can then calculate the predictive posterior di
 \begin{equation}
     \begin{aligned}
         \label{eq:general_kernel}
-        p(\bm{f_*}|\bm{X},\bm{y},\bm{X_*}) &= \mathcal{N}(\bm{f_*|\bm{\mu_*}},\bm{\Sigma_*})\\
-        \bm{\mu_*} &=  K(\bm{X_*},\bm{X}){[K(\bm{X},\bm{X}) + \sigma_n^2 \bm{I}]}^{-1} \bm{y}\\
-        \bm{\Sigma_*} &= K(\bm{X_*},\bm{X_*}) - K(\bm{X_*},\bm{X}){[K(\bm{X},\bm{X}) + \sigma_n^2 \bm{I}]}^{-1}K(\bm{X},\bm{X_*})
+        p(\bm{f_*}|\bm{X},\bm{y},\bm{X_*}) & = \mathcal{N}(\bm{f_*|\bm{\mu_*}},\bm{\Sigma_*})                                                           \\
+        \bm{\mu_*}                         & =  K(\bm{X_*},\bm{X}){[K(\bm{X},\bm{X}) + \sigma_n^2 \bm{I}]}^{-1} \bm{y}                                  \\
+        \bm{\Sigma_*}                      & = K(\bm{X_*},\bm{X_*}) - K(\bm{X_*},\bm{X}){[K(\bm{X},\bm{X}) + \sigma_n^2 \bm{I}]}^{-1}K(\bm{X},\bm{X_*})
     \end{aligned}
 \end{equation}
 We now have obtained the predictive mean $\bm{\mu_*}$ and the predictive covariance for the new test inputs $\bm{X_*}$.
 
 \subsection{Kernels}
-In~\cite{RasmussenCarlEdward} a kernel is defined as a function $k(\bm{x},\bm{x'})$, which maps two input pairs $\bm{x} \in \mathcal{X}$ and $\bm{x'} \in \mathcal{X'}$ into $\mathbb{R}$.
-To be a valid covariance function the kernel needs to satisfy two main conditions. First it needs to be symmetric so that $k(\bm{x,x'}) = k(\bm{x,x'})$ and second it needs to be positive semidefinite (PSD)
-The general covariance function used in this work is the squared exponential covariance function (SE) as defined in~\cite{RasmussenCarlEdward}:
+In~\cite{RasmussenCarlEdward} a kernel is defined as a function
+$k(\bm{x},\bm{x'})$, which maps two input pairs $\bm{x} \in \mathcal{X}$ and
+$\bm{x'} \in \mathcal{X'}$ into $\mathbb{R}$. To be a valid covariance function
+the kernel needs to satisfy two main conditions. First it needs to be symmetric
+so that $k(\bm{x,x'}) = k(\bm{x,x'})$ and second it needs to be positive
+semidefinite (PSD) The general covariance function used in this work is the
+squared exponential covariance function (SE) as defined
+in~\cite{RasmussenCarlEdward}:
 \begin{equation}
     k(\bm{x_p}, \bm{x_q}) = \sigma_f^2  \exp({-0.5{(\bm{x_p}-\bm{x_q} )}^\intercal M (\bm{x_p}- \bm{x_q})})
 \end{equation}
@@ -115,17 +142,21 @@ For a two-dimensional case with time being the second dimension, two independent
 There are many kernels one can choose from. A good overview over some kernel functions, as well as how they can be modified, can be found in~\cite{Duvenaud} as well as in~\cite{görtler2019a}. Later we will modify the SE kernels with linear operators, more specifically with differential operators.
 \subsection{Marginal likelihood}
 
-For the optimization of the hyperparameters $\theta$ and $\phi$ the negative marginal log likelihood ($nmll$)~\cite{RasmussenCarlEdward} is minimized. The $nmll$ 
+For the optimization of the hyperparameters $\theta$ and $\phi$ the negative
+marginal log likelihood ($nmll$)~\cite{RasmussenCarlEdward} is minimized. The
+$nmll$
 \begin{equation}
     \log p(\bm{y}|\bm{X},\bm{\theta}) = -\frac{1}{2}\bm{y}^\intercal \bm{K_y}^{-1}\bm{y} - \frac{1}{2}\log\left\lvert \bm{K_y}\right\rvert - \frac{n}{2}\log(2\pi)
 \end{equation}
-with $K_y$ = $K_f + \sigma_n^2 \bm{I}$. As described in~\cite{RasmussenCarlEdward}, the $mll$ consists of three parts, which can each be understood separately. The first term $\frac{1}{2}\bm{y}^\intercal \bm{K_y}^{-1}\bm{y}$ is in charge of the data fit, the second term $\log\left\lvert K_y\right\rvert$ is the complexity penalty and the last term is a normalization term. 
+with $K_y$ = $K_f + \sigma_n^2 \bm{I}$. As described in~\cite{RasmussenCarlEdward}, the $mll$ consists of three parts, which can each be understood separately. The first term $\frac{1}{2}\bm{y}^\intercal \bm{K_y}^{-1}\bm{y}$ is in charge of the data fit, the second term $\log\left\lvert K_y\right\rvert$ is the complexity penalty and the last term is a normalization term.
 
 \subsection{Linear operators and GPs}
-A useful property of Gaussian Processes is that their linear transformation is still a Gaussian Process. This main 
+A useful property of Gaussian Processes is that their linear transformation is
+still a Gaussian Process. This main
 
 \section{Physics informed framework}
-We choose our problem setup similar to the one proposed in~\cite{RAISSI}. We have some sort of linear differential equation or ODE of a physical model:
+We choose our problem setup similar to the one proposed in~\cite{RAISSI}. We
+have some sort of linear differential equation or ODE of a physical model:
 \begin{equation}
     \label{eq:Lu=f}
     \mathcal{L}_{\bm{x}}^\phi u(\bm{x}) = f(\bm{x})
@@ -142,13 +173,13 @@ with $k_{uu}(\bm{x},\bm{x'};\bm{\theta})$ being the kernel depending on its hype
 \end{equation}
 with now $k_{ff}$ being the kernel defining the $\mathcal{G}\mathcal{P}$ (on) $f(\bm{x})$. As shown in~\cite{garnett_2023_full},~\cite{Särkkä} and~\cite{RAISSI} $k_{ff}$ is defined by:
 \begin{equation}
-    k_{ff}(\bm{x},\bm{x'};\bm{\theta}, \bm{\phi}) = \mathcal{L}_{\bm{x}}^\phi \mathcal{L}_{\bm{x'}}^\phi k_{uu}(\bm{x},\bm{x'};\bm{\theta}) 
+    k_{ff}(\bm{x},\bm{x'};\bm{\theta}, \bm{\phi}) = \mathcal{L}_{\bm{x}}^\phi \mathcal{L}_{\bm{x'}}^\phi k_{uu}(\bm{x},\bm{x'};\bm{\theta})
 \end{equation}
 We will later need the mixed terms between $u(x)$ and $f(x)$, namely $k_{uf}$ and $k_{fu}$ which are formed by:
 \begin{equation}
     \begin{aligned}
-        k_{uf}(\bm{x,x'};\bm{\theta,\phi}) &= \mathcal{L}_{\bm{x'}}^\phi k_{uu}(\bm{x},\bm{x'};\bm{\theta}) \\
-        k_{fu}(\bm{x,x'};\bm{\theta,\phi}) &= \mathcal{L}_{\bm{x}}^\phi k_{uu}(\bm{x},\bm{x'};\bm{\theta})
+        k_{uf}(\bm{x,x'};\bm{\theta,\phi}) & = \mathcal{L}_{\bm{x'}}^\phi k_{uu}(\bm{x},\bm{x'};\bm{\theta}) \\
+        k_{fu}(\bm{x,x'};\bm{\theta,\phi}) & = \mathcal{L}_{\bm{x}}^\phi k_{uu}(\bm{x},\bm{x'};\bm{\theta})
     \end{aligned}
 \end{equation}
 To simplify the notation, the dependence on the hyperparameters $\bm{\theta}$ and $\bm{\phi}$ is not written explicitly anymore.
@@ -171,66 +202,88 @@ with $k_{uu}: \mathcal{U} \times  \mathcal{U}$, $k_{uf}: \mathcal{U} \times  \ma
 We now look at noisy observations of both $u$ and $f$,with noise $\sigma_u$ and $\sigma_f$, of the form:
 \begin{equation}
     \begin{aligned}
-        y_{i,u} = u_i(\bm{x_{i,u}}) + \mathcal{N}(0|\sigma_u^2)\\
+        y_{i,u} = u_i(\bm{x_{i,u}}) + \mathcal{N}(0|\sigma_u^2) \\
         y_{i,f} = u_i(\bm{x_{i,f}}) + \mathcal{N}(0|\sigma_f^2)
     \end{aligned}
 \end{equation}
 with which we create two data sets $\{\bm{X_u,y_u}\}$ and $\{\bm{X_f,y_f}\}$. Similarly, as we did before for the test points in equation~\ref{eq:joint_f,X_*} we can now write (create) a joint Gaussian distribution of the observations $\bm{y_u}$ and $\bm{y_f}$. We collect $\bm{X_u,X_f}$ in $\bm{X}$ and $\bm{y_u,y_f}$ in $\bm{y}$. With the joint GP at equation~\ref{eq:jointGP}, the joint distribution will take the following form:
 \begin{equation}
     \begin{aligned}
-    p(\bm{y}|\bm{X},\bm{\theta},\sigma_{n_u}^2,\sigma_{f_u}^2,\bm{\phi}) = 
-     \mathcal{N}\left(\bm{0},
-    \begin{bmatrix}
-        k_{uu}(\bm{X_u,X_u}) + \sigma_{n_u}^2 \bm{I} & k_{uf}(\bm{X_u,X_f}) \\
-        k_{fu}(\bm{X_f,X_u}) & k_{ff}(\bm{X_f,X_f}) + \sigma_{n_f}^2 \bm{I}
-    \end{bmatrix}\right)
+        p(\bm{y}|\bm{X},\bm{\theta},\sigma_{n_u}^2,\sigma_{f_u}^2,\bm{\phi}) =
+        \mathcal{N}\left(\bm{0},
+        \begin{bmatrix}
+            k_{uu}(\bm{X_u,X_u}) + \sigma_{n_u}^2 \bm{I} & k_{uf}(\bm{X_u,X_f})                         \\
+            k_{fu}(\bm{X_f,X_u})                         & k_{ff}(\bm{X_f,X_f}) + \sigma_{n_f}^2 \bm{I}
+        \end{bmatrix}\right)
     \end{aligned}
 \end{equation}
 
-We can directly use $\bm{K}$ to compute the mag log likelihood and train the model to obtain the optimized hyperparameters $\bm{\theta_*}$ and $\bm{\phi_*}$. More information about the optimization process will be provided in the next chapter. Here we now continue with the optimized hyperparameters.
+We can directly use $\bm{K}$ to compute the mag log likelihood and train the
+model to obtain the optimized hyperparameters $\bm{\theta_*}$ and
+$\bm{\phi_*}$. More information about the optimization process will be provided
+in the next chapter. Here we now continue with the optimized hyperparameters.
 \subsection{Optimization/Finding of the hyperparameters}
 
-
-The optimization of the hyperparameters deemed to be harder than expected. Different optimizers were used. 
+The optimization of the hyperparameters deemed to be harder than expected.
+Different optimizers were used.
 \subsection{Predictions with the Posterior}
-With the obtained hyperparameters $\bm{\theta_*}$ and $\bm{\phi_*}$ we can make new predictions at a test location $\bm{x_*}$. Similar to the construction in chapter~\ref{sec:Regression} we can now formulate the predictive posterior distribution for $u(\bm{x_*})$ and also for $f(\bm{x_*})$ as done in~\cite{RAISSI}:
+With the obtained hyperparameters $\bm{\theta_*}$ and $\bm{\phi_*}$ we can make
+new predictions at a test location $\bm{x_*}$. Similar to the construction in
+chapter~\ref{sec:Regression} we can now formulate the predictive posterior
+distribution for $u(\bm{x_*})$ and also for $f(\bm{x_*})$ as done
+in~\cite{RAISSI}:
 \begin{equation}
     \begin{aligned}
-        p(u(\bm{x_*})|\bm{y},\bm{X},\bm{\theta_*}, \bm{\phi_*}) = \mathcal{N}(\mu_{u*}, \Sigma_u)\\
+        p(u(\bm{x_*})|\bm{y},\bm{X},\bm{\theta_*}, \bm{\phi_*}) = \mathcal{N}(\mu_{u*}, \Sigma_u) \\
         p(u(\bm{x_*})|\bm{y},\bm{X},\bm{\theta_*}, \bm{\phi_*}) = \mathcal{N}(\mu_{f*}, \Sigma_f)
     \end{aligned}
 \end{equation}
 with
 \begin{equation}
     \begin{aligned}
-        \mu_u = \bm{\kappa_u}\bm{K}^{-1}\bm{y}, \; \Sigma_* = k_{uu}(\bm{x_*,x_*}) - \bm{\kappa_u}\bm{K}^{-1}\bm{\kappa_u}^\intercal\\
-        \mu_f = \bm{\kappa_f}\bm{K}^{-1}\bm{y}, \;  \Sigma_* = k_{ff}(\bm{x_*,x_*}) - \bm{\kappa_f}\bm{K}^{-1}\bm{\kappa_f}^\intercal\\  
+        \mu_u = \bm{\kappa_u}\bm{K}^{-1}\bm{y}, \; \Sigma_* = k_{uu}(\bm{x_*,x_*}) - \bm{\kappa_u}\bm{K}^{-1}\bm{\kappa_u}^\intercal  \\
+        \mu_f = \bm{\kappa_f}\bm{K}^{-1}\bm{y}, \;  \Sigma_* = k_{ff}(\bm{x_*,x_*}) - \bm{\kappa_f}\bm{K}^{-1}\bm{\kappa_f}^\intercal \\
     \end{aligned}
 \end{equation}
 with $\bm{\kappa_u}$ and $\bm{\kappa_f}$ being:
 \begin{equation}
     \begin{aligned}
-        \bm{\kappa_u} = [k_{uu}(\bm{x_*},\bm{X_u})k_{uf}(\bm{x_*,\bm{X_f}})]\\
+        \bm{\kappa_u} = [k_{uu}(\bm{x_*},\bm{X_u})k_{uf}(\bm{x_*,\bm{X_f}})] \\
         \bm{\kappa_f} = [k_{fu}(\bm{x_*},\bm{X_u})k_{ff}(\bm{x_*,\bm{X_f}})]
     \end{aligned}
 \end{equation}
 
 \section{Results}
-For testing the framework we will use ODEs and PDEs of physical models. The numerically obtained solutions will be used as the ground truth. For obtaining $u(\bm{x})$, we will fully define the differential equation with its initial- and boundary conditions and then use mathematicas NDSolve to compute the solution $\{(\bm{x});u(\bm{x}),f(\bm{x})\}$. For all cases, the training and validation points will be samples from the numerical solution using a sobol sequence[cite], as well as the addition of some noise. Our  that we get two data sets $\{(\bm{x_u});\bm{y_u}\}$ and $\{(\bm{x_f});\bm{y_f}\}$ with $\bm{y_i} = u(\bm{x_i}) + \sigma_{ui}^2 ; \; i = u,f$. The implementation of a sobol sequence helps with evenly spaced training and validation points, which is important for the training- process of the model. \\
-Through optimization, we will obtain the parameters of the underlying equation $\phi$. With these parameters we will then calculate the predictive mean and covariance and then compare the ground truth with the computed mean function. For comparison a classical GP regression with a general SE kernel as described in~\ref{sec:Regression} will be computed and compared to the PI model.
+For testing the framework we will use ODEs and PDEs of physical models. The
+numerically obtained solutions will be used as the ground truth. For obtaining
+$u(\bm{x})$, we will fully define the differential equation with its initial-
+and boundary conditions and then use mathematicas NDSolve (numerical solution)
+or NSolve (analytical solution) to compute the solution
+$\{(\bm{x});u(\bm{x}),f(\bm{x})\}$. The training and validation points will be
+sampled from the solution using a sobol sequence[cite]. In addition, we will
+add some noise to the samples for the training and validation points, to
+analyse the impact onto the results and to simulate real world data. This will be done by
+creating two data sets $\{(\bm{x_u});\bm{y_u}\}$ and $\{(\bm{x_f});\bm{y_f}\}$
+with $\bm{y_i} = u(\bm{x_i}) + \sigma_{ui}^2 ; \; i = u,f$. The implementation
+of a sobol sequence helps with evenly spaced training and validation points,
+which is important for the training process of the model.\\ 
+Through the optimization of the mll, we will obtain the parameters of the underlying equation $\phi$.
+With these parameters we will then calculate the predictive mean and covariance
+and then compare the ground truth with the computed mean function. To benchmark the performance
+a classical GP regression with a general SE kernel, as described
+in~\ref{sec:Regression}, will be computed and compared to the PI model.
 \subsection{Damped oscillator}
-As a first example we will look at a one dimensional differential equation of a damped oscillator. The differential equation is given by:
+As a first example we will look at a one dimensional differential equation of a
+damped oscillator. The differential equation is given by:
 \begin{equation}
-    \frac{\partial^2 u(x,t)}{\partial t^2} + \gamma \frac{\partial u(x,t)}{\partial t} + \omega_0^2 u(x,t) = 0
+    \frac{\partial^2 u(t)}{\partial t^2} + \gamma \frac{\partial u(t)}{\partial t} + \omega_0^2 u(t) = 0
 \end{equation}
 \subsection{Heat Equation}
-The one dimensional time dependent heat equation with a forcing term is: 
+The one dimensional time dependent heat equation with a forcing term is:
 \begin{equation}
     \begin{aligned}
-    \frac{\partial u(x,t)}{\partial t} - \alpha \frac{\partial^2 u(x,t)}{\partial x^2} = f(x,t)\\
-    u[0,x] =\\
-    u(t,0) = ; u(t,L) = 
-\end{aligned}
+        \frac{\partial u(x,t)}{\partial t} - \alpha \frac{\partial^2 u(x,t)}{\partial x^2} = f(x,t) \\ u[0,x] =\\ u(t,0) = ; u(t,L) =
+    \end{aligned}
 \end{equation}
 with $\alpha$ as the thermal diffusivity.
 \begin{figure}
@@ -240,22 +293,15 @@ with $\alpha$ as the thermal diffusivity.
     \label{fig:heat_equation}
 \end{figure}
 
-
 \subsection{Wave Equation}
 \begin{equation}
     \begin{aligned}
-    \frac{1}{c^2} \frac{\partial^2 u(x,t)}{\partial t^2} - \frac{\partial^2 u(x,t)}{\partial x^2} = f(x,t)\\
-    u[0,x] =\\
-    u(t,0) = ; u(t,L) = 
+        \frac{1}{c^2} \frac{\partial^2 u(x,t)}{\partial t^2} - \frac{\partial^2 u(x,t)}{\partial x^2} = f(x,t) \\ u[0,x] =\\ u(t,0) = ; u(t,L) =
     \end{aligned}
 \end{equation}
 \subsection{Damped Oscillator}
 
-
-
-
 \bibliographystyle{plain}
 \bibliography{library}
-
 
 \end{document}

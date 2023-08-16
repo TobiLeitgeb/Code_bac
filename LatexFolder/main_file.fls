@@ -150,8 +150,14 @@ INPUT C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex\latex\graphics-cfg\color.
 INPUT C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex\latex\graphics\mathcolor.ltx
 INPUT C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex\latex\graphics\mathcolor.ltx
 INPUT C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex\latex\graphics\mathcolor.ltx
-OUTPUT main_file.out
+INPUT .\main_file.out
+INPUT .\main_file.out
+INPUT main_file.out
+INPUT main_file.out
 OUTPUT main_file.pdf
+INPUT .\main_file.out
+INPUT .\main_file.out
+OUTPUT main_file.out
 INPUT C:\Users\Razer\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmr17.tfm
 INPUT C:\Users\Razer\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmr12.tfm
 INPUT C:\Users\Razer\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmr8.tfm
