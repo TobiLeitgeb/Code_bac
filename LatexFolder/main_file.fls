@@ -150,14 +150,8 @@ INPUT C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex\latex\graphics-cfg\color.
 INPUT C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex\latex\graphics\mathcolor.ltx
 INPUT C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex\latex\graphics\mathcolor.ltx
 INPUT C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex\latex\graphics\mathcolor.ltx
-INPUT .\main_file.out
-INPUT .\main_file.out
-INPUT main_file.out
-INPUT main_file.out
-OUTPUT main_file.pdf
-INPUT .\main_file.out
-INPUT .\main_file.out
 OUTPUT main_file.out
+OUTPUT main_file.pdf
 INPUT C:\Users\Razer\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmr17.tfm
 INPUT C:\Users\Razer\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmr12.tfm
 INPUT C:\Users\Razer\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmr8.tfm
@@ -214,6 +208,13 @@ INPUT C:\Users\Razer\AppData\Local\Programs\MiKTeX\fonts\tfm\public\amsfonts\cme
 INPUT C:\Users\Razer\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmbsy10.tfm
 INPUT C:\Users\Razer\AppData\Local\Programs\MiKTeX\fonts\tfm\public\amsfonts\cmextra\cmbsy7.tfm
 INPUT C:\Users\Razer\AppData\Local\Programs\MiKTeX\fonts\tfm\public\amsfonts\cmextra\cmbsy5.tfm
+INPUT ..\PI_GP_regressor\plots\heat_eq\predictive_mean.png
+INPUT ..\PI_GP_regressor\plots\heat_eq\predictive_mean.png
+INPUT ..\PI_GP_regressor\plots\heat_eq\predictive_mean.png
+INPUT ..\PI_GP_regressor\plots\heat_eq\predictive_mean.png
+INPUT ..\PI_GP_regressor\plots\heat_eq\predictive_mean.png
+INPUT ..\PI_GP_regressor\plots\heat_eq\predictive_mean.png
+INPUT ..\PI_GP_regressor\plots\heat_eq\predictive_mean.png
 INPUT .\main_file.bbl
 INPUT .\main_file.bbl
 INPUT main_file.bbl
@@ -223,6 +224,8 @@ INPUT .\main_file.out
 INPUT .\main_file.out
 INPUT C:\Users\Razer\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\cm\cmbsy10.pfb
 INPUT C:\Users\Razer\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\cm\cmbsy10.pfb
+INPUT C:\Users\Razer\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\cmextra\cmbsy5.pfb
+INPUT C:\Users\Razer\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\cmextra\cmbsy5.pfb
 INPUT C:\Users\Razer\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\cmextra\cmbsy7.pfb
 INPUT C:\Users\Razer\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\cmextra\cmbsy7.pfb
 INPUT C:\Users\Razer\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\cm\cmbx10.pfb
@@ -235,6 +238,8 @@ INPUT C:\Users\Razer\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\c
 INPUT C:\Users\Razer\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\cm\cmex10.pfb
 INPUT C:\Users\Razer\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\cm\cmmi10.pfb
 INPUT C:\Users\Razer\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\cm\cmmi10.pfb
+INPUT C:\Users\Razer\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\cm\cmmi5.pfb
+INPUT C:\Users\Razer\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\cm\cmmi5.pfb
 INPUT C:\Users\Razer\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\cm\cmmi7.pfb
 INPUT C:\Users\Razer\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\cm\cmmi7.pfb
 INPUT C:\Users\Razer\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\cm\cmmib10.pfb

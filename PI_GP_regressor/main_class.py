@@ -36,6 +36,7 @@ class PhysicsInformedGP_regressor():
         self.MSE = {"u":None,"f":None}
         self.filename = None
         self.results_list = None
+        self.GPy_models = None
         
     def __str__(self) -> str:
         string = "-----------------------------------------------\n"
@@ -94,7 +95,7 @@ class PhysicsInformedGP_regressor():
         """computes the log marginal likelihood of the GP"""
         K = self.gram_matrix(self.X, self.Y, params,self.noise)
     
-        L = jnp.linalg.cholesky(K + 1e-10 * jnp.zeros(K.shape)) #add some jitter for stability
+        L = jnp.linalg.cholesky(K + 1e-8 * jnp.zeros(K.shape)) #add some jitter for stability
     
         alpha = jnp.linalg.solve(L.T, jnp.linalg.solve(L, self.targets))
         mll = 1/2 * jnp.dot(self.targets.T,alpha) +0.5*jnp.sum(jnp.log(jnp.diagonal(L))) + len(self.X)/2 * jnp.log(2*jnp.pi)
@@ -118,6 +119,8 @@ class PhysicsInformedGP_regressor():
             opt_result = self.optimization_restarts_parallel_CG(n_restarts, n_threads, opt_dictionary)
         elif method == "TNC":
             opt_result = self.optimization_restarts_parallel_TNC(n_restarts, n_threads, opt_dictionary)
+        elif method == "L-BFGS-B":
+            opt_result = self.optimization_restarts_parallel_LBFGSB(n_restarts, n_threads, opt_dictionary)
         self.set_params(opt_result.x)
         self.result = opt_result
         pass
@@ -174,6 +177,31 @@ class PhysicsInformedGP_regressor():
         
         return best_result
     
+    def optimization_restarts_parallel_LBFGSB(self, n_restarts: int, n_threads: int,opt_dictionary: dict) -> dict:
+        """
+        performs the optimization of the hyperparameters in parallel and returns the best result.
+        n_restarts: number of restarts of the optimization
+        n_threads: number of threads to use for the parallelization
+        opt_dictionary: dictionary containing all the parameters needed for the optimization (initial values, bounds, etc.)
+        """
+        
+        def single_optimization_run():
+            """performs a single optimization run with random initialization of the hyperparameters"""
+            theta_initial = opt_dictionary['theta_initial']()
+            res = minimize(self.log_marginal_likelihood_to_optimize(), x0=theta_initial,
+                        method='L-BFGS-B', bounds=opt_dictionary['bounds'],
+                       options={'gtol': opt_dictionary['gtol']})
+            return res
+        results = Parallel(n_jobs=n_threads)(delayed(single_optimization_run)() for _ in tqdm(range(n_restarts)))
+        #all positive parameters
+        results = [res for res in results if  np.all(res.x > 0) and res.success]
+        self.results_list = results
+        best_result = min(results, key=lambda x: x.fun)
+        print(best_result)
+        
+        return best_result
+
+
     def predict_model(self,X_star):
         self.mean_u, self.var_u = self.predict_u(X_star)
         self.mean_f, self.var_f = self.predict_f(X_star)
@@ -181,79 +209,62 @@ class PhysicsInformedGP_regressor():
     def predict_u(self, X_star):
         """predicts the mean and variance of the GP at the points X_star"""
         params = self.get_params()
-        if self.timedependence:
-            assert X_star.shape[1] == 2, "Please provide a valid test data set"
-            x_star, t_star = X_star[:,0].reshape(-1,1), X_star[:,1].reshape(-1,1)
-        else:
-            assert X_star.shape[1] == 1, "Please provide a valid test data set"
-            x_star = X_star
 
         K = self.gram_matrix(self.X, self.Y, params,self.noise)
         L = jnp.linalg.cholesky(K + 1e-6 * jnp.zeros(K.shape)) #add some jitter for stability
         if self.timedependence:
-            #weird snippets are needed because of the way the kernel is implemented
-            x_star_t_star = jnp.hstack([x_star,t_star])
-            x_u_t_u = jnp.hstack([self.X[:,0].reshape(-1,1),self.X[:,1].reshape(-1,1)])
-            q_1 = self.k_uu(x_star_t_star,x_u_t_u, params) 
-            
-            x_f_t_f = jnp.hstack([self.Y[:,0].reshape(-1,1),self.Y[:,1].reshape(-1,1)])
-            q_2 = self.k_uf(x_star_t_star, x_f_t_f, params)
+            assert X_star.shape[1] == 2, "Please provide a valid test data set"
+            q_1 = self.k_uu(X_star,self.X, params) 
+            q_2 = self.k_uf(X_star, self.Y, params)
             q = jnp.hstack((q_1,q_2))
+
             alpha = jnp.linalg.solve(L.T, jnp.linalg.solve(L, self.targets))
             f_star = jnp.dot(q,alpha)
             alpha_var = jnp.linalg.solve(L.T, jnp.linalg.solve(L, q.T))
-            cov_f_star = self.k_uu(x_star_t_star,x_star_t_star, params) - q@alpha_var
+            cov_f_star = self.k_uu(X_star,X_star, params) - q@alpha_var
             var = jnp.diag(cov_f_star)
         else:
-            q_1 = self.k_uu(x_star, self.X, params) 
-            q_2 = self.k_uf(x_star, self.Y, params)
+            assert X_star.shape[1] == 1, "Please provide a valid test data set"
+            q_1 = self.k_uu(X_star, self.X, params) 
+            q_2 = self.k_uf(X_star, self.Y, params)
             q = jnp.hstack((q_1,q_2))
             alpha = jnp.linalg.solve(L.T, jnp.linalg.solve(L, self.targets))
             f_star = jnp.dot(q,alpha)
             alpha_var = jnp.linalg.solve(L.T, jnp.linalg.solve(L, q.T))
-            cov_f_star = self.k_uu(x_star,x_star, params) - q@alpha_var
+            cov_f_star = self.k_uu(X_star,X_star, params) - q@alpha_var
             var = jnp.diag(cov_f_star)
         return f_star, var
         
     def predict_f(self,X_star):
-        """predicts the mean and variance of the GP at the points X_star"""
+        """predicts the mean and variance of the GP at the points X_star
+        X_star: points at which the GP is evaluated(for 2d case: (x,t) meshgrid)
+        returns: mean and variance tuple of the GP at the points X_star
+        """
         params = self.get_params()
-        if self.timedependence:
-            assert X_star.shape[1] == 2, "Please provide a valid test data set"
-            x_star, t_star = X_star[:,0].reshape(-1,1), X_star[:,1].reshape(-1,1)
-            #x_star, t_star = np.meshgrid(x_star,t_star)
-            #x_star, t_star = x_star.reshape(-1,1), t_star.reshape(-1,1)
-        else:
-            assert X_star.shape[1] == 1, "Please provide a valid test data set"
-            x_star = X_star
-
+     
         K = self.gram_matrix(self.X, self.Y, params,self.noise)
         L = jnp.linalg.cholesky(K + 1e-6 * jnp.zeros(K.shape)) #add some jitter for stability
         
         if self.timedependence:
-            #weird snippets are needed because of the way the kernel is implemented
-            x_star_t_star = jnp.hstack([x_star,t_star])
-            x_u_t_u = jnp.hstack([self.X[:,0].reshape(-1,1),self.X[:,1].reshape(-1,1)])
-            q_1 = self.k_fu(x_star_t_star,x_u_t_u, params) 
-
-            x_star_t_star = jnp.hstack([x_star,t_star])
-            x_f_t_f = jnp.hstack([self.Y[:,0].reshape(-1,1),self.Y[:,1].reshape(-1,1)])
-            q_2 = self.k_ff(x_star_t_star, x_f_t_f, params)
+            assert X_star.shape[1] == 2, "Please provide a valid test data set"
+            q_1 = self.k_fu(X_star,self.X, params) 
+            q_2 = self.k_ff(X_star, self.Y, params)
             q = jnp.hstack((q_1,q_2))
             alpha = jnp.linalg.solve(L.T, jnp.linalg.solve(L, self.targets))
             f_star = jnp.dot(q,alpha)
             alpha_var = jnp.linalg.solve(L.T, jnp.linalg.solve(L, q.T))
-            cov_f_star = self.k_ff(x_star_t_star,x_star_t_star, params) - q@alpha_var
+            cov_f_star = self.k_ff(X_star,X_star, params) - q@alpha_var
             var = jnp.diag(cov_f_star)
             
         else:
-            q_1 = self.k_fu(x_star, self.X, params) 
-            q_2 = self.k_ff(x_star, self.Y, params)
+            assert X_star.shape[1] == 1, "Please provide a valid test data set"
+            q_1 = self.k_fu(X_star, self.X, params) 
+            q_2 = self.k_ff(X_star, self.Y, params)
             q = jnp.hstack((q_1,q_2))
             alpha = jnp.linalg.solve(L.T, jnp.linalg.solve(L, self.targets))
             f_star = jnp.dot(q,alpha)
             alpha_var = jnp.linalg.solve(L.T, jnp.linalg.solve(L, q.T))
-            cov_f_star = self.k_ff(x_star,x_star, params) - q@alpha_var
+            cov_f_star = self.k_ff(X_star,X_star, params) - q@alpha_var
             var = jnp.diag(cov_f_star)
             
         return f_star, var
@@ -262,9 +273,9 @@ class PhysicsInformedGP_regressor():
         """computes the mean squared error of the computed model"""
         assert self.validation_set is not None, "Please set the validation set first"
         if self.timedependence:
-            x_star, t_star = self.validation_set[0].reshape(-1,1), self.validation_set[0].reshape(-1,1)
+            x_star, t_star = self.validation_set[0].reshape(-1,1), self.validation_set[1].reshape(-1,1)
             X_star_u = np.hstack((x_star,t_star))
-            x_star, t_star = self.validation_set[1].reshape(-1,1), self.validation_set[1].reshape(-1,1)
+            x_star, t_star = self.validation_set[2].reshape(-1,1), self.validation_set[3].reshape(-1,1)
             X_star_f = np.hstack((x_star,t_star))
             u_values = self.validation_set[4]
             f_values = self.validation_set[5]
@@ -281,7 +292,7 @@ class PhysicsInformedGP_regressor():
         self.MSE["f"] = np.mean((mean_validation_set_f.ravel() - f_values.ravel())**2).item()
 
 
-    def use_GPy(self,X_star):
+    def use_GPy(self,X_star,save_path:str=None):
         """uses the GPy library to compute the GP"""
         if not self.timedependence:
             kernel = GPy.kern.RBF(input_dim=1, variance=1., lengthscale=1.)
@@ -308,7 +319,43 @@ class PhysicsInformedGP_regressor():
             ax[1].set_title("f(t) prediction")
             ax[1].grid(alpha = 0.7)
             ax[1].legend()
-            pass
+            plt.suptitle("GPy predictions")
+            if save_path != None:
+                plt.savefig(save_path)
+
+        else:
+            kernel_1 = GPy.kern.RBF(input_dim=2, variance=1., lengthscale=1., ARD = True)
+            model_GPy = GPy.models.GPRegression(self.X, self.u_train, kernel_1)
+            model_GPy.Gaussian_noise.variance.fix(self.noise[0])
+            model_GPy.optimize_restarts(num_restarts = 20, verbose=False)
+
+            kernel_2 = GPy.kern.RBF(input_dim=2, variance=1., lengthscale=1., ARD = True)
+            model_GPy_2 = GPy.models.GPRegression(self.Y, self.f_train, kernel_2)
+            model_GPy_2.Gaussian_noise.variance.fix(self.noise[1])
+            model_GPy_2.optimize_restarts(num_restarts = 20, verbose=False)
+            mean, var = model_GPy.predict(X_star)
+            original_shape = (int(np.sqrt(len(mean))),int(np.sqrt(len(mean))))
+            mean = mean.reshape(original_shape)
+            mean2, var2 = model_GPy_2.predict(X_star)
+            mean2 = mean2.reshape(original_shape)
+
+            fig, ax = plt.subplots(1,2,subplot_kw={"projection": "3d"},figsize=(12,5))
+            ax[0].plot_surface(X_star[:,0].reshape(mean.shape), X_star[:,1].reshape(mean.shape), mean, cmap='viridis', edgecolor='none', alpha=0.5)
+            ax[0].set_title('Predictive mean for u(t,x))')
+            ax[0].set_xlabel('x')
+            ax[0].set_ylabel('t')
+            ax[0].scatter(self.X[:,0], self.X[:,1], self.u_train, c='r', marker='o')
+
+            ax[1].plot_surface(X_star[:,0].reshape(mean2.shape), X_star[:,1].reshape(mean2.shape), mean2, cmap="viridis", edgecolor='none', alpha=0.5)
+            ax[1].scatter(self.Y[:,0], self.Y[:,1], self.f_train, c='b', marker='o')
+            ax[1].set_title('Predictive mean for f(t,x)')
+            ax[1].set_xlabel('x')
+            ax[1].set_ylabel('t')
+            plt.legend()
+            self.GPy_models = [model_GPy,model_GPy_2]
+            plt.suptitle("GPy predictions")
+            if save_path != None:
+                plt.savefig(save_path)
     
     def plot_prediction(self,X_star, title:str, save_path:str):
         """plots the prediction of the GP at the points X_star"""
@@ -332,7 +379,7 @@ class PhysicsInformedGP_regressor():
             fig, ax = plt.subplots(1,2,subplot_kw={"projection": "3d"},figsize=(12,5))
 
             ax[0].plot_surface(x_star.reshape(self.mean_u.shape), t_star.reshape(self.mean_u.shape), self.mean_u, cmap='viridis', edgecolor='none', alpha=0.5)
-            ax[0].set_title('Predictive mean for u(t,x))')
+            ax[0].set_title('Predictive mean for u(t,x)')
             ax[0].set_xlabel('x')
             ax[0].set_ylabel('t')
             ax[0].scatter(self.X[:,0], self.X[:,1], self.u_train, c='r', marker='o')
@@ -345,7 +392,7 @@ class PhysicsInformedGP_regressor():
             plt.legend()
             plt.suptitle(title)
             if save_path != None:
-                plt.savefig(save_path)
+                plt.savefig(save_path,bbox_inches='tight')
         else:
             fig,ax = plt.subplots(1,2,figsize=(12, 6))
             ax[0].scatter(self.validation_set[0], self.validation_set[1], c='orange', marker='x', label='Validation set', alpha=0.5, s=15)
@@ -371,8 +418,9 @@ class PhysicsInformedGP_regressor():
             ax[1].grid(alpha = 0.7)
             fig.suptitle(title)
             if save_path != None:
-                plt.savefig(save_path)
+                plt.savefig(save_path,bbox_inches='tight')
         pass 
+    
     def plot_difference(self, title:str, save_path:str):
         """plots the difference between the analytical solution and the predicted mean"""
         assert self.timedependence  == True, "Contourplot of difference only for 2d case"
@@ -400,7 +448,40 @@ class PhysicsInformedGP_regressor():
         fig.colorbar(cont2, ax=ax[1])
         plt.suptitle(title)
         if save_path != None:
-            plt.savefig(save_path)
+            plt.savefig(save_path,bbox_inches='tight')
+        
+    
+    def plot_difference_GPy(self,title,save_path):
+        assert self.timedependence  == True, "Contourplot of difference only for 2d case"
+        data = self.raw_data
+        x_star, t_star = self.raw_data[0].reshape(-1,1), self.raw_data[1].reshape(-1,1)
+        u_grid = self.raw_data[2]
+        f_grid = self.raw_data[3]
+        size = (int(np.sqrt(len(x_star))),int(np.sqrt(len(x_star))))
+        mean_u, var = self.GPy_models[0].predict(np.hstack((x_star,t_star)))
+        mean_f, var = self.GPy_models[1].predict(np.hstack((x_star,t_star)))
+        mean_u, mean_f = mean_u.reshape(size), mean_f.reshape(size)
+        fig, ax = plt.subplots(1,2,figsize=(12,5))
+        cont = ax[0].contourf(x_star.reshape(mean_u.shape), t_star.reshape(mean_u.shape), np.abs(mean_u - u_grid.reshape(size)), cmap='viridis', alpha=0.8)
+        ax[0].set_title(' |$f_*$ - u(t,x)|')
+        ax[0].set_xlabel('x')
+        ax[0].set_ylabel('t')
+        ax[0].scatter(self.X[:,0], self.X[:,1], c='r', marker='o')
+        fig.colorbar(cont, ax=ax[0])
+
+        cont2 = ax[1].contourf(x_star.reshape(mean_f.shape), t_star.reshape(mean_f.shape), np.abs(mean_f - f_grid.reshape(size)), cmap="viridis", alpha=0.8)
+        ax[1].scatter(self.Y[:,0], self.Y[:,1], c='b', marker='o')
+        ax[1].set_title(' |$f_*$ - f(t,x)|')
+        ax[1].set_xlabel('x')
+        ax[1].set_ylabel('t')
+        fig.colorbar(cont2, ax=ax[1])
+        plt.suptitle(title)
+        if save_path != None:
+            plt.savefig(save_path,bbox_inches='tight')
+        MSE_u = np.mean((mean_u - u_grid.reshape(size))**2).item()
+        MSE_f = np.mean((mean_f - f_grid.reshape(size))**2).item()
+        print("MSE_u: ", MSE_u)
+        print("MSE_f: ", MSE_f)
 
     def plot_variance(self,X_star, title:str, save_path:str):
         """plots the variance of the GP at the points X_star"""
@@ -432,9 +513,35 @@ class PhysicsInformedGP_regressor():
 
         plt.suptitle(title)
         if save_path != None:
-            plt.savefig(save_path)
+            plt.savefig(save_path,bbox_inches='tight')
 
-    
+    def plot_variance_GPy(self,title,save_path=None):
+        assert self.timedependence  == True, "Contourplot of difference only for 2d case"
+        data = self.raw_data
+        x_star, t_star = self.raw_data[0].reshape(-1,1), self.raw_data[1].reshape(-1,1)
+        u_grid = self.raw_data[2]
+        f_grid = self.raw_data[3]
+        size = (int(np.sqrt(len(x_star))),int(np.sqrt(len(x_star))))
+        mean_u, var_u = self.GPy_models[0].predict(np.hstack((x_star,t_star)))
+        mean_f, var_f = self.GPy_models[1].predict(np.hstack((x_star,t_star)))
+        var_u, var_f = var_u.reshape(u_grid.shape), var_f.reshape(u_grid.shape)
+        fig, ax = plt.subplots(1,2,figsize=(12,5))
+        cont = ax[0].contourf(x_star.reshape(u_grid.shape), t_star.reshape(u_grid.shape), var_u, cmap='viridis', alpha=0.8)
+        ax[0].set_title('GPy std for u(t,x)')
+        ax[0].set_xlabel('x')
+        ax[0].set_ylabel('t')
+        ax[0].scatter(self.X[:,0], self.X[:,1], c='r', marker='o')
+        fig.colorbar(cont, ax=ax[0])
+
+        cont2 = ax[1].contourf(x_star.reshape(u_grid.shape), t_star.reshape(u_grid.shape), var_f, cmap="viridis", alpha=0.8)
+        ax[1].scatter(self.Y[:,0], self.Y[:,1], c='b', marker='o')
+        ax[1].set_title(' GPy std for f(t,x)')
+        ax[1].set_xlabel('x')
+        ax[1].set_ylabel('t')
+        fig.colorbar(cont2, ax=ax[1])
+        plt.suptitle(title)
+        if save_path != None:
+            plt.savefig(save_path,bbox_inches='tight')
     def grad_log_marginal_likelihood(self):
         return grad(self.log_marginal_likelihood_to_optimize())
     

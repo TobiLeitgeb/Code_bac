@@ -6,12 +6,13 @@ import numpy as np
 import jax.numpy as jnp
 import matplotlib.pyplot as plt
 
+
 def main():
     kernel = [gram_Matrix,k_uu,k_uf,k_fu,k_ff]
     params = ["l","sigma_f","m","b","k"]
     seeds_training = [50,14] #sets the seeds for the random training points--- change when the points are not optimal
     model = PhysicsInformedGP_regressor(kernel,timedependence=False, params = params)
-    model.set_training_data("data_files/damped_third.csv",8,[1e-5,1e-5],seeds_training)
+    model.set_training_data("PI_GP_regressor/data_files/damped_third.csv",15,[1e-8,1e-8],seeds_training)
     model.plot_raw_data(Training_points=True)
     model.set_validation_data(1000)
     def get_initial_values():
@@ -26,26 +27,27 @@ def main():
         theta_initial[3] = rng.uniform(0, 3, 1)
         theta_initial[4] = rng.uniform(2, 6, 1)
         return theta_initial
-    n_iterations, n_threads = 100, -1
+    n_iterations, n_threads = 300, -1
     train = True
     if train:
 
-        model.train("CG",n_iterations,n_threads,{'theta_initial': get_initial_values,   #needed for all optimization methods
+        model.train("TNC",n_iterations,n_threads,{'theta_initial': get_initial_values,   #needed for all optimization methods
                                               'bounds': ((1e-2, None), (1e-2, None), (1e-1, None),(1e-2, None),(1e-2,None)), #needed for TNC and L-BFGS-B
                                               'gtol': 1e-6})
     else:
         model.set_params([0.39817882, 0.27357868, 0.98451776, 0.99907327, 1.55976642])
         print(model.log_marginal_likelohood([0.5817882, 0.27357868, 0.98451776, 0.99907327, 2]))   
-    X_star = np.linspace(0,3,100).reshape(-1,1)
+    X_star = np.linspace(0,6,100).reshape(-1,1)
     model.predict_model(X_star)
-    model.plot_prediction(X_star, "prediction", None)
+    model.plot_prediction(X_star, "prediction", "PI_GP_regressor/plots/oscillator/prediction.png")
     model.error()
     print(model)
-    model.use_GPy(X_star)
-    # plot_kernel_mat(model.k_ff(X_star,X_star,[0.31422814, 1.75373374, 0.85081937, 2.82121362, 2]))
-    # plot_kernel_mat(model.k_uu(X_star,X_star,[0.31422814, 1.75373374, 0.85081937, 2.82121362, 2]))
-    # plot_kernel_mat(model.k_uf(X_star,X_star,[0.31422814, 1.75373374, 0.85081937, 2.82121362, 2]))
-    # plot_kernel_mat(model.k_fu(X_star,X_star,[0.31422814, 1.75373374, 0.85081937, 2.82121362, 2]))
+    model.use_GPy(X_star, "PI_GP_regressor/plots/oscillator/GPy_model.png")
+    
+    plot_kernel_mat(model.k_ff(X_star,X_star,model.get_params()))
+    plot_kernel_mat(model.k_uu(X_star,X_star,model.get_params()))
+    plot_kernel_mat(model.k_uf(X_star,X_star,model.get_params()))
+    plot_kernel_mat(model.k_fu(X_star,X_star,model.get_params()))
     pass
 
 
@@ -54,7 +56,7 @@ def plot_kernel_mat(K):
     # plot
     plt.figure()
     plt.imshow(K, cmap='Reds')
-    plt.title(r'$K_{ff}$, (rbf)', fontsize=20, weight='bold')
+    plt.title(r'$K_{}$, (rbf)', fontsize=20, weight='bold')
     plt.tight_layout()
     plt.show()
 

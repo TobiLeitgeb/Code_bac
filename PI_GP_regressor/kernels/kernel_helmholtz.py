@@ -142,7 +142,7 @@ def k_uf(xt,ys,params):
     gamma_x = 0.5 / params[0]**2
     gamma_t = 0.5 / l_t**2
     # d^2/dy^2 K_uu
-    k_yy = 2*gamma_x*(2*gamma_x * (x-y)**2 - 1) * rbf_kernel_single_x(x, y, params) * rbf_kernel_single_t(x, y, l_t)
+    k_yy = 2*gamma_x*(2*gamma_x * (x-y)**2 - 1) * rbf_kernel_single_x(x, y, params) * rbf_kernel_single_t(t, s, l_t)
     print(k_yy)
     # d^2/ds^2 K_uu
     k_ss = 2*gamma_t*(2*gamma_t * (t-s)**2 - 1) * rbf_kernel_single_t(t, s, l_t) * rbf_kernel_single_x(x, y, params)
@@ -159,7 +159,7 @@ def k_fu(xt,ys,params):
     gamma_x = 0.5 / params[0]**2
     gamma_t = 0.5 / l_t**2
     # d^2/dx^2 K_uu
-    k_xx = 2*gamma_x*(2*gamma_x * (x-y)**2 - 1) * rbf_kernel_single_x(x, y, params) * rbf_kernel_single_t(x, y, l_t)
+    k_xx = 2*gamma_x*(2*gamma_x * (x-y)**2 - 1) * rbf_kernel_single_x(x, y, params) * rbf_kernel_single_t(t, s, l_t)
     # d^2/dt^2 K_uu
     k_tt = 2*gamma_t*(2*gamma_t * (t-s)**2 - 1) * rbf_kernel_single_t(t, s, l_t) * rbf_kernel_single_x(x, y, params)
     return -c**2*k_xx + 1 *  k_tt
