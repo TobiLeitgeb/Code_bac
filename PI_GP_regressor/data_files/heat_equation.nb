@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[    470661,       7930]
+NotebookDataLength[    470662,       7930]
 NotebookOptionsPosition[    469107,       7900]
-NotebookOutlinePosition[    469548,       7917]
-CellTagsIndexPosition[    469505,       7914]
+NotebookOutlinePosition[    469549,       7917]
+CellTagsIndexPosition[    469506,       7914]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -51,11 +51,11 @@ Cell[BoxData[
        RowBox[{"2", "*", "Pi", "*", "t"}], "]"}], "*", 
       RowBox[{"Cos", "[", 
        RowBox[{"2", "*", "Pi", "*", "x"}], "]"}], " ", "*", " ", "20", " ", 
-      "*", "0"}]}], ";"}], "\n", "\[IndentingNewLine]", 
+      "*", "0"}]}], ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
    RowBox[{"(*", 
     RowBox[{
     "heat", " ", "equation", " ", "with", " ", "forcing", " ", "term"}], 
-    "*)"}], "\[IndentingNewLine]", 
+    "*)"}], "\n", 
    RowBox[{
     RowBox[{"eqn", "=", 
      RowBox[{
@@ -72,7 +72,7 @@ Cell[BoxData[
           RowBox[{"{", 
            RowBox[{"x", ",", "2"}], "}"}]}], "]"}]}], "+", 
        RowBox[{"f", "[", 
-        RowBox[{"t", ",", "x"}], "]"}]}]}]}], ";"}], "\n", 
+        RowBox[{"t", ",", "x"}], "]"}]}]}]}], ";"}], "\[IndentingNewLine]", 
    "\[IndentingNewLine]", 
    RowBox[{"(*", 
     RowBox[{
@@ -82,7 +82,7 @@ Cell[BoxData[
         RowBox[{"(", 
          RowBox[{
           RowBox[{"t", "=", "0"}], ",", "x"}], ")"}]}]}]}], "=", "0"}], 
-    "*)"}], "\[IndentingNewLine]", 
+    "*)"}], "\n", 
    RowBox[{
     RowBox[{"ic", "=", 
      RowBox[{
@@ -91,7 +91,7 @@ Cell[BoxData[
       RowBox[{
        RowBox[{"Sin", "[", 
         RowBox[{"Pi", "*", "x"}], "]"}], "/", "2"}]}]}], ";"}], 
-   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", "\n", 
    RowBox[{"(*", 
     RowBox[{
      RowBox[{"boundary", " ", 
@@ -104,7 +104,8 @@ Cell[BoxData[
       RowBox[{"u", 
        RowBox[{"(", 
         RowBox[{"t", ",", 
-         RowBox[{"x", "=", "L"}]}], ")"}]}], "=", "0"}]}], "*)"}], "\n", 
+         RowBox[{"x", "=", "L"}]}], ")"}]}], "=", "0"}]}], "*)"}], 
+   "\[IndentingNewLine]", 
    RowBox[{
     RowBox[{"bc", "=", 
      RowBox[{"{", 
@@ -116,10 +117,10 @@ Cell[BoxData[
        RowBox[{
         RowBox[{"u", "[", 
          RowBox[{"t", ",", "L"}], "]"}], "\[Equal]", 
-        RowBox[{"t", "*", "0.2"}]}]}], "}"}]}], ";"}], "\n", 
+        RowBox[{"t", "*", "0.2"}]}]}], "}"}]}], ";"}], "\[IndentingNewLine]", 
    "\[IndentingNewLine]", 
    RowBox[{"(*", 
-    RowBox[{"solve", " ", "the", " ", "PDE"}], "*)"}], "\[IndentingNewLine]", 
+    RowBox[{"solve", " ", "the", " ", "PDE"}], "*)"}], "\n", 
    RowBox[{
     RowBox[{"sol", "=", 
      RowBox[{"NDSolve", "[", 
@@ -129,11 +130,10 @@ Cell[BoxData[
        RowBox[{"{", 
         RowBox[{"t", ",", "0", ",", "T"}], "}"}], ",", 
        RowBox[{"{", 
-        RowBox[{"x", ",", "0", ",", "L"}], "}"}]}], "]"}]}], ";"}], "\n", 
-   "\[IndentingNewLine]", 
+        RowBox[{"x", ",", "0", ",", "L"}], "}"}]}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
    RowBox[{"(*", 
-    RowBox[{"visualize", " ", "the", " ", "solution"}], "*)"}], 
-   "\[IndentingNewLine]", 
+    RowBox[{"visualize", " ", "the", " ", "solution"}], "*)"}], "\n", 
    RowBox[{"Plot3D", "[", 
     RowBox[{
      RowBox[{"Evaluate", "[", 
@@ -149,10 +149,10 @@ Cell[BoxData[
        RowBox[{"\"\<t\>\"", ",", "\"\<x\>\"", ",", "\"\<u\>\""}], "}"}]}], 
      ",", 
      RowBox[{"PlotLabel", "\[Rule]", "\"\<Heat Equation Solution\>\""}]}], 
-    "]"}], "\n", "\[IndentingNewLine]", 
+    "]"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
    RowBox[{"(*", 
     RowBox[{"visualize", " ", "the", " ", "forcing", " ", "term"}], "*)"}], 
-   "\[IndentingNewLine]", 
+   "\n", 
    RowBox[{"Plot3D", "[", 
     RowBox[{
      RowBox[{"f", "[", 
@@ -179,8 +179,8 @@ Graz\\\\Dokumente\\\\Uni\\\\6.Semester\\\\BAC\\\\Code_bac\\\\PI_GP_regressor\\\
       RowBox[{"FileExistsQ", "[", "filename", "]"}], ",", 
       RowBox[{"DeleteFile", "[", "filename", "]"}]}], "]"}], ";"}], "\n", 
    RowBox[{
-    RowBox[{"CreateFile", "[", "filename", "]"}], ";"}], 
-   "\[IndentingNewLine]", "\n", 
+    RowBox[{"CreateFile", "[", "filename", "]"}], ";"}], "\n", 
+   "\[IndentingNewLine]", 
    RowBox[{
     RowBox[{"data", "=", 
      RowBox[{"Flatten", "[", 
@@ -7898,8 +7898,8 @@ Graz\\\\Dokumente\\\\Uni\\\\6.Semester\\\\BAC\\\\Code_bac\\\\PI_GP_regressor\\\
  CellLabel->"Out[30]=",ExpressionUUID->"da8ddf83-30fd-4fc0-963f-599e838b1455"]
 }, Open  ]]
 },
-WindowSize->{1280, 652},
-WindowMargins->{{Automatic, -1285.5}, {Automatic, -8.25}},
+WindowSize->{1265.25, 648.},
+WindowMargins->{{539.25, Automatic}, {Automatic, 156}},
 Magnification:>1.3 Inherited,
 FrontEndVersion->"12.2 for Microsoft Windows (64-bit) (December 12, 2020)",
 StyleDefinitions->"Default.nb",
@@ -7917,7 +7917,7 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[CellGroupData[{
-Cell[580, 22, 7468, 205, 1151, "Input",ExpressionUUID->"d5c89f48-f2ce-4174-9086-76f068299cea"],
+Cell[580, 22, 7468, 205, 1211, "Input",ExpressionUUID->"d5c89f48-f2ce-4174-9086-76f068299cea"],
 Cell[8051, 229, 649, 10, 42, "Output",ExpressionUUID->"3bc0baea-83de-4ba0-b829-513e8788bfdc"],
 Cell[8703, 241, 85604, 1403, 331, "Output",ExpressionUUID->"57e70ddb-a8e9-4ce1-b72b-f3ac82adc258"],
 Cell[94310, 1646, 33862, 558, 431, "Output",ExpressionUUID->"4d1321c4-0820-4ed6-8549-231c6cfdccd0"],

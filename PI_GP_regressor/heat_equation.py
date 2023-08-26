@@ -36,7 +36,7 @@ def main():
     # TNC: truncated Newton --- slower but more accurate
     # L-BFGS-B: limited memory BFGS --- fast and accurate (not always for some reason)
     #generally TNC is the best choice
-    n_restarts = 1000; n_threads = 8
+    n_restarts = 100; n_threads = 8
     opt_params_dict = {'theta_initial': get_initial_values,   #needed for all optimization methods
                        'bounds': ((1e-2, None), (1e-5, None), (1e-3, None),(1e-2, None)), #needed for TNC and L-BFGS-B
                        'gtol': 1e-7}

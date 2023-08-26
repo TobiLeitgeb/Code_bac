@@ -41,11 +41,12 @@ techniques.
 As defined in~\cite{RasmussenCarlEdward} a Gaussian Process is a collection of
 random variables for which every finite set of variables have a joint
 multivariate Gaussian distribution. For a Regression model we define a function
-$f(\bm{x}): \mathcal{X}\rightarrow \mathbb{R}$ with the input set ${\bm{X}}$ =
-$\{\bm{x_n} \in \mathcal{X} \}_{n=1}^N$. We now let $f: \mathcal{X}\rightarrow
-    \mathbb{R}$ be our Gaussian Process. To fully define the GP we need to specify
-a mean function $m(\bm{x})$ and a covariance function or kernel
-$k(\bm{x},\bm{x'})$ for $f(\bm{x})$:
+$f(\bm{x}): \mathcal{X}\rightarrow \mathbb{R}$ with the input set $\{\bm{X}\}$
+= $\{\bm{x_n} \in \mathcal{X} \}_{n=1}^N$. We now let $f:
+    \mathcal{X}\rightarrow \mathbb{R}$ be our Gaussian Process. To fully define the
+GP we need to specify a mean function $m(\bm{x})$ and a covariance function or
+kernel $k(\bm{x}, \bm{x'}): \mathcal{X} \times \mathcal{X} \rightarrow
+    \mathbb{R}$ for $f(\bm{x})$:
 \begin{equation}
     \begin{aligned}
         m(\bm{x})         & = \mathbb{E}[f(\bm{x})]                                    \\
@@ -64,7 +65,7 @@ We now write our Gaussian Process $f(\bm{x})$ as:
 \begin{equation}
     f(\bm{x})\thicksim \mathcal{G} \mathcal{P}(0,k(\bm{x},\bm{x'}))
 \end{equation}
-It is important to note that $ k(\bm{x},\bm{x'})$ has to be a positive definite in order to be a valid kernel function.
+It is important to note that $ k(\bm{x},\bm{x'})$ has to be positive definite and symmetric in order to be a valid kernel function.
 Because of the definition of the GP we can now generate a joint Gaussian distribution for a finite set of points $\bm{X_*}$:
 \begin{equation}
     \label{eq:f_star_random_vector}
@@ -254,30 +255,50 @@ with $\bm{\kappa_u}$ and $\bm{\kappa_f}$ being:
 \end{equation}
 
 \section{Results}
-For testing the framework we will use ODEs and PDEs of physical models. The
-numerically obtained solutions will be used as the ground truth. For obtaining
-$u(\bm{x})$, we will fully define the differential equation with its initial-
-and boundary conditions and then use mathematicas NDSolve (numerical solution)
-or NSolve (analytical solution) to compute the solution
-$\{(\bm{x});u(\bm{x}),f(\bm{x})\}$. The training and validation points will be
-sampled from the solution using a sobol sequence[cite]. In addition, we will
-add some noise to the samples for the training and validation points, to
-analyse the impact onto the results and to simulate real world data. This will be done by
-creating two data sets $\{(\bm{x_u});\bm{y_u}\}$ and $\{(\bm{x_f});\bm{y_f}\}$
-with $\bm{y_i} = u(\bm{x_i}) + \sigma_{ui}^2 ; \; i = u,f$. The implementation
-of a sobol sequence helps with evenly spaced training and validation points,
-which is important for the training process of the model.\\ 
-Through the optimization of the mll, we will obtain the parameters of the underlying equation $\phi$.
-With these parameters we will then calculate the predictive mean and covariance
-and then compare the ground truth with the computed mean function. To benchmark the performance
-a classical GP regression with a general SE kernel, as described
-in~\ref{sec:Regression}, will be computed and compared to the PI model.
+For testing the framework we will use ODEs and PDEs of physical models. More
+specifically, we will look at the three main types of PDE, namely Elliptic,
+Hyperbolic, and Parabolic. The numerically obtained solutions will be used as
+the ground truth. For obtaining $u(\bm{x})$, we will fully define the
+differential equation with its initial- and boundary conditions and then use
+mathematicas NDSolve (numerical solution) or NSolve (analytical solution) to
+compute the solution $\{(\bm{x});u(\bm{x}),f(\bm{x})\}$. The training and
+validation points will be sampled from the solution using a sobol
+sequence[cite]. In addition, we will add some noise to the samples for the
+training and validation points, to analyse the impact onto the results and to
+simulate real world data. This will be done by creating two data sets
+$\{(\bm{x_u});\bm{y_u}\}$ and $\{(\bm{x_f});\bm{y_f}\}$ with $\bm{y_i} =
+    u(\bm{x_i}) + \sigma_{ui}^2 ; \; i = u,f$. The implementation of a sobol
+sequence helps with evenly spaced training and validation points, which is
+important for the training process of the model.\\ Through the optimization of
+the mll, we will obtain the parameters of the underlying equation $\phi$, as
+well as the hyperparameters $\theta$ of the kernel. With these parameters we
+will then calculate the predictive mean and covariance and then compare the
+ground truth with the computed mean function. To benchmark the performance we
+will look at the marginal log likelihood and at the mean squared error of the
+validation set with the prediction. As another way of looking at the performance of the informed model we will compare it to a GP regression with a general SE kernel, as described in~\ref{sec:Regression}. For this we will use the GPy library~\cite{gpy2014}.
 \subsection{Damped oscillator}
 As a first example we will look at a one dimensional differential equation of a
-damped oscillator. The differential equation is given by:
+damped oscillator with mass $m$, damping $\gamma$ and force constant $k$. The
+differential equation is given by:
 \begin{equation}
-    \frac{\partial^2 u(t)}{\partial t^2} + \gamma \frac{\partial u(t)}{\partial t} + \omega_0^2 u(t) = 0
+    \begin{aligned}
+        m\frac{\partial^2 u(t)}{\partial t^2} + \gamma \frac{\partial u(t)}{\partial t} + k u(t) = f(t) \\ u(0) = 0, \; \frac{\partial u(t)}{\partial t} = 0
+    \end{aligned}
 \end{equation}
+The data sets were generated with $m = 1, \gamma = 0.1, k = 1$ and $f(t) = 0$.
+\begin{figure}
+    \centering
+    \includegraphics[width=1\textwidth]{../final_examples/oscillator/prediction.png}
+    \caption{Predictive mean of the damped oscillator}
+    \label{fig:damped_oscillator}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\textwidth]{../final_examples/oscillator/GPy_prediction.png}
+    \caption{Predictive mean of the damped oscillator}
+    \label{fig:damped_oscillator}
+\end{figure}
 \subsection{Heat Equation}
 The one dimensional time dependent heat equation with a forcing term is:
 \begin{equation}
@@ -288,7 +309,19 @@ The one dimensional time dependent heat equation with a forcing term is:
 with $\alpha$ as the thermal diffusivity.
 \begin{figure}
     \centering
-    \includegraphics[width=1\textwidth]{../PI_GP_regressor/plots/heat_eq/predictive_mean.png}
+    \includegraphics[width=1\textwidth]{../final_examples/heat_equation/predictive_mean.png}
+    \caption{}
+    \label{fig:heat_equation}
+\end{figure}
+\begin{figure}
+    \centering
+    \includegraphics[width=1\textwidth]{../final_examples/heat_equation/predictive_variance.png}
+    \caption{}
+    \label{fig:heat_equation}
+\end{figure}
+\begin{figure}
+    \centering
+    \includegraphics[width=1\textwidth]{../final_examples/heat_equation/difference.png}
     \caption{}
     \label{fig:heat_equation}
 \end{figure}
@@ -299,7 +332,14 @@ with $\alpha$ as the thermal diffusivity.
         \frac{1}{c^2} \frac{\partial^2 u(x,t)}{\partial t^2} - \frac{\partial^2 u(x,t)}{\partial x^2} = f(x,t) \\ u[0,x] =\\ u(t,0) = ; u(t,L) =
     \end{aligned}
 \end{equation}
-\subsection{Damped Oscillator}
+\subsection{Poisson Equation}
+Here we will look at the Poisson equation in two spatial dimensions with a
+forcing term and with dirichlet boundary conditions:
+\begin{equation}
+    \begin{aligned}
+        \nabla^2 u(x,y) = f(x,y) \\ u[0,x] =\\ u(t,0) = ; u(t,L) =
+    \end{aligned}
+\end{equation}
 
 \bibliographystyle{plain}
 \bibliography{library}

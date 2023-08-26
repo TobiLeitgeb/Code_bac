@@ -15,6 +15,11 @@ Roman Garnett.
 \newblock {\em Bayesian Optimization}.
 \newblock Cambridge University Press, 2023.
 
+\bibitem{gpy2014}
+{GPy}.
+\newblock {GPy}: A gaussian process framework in python.
+\newblock \url{http://github.com/SheffieldML/GPy}, since 2012.
+
 \bibitem{görtler2019a}
 Jochen Görtler, Rebecca Kehlbeck, and Oliver Deussen.
 \newblock A visual exploration of gaussian processes.

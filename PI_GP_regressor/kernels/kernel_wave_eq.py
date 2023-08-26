@@ -147,8 +147,8 @@ def k_uf(xt,ys,params):
     # d^2/ds^2 K_uu
     k_ss = 2*gamma_t*(2*gamma_t * (t-s)**2 - 1) * rbf_kernel_single_t(t, s, l_t) * rbf_kernel_single_x(x, y, params)
     return -c**2*k_yy + 1 *  k_ss
-k_uf = vmap(vmap(k_uf, (None, 0, None)), (0, None, None))
-k_uf = jit(k_uf)
+k_uf = jit(vmap(vmap(k_uf, (None, 0, None)), (0, None, None)))
+
 
 def k_fu(xt,ys,params):
     x,t = xt
@@ -163,8 +163,8 @@ def k_fu(xt,ys,params):
     # d^2/dt^2 K_uu
     k_tt = 2*gamma_t*(2*gamma_t * (t-s)**2 - 1) * rbf_kernel_single_t(t, s, l_t) * rbf_kernel_single_x(x, y, params)
     return -c**2*k_xx + 1 *  k_tt
-k_fu = vmap(vmap(k_fu, (None, 0, None)), (0, None, None))
-k_fu = jit(k_fu)
+k_fu = jit(vmap(vmap(k_fu, (None, 0, None)), (0, None, None)))
+
 
 
 def k_ff(xt,ys, params):
@@ -189,8 +189,8 @@ def k_ff(xt,ys, params):
     k_ttdsds = (16*gamma_t**4 *(t-s)**4 - 48*gamma_t**3*(t-s)**2 + 12*gamma_t**2) * rbf_kernel_single_t(t,s,l_t) * rbf_kernel_single_x(x,y,params)
 
     return  c**4*k_xxyy - 2*c**2 * k_ttyy +  k_ttdsds
-k_ff = vmap(vmap(k_ff, (None, 0, None)), (0, None, None))
-k_ff = jit(k_ff)
+k_ff = jit(vmap(vmap(k_ff, (None, 0, None)), (0, None, None)))
+
 
 
 @jit

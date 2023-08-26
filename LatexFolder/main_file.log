@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.5) (preloaded format=pdflatex 2023.7.23)  16 AUG 2023 17:42
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.5) (preloaded format=pdflatex 2023.7.23)  26 AUG 2023 15:58
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -342,7 +342,17 @@ Package: float 2001/11/08 v1.3d Float enhancements (AL)
 File: l3backend-pdftex.def 2023-04-19 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count296
 \l__pdf_internal_box=\box57
-) (main_file.aux)
+) (main_file.aux
+
+LaTeX Warning: Label `fig:damped_oscillator' multiply defined.
+
+
+LaTeX Warning: Label `fig:heat_equation' multiply defined.
+
+
+LaTeX Warning: Label `fig:heat_equation' multiply defined.
+
+)
 \openout1 = `main_file.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 24.
@@ -441,36 +451,60 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1
 
 {C:/Users/Razer/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}] [2] [3]
-Underfull \hbox (badness 10000) in paragraph at lines 163--167
+Underfull \hbox (badness 10000) in paragraph at lines 164--168
 
  []
 
 [4]
-<../PI_GP_regressor/plots/heat_eq/predictive_mean.png, id=149, 672.111pt x 334.6101pt>
-File: ../PI_GP_regressor/plots/heat_eq/predictive_mean.png Graphic file (type png)
-<use ../PI_GP_regressor/plots/heat_eq/predictive_mean.png>
-Package pdftex.def Info: ../PI_GP_regressor/plots/heat_eq/predictive_mean.png  used on input line 291.
-(pdftex.def)             Requested size: 443.57848pt x 220.83824pt.
- (main_file.bbl [5]) [6 <../PI_GP_regressor/plots/heat_eq/predictive_mean.png>] (main_file.aux)
+<../final_examples/oscillator/prediction.png, id=150, 724.1454pt x 408.3255pt>
+File: ../final_examples/oscillator/prediction.png Graphic file (type png)
+<use ../final_examples/oscillator/prediction.png>
+Package pdftex.def Info: ../final_examples/oscillator/prediction.png  used on input line 291.
+(pdftex.def)             Requested size: 443.57848pt x 250.12491pt.
+<../final_examples/oscillator/GPy_prediction.png, id=152, 867.24pt x 433.62pt>
+File: ../final_examples/oscillator/GPy_prediction.png Graphic file (type png)
+<use ../final_examples/oscillator/GPy_prediction.png>
+Package pdftex.def Info: ../final_examples/oscillator/GPy_prediction.png  used on input line 298.
+(pdftex.def)             Requested size: 443.57848pt x 221.79169pt.
+<../final_examples/heat_equation/predictive_mean.png, id=153, 705.3552pt x 328.8285pt>
+File: ../final_examples/heat_equation/predictive_mean.png Graphic file (type png)
+<use ../final_examples/heat_equation/predictive_mean.png>
+Package pdftex.def Info: ../final_examples/heat_equation/predictive_mean.png  used on input line 312.
+(pdftex.def)             Requested size: 443.57848pt x 206.79175pt.
+<../final_examples/heat_equation/predictive_variance.png, id=154, 700.2963pt x 334.6101pt>
+File: ../final_examples/heat_equation/predictive_variance.png Graphic file (type png)
+<use ../final_examples/heat_equation/predictive_variance.png>
+Package pdftex.def Info: ../final_examples/heat_equation/predictive_variance.png  used on input line 318.
+(pdftex.def)             Requested size: 443.57848pt x 211.94916pt.
+<../final_examples/heat_equation/difference.png, id=155, 697.4055pt x 328.8285pt>
+File: ../final_examples/heat_equation/difference.png Graphic file (type png)
+<use ../final_examples/heat_equation/difference.png>
+Package pdftex.def Info: ../final_examples/heat_equation/difference.png  used on input line 324.
+(pdftex.def)             Requested size: 443.57848pt x 209.155pt.
+ [5] [6 <../final_examples/oscillator/prediction.png> <../final_examples/oscillator/GPy_prediction.png>] [7 <../final_examples/heat_equation/predictive_mean.png> <../final_examples/heat_equation/predictive_variance.png>] (main_file.bbl) [8 <../final_examples/heat_equation/difference.png>] (main_file.aux)
  ***********
 LaTeX2e <2023-06-01> patch level 1
 L3 programming layer <2023-06-30>
  ***********
+
+
+LaTeX Warning: There were multiply-defined labels.
+
 Package rerunfilecheck Info: File `main_file.out' has not changed.
-(rerunfilecheck)             Checksum: 31AE65848E720651BB82CD51D54B825D;2186.
+(rerunfilecheck)             Checksum: 33029FCF3FDDF4FA91AEE7A1EE3914D2;2181.
  ) 
 Here is how much of TeX's memory you used:
- 12940 strings out of 475551
- 208522 string characters out of 5762554
+ 12981 strings out of 475551
+ 210207 string characters out of 5762554
  1935238 words of memory out of 5000000
- 33917 multiletter control sequences out of 15000+600000
- 571796 words of font info for 86 fonts, out of 8000000 for 9000
+ 33949 multiletter control sequences out of 15000+600000
+ 571964 words of font info for 87 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,14n,79p,574b,569s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbsy10.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cmextra/cmbsy5.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cmextra/cmbsy7.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx9.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi5.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmib10.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cmextra/cmmib7.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmti10.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msam7.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on main_file.pdf (6 pages, 448273 bytes).
+ 75i,14n,79p,574b,465s stack positions out of 10000i,1000n,20000p,200000b,200000s
+<C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbsy10.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cmextra/cmbsy5.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cmextra/cmbsy7.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx9.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi5.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmib10.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cmextra/cmmib7.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmti10.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmtt10.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msam7.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on main_file.pdf (8 pages, 642015 bytes).
 PDF statistics:
- 269 PDF objects out of 1000 (max. 8388607)
- 56 named destinations out of 1000 (max. 500000)
- 126 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 301 PDF objects out of 1000 (max. 8388607)
+ 64 named destinations out of 1000 (max. 500000)
+ 146 words of extra memory for PDF output out of 10000 (max. 10000000)
 

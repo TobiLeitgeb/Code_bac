@@ -37,6 +37,7 @@ class PhysicsInformedGP_regressor():
         self.filename = None
         self.results_list = None
         self.GPy_models = None
+        self.xlabel, self.ylabel = "", ""
         
     def __str__(self) -> str:
         string = "-----------------------------------------------\n"
@@ -51,6 +52,11 @@ class PhysicsInformedGP_regressor():
     def set_name_kernel(self,name:str):
         """sets the name of the kernel"""
         self._name_kernel = name
+        pass
+    def set_axis_labels(self,xlabel:str,ylabel:str):
+        """sets the axis labels for the plots"""
+        self.xlabel = xlabel
+        self.ylabel = ylabel
         pass
     def set_training_data(self,filename:str, n_training_points,noise,seeds_training: list = [40,14]):
         """sets the training data and the raw data"""
@@ -146,7 +152,7 @@ class PhysicsInformedGP_regressor():
     
         results = Parallel(n_jobs=n_threads)(delayed(single_optimization_run)() for _ in tqdm(range(n_restarts)))
         #all positive parameters
-        results = [res for res in results if  np.all(res.x > 0) ]#and res.success
+        results = [res for res in results if  np.all(res.x > 0) and res.success]
         self.result_list = results
         best_result = min(results, key=lambda x: x.fun)
         print(best_result)
@@ -292,16 +298,22 @@ class PhysicsInformedGP_regressor():
         self.MSE["f"] = np.mean((mean_validation_set_f.ravel() - f_values.ravel())**2).item()
 
 
-    def use_GPy(self,X_star,save_path:str=None):
+    def use_GPy(self,X_star,save_path:str=None,heat_map:bool = False):
         """uses the GPy library to compute the GP"""
         if not self.timedependence:
             kernel = GPy.kern.RBF(input_dim=1, variance=1., lengthscale=1.)
             model_GPy = GPy.models.GPRegression(self.X, self.u_train, kernel)
             model_GPy.Gaussian_noise.variance.fix(self.noise[0])
             model_GPy.optimize_restarts(num_restarts = 20, verbose=False)
-
+            
+            #MSE error
+            t_val,u_val = self.validation_set[0],self.validation_set[1]
+            mean,var = model_GPy.predict(t_val.reshape(-1,1))
+            MSE_u = np.mean((mean.ravel() - u_val.ravel())**2).item()
             fig, ax = plt.subplots(1,2,figsize=(12, 6))
-            model_GPy.plot(ax  = ax[0])
+            y_data, var = model_GPy.predict(X_star)
+            ax[0].plot(X_star, y_data, label = "GP prediction")
+            ax[0].fill_between(X_star.ravel(), y_data.ravel() - 2*np.sqrt(var.ravel()), y_data.ravel() + 2*np.sqrt(var.ravel()), alpha=0.2, label = "95% confidence interval")
             ax[0].scatter(self.validation_set[0],self.validation_set[1], label = "validation set", color = "orange", marker = "x", s = 15)
             ax[0].set_xlim(0,max(X_star))
             ax[0].set_title("u(t) prediction")
@@ -312,8 +324,13 @@ class PhysicsInformedGP_regressor():
             model_GPy2 = GPy.models.GPRegression(self.Y, self.f_train, kernel2)
             model_GPy2.Gaussian_noise.variance.fix(self.noise[1])
             model_GPy2.optimize_restarts(num_restarts = 20, verbose=False)
-
-            model_GPy2.plot(ax = ax[1])
+            #MSE error 
+            t_val,f_val = self.validation_set[2],self.validation_set[3]
+            #mean,var = model_GPy2.predict(t_val.reshape(-1,1))
+            y_data, var = model_GPy2.predict(X_star)
+            MSE_f = np.mean((mean.ravel() - f_val.ravel())**2).item()
+            ax[1].plot(X_star, y_data, label = "GP prediction",color = "blue")
+            ax[1].fill_between(X_star.ravel(), y_data.ravel() - 2*np.sqrt(var.ravel()), y_data.ravel() + 2*np.sqrt(var.ravel()), alpha=0.2,color ="blue", label = "95% confidence interval")
             ax[1].scatter(self.validation_set[2],self.validation_set[3], label = "validation set", color = "orange", marker = "x", s = 15)
             ax[1].set_xlim(0,max(X_star))
             ax[1].set_title("f(t) prediction")
@@ -322,7 +339,10 @@ class PhysicsInformedGP_regressor():
             plt.suptitle("GPy predictions")
             if save_path != None:
                 plt.savefig(save_path)
-
+            print("---------GPY--------")
+            print("MSE u: ",MSE_u)
+            print("MSE f: ",MSE_f)
+            self.GPy_models = [model_GPy,model_GPy2]
         else:
             kernel_1 = GPy.kern.RBF(input_dim=2, variance=1., lengthscale=1., ARD = True)
             model_GPy = GPy.models.GPRegression(self.X, self.u_train, kernel_1)
@@ -339,25 +359,47 @@ class PhysicsInformedGP_regressor():
             mean2, var2 = model_GPy_2.predict(X_star)
             mean2 = mean2.reshape(original_shape)
 
-            fig, ax = plt.subplots(1,2,subplot_kw={"projection": "3d"},figsize=(12,5))
-            ax[0].plot_surface(X_star[:,0].reshape(mean.shape), X_star[:,1].reshape(mean.shape), mean, cmap='viridis', edgecolor='none', alpha=0.5)
-            ax[0].set_title('Predictive mean for u(t,x))')
-            ax[0].set_xlabel('x')
-            ax[0].set_ylabel('t')
-            ax[0].scatter(self.X[:,0], self.X[:,1], self.u_train, c='r', marker='o')
 
-            ax[1].plot_surface(X_star[:,0].reshape(mean2.shape), X_star[:,1].reshape(mean2.shape), mean2, cmap="viridis", edgecolor='none', alpha=0.5)
-            ax[1].scatter(self.Y[:,0], self.Y[:,1], self.f_train, c='b', marker='o')
-            ax[1].set_title('Predictive mean for f(t,x)')
-            ax[1].set_xlabel('x')
-            ax[1].set_ylabel('t')
-            plt.legend()
-            self.GPy_models = [model_GPy,model_GPy_2]
-            plt.suptitle("GPy predictions")
-            if save_path != None:
-                plt.savefig(save_path)
+            if heat_map:
+                fig, ax = plt.subplots(1,2,figsize=(12,5))
+                cont1 = ax[0].imshow(mean, cmap='viridis', alpha=1, extent=[0,1,0,1],origin='lower')
+                #cont1 = ax[0].contourf(x_star.reshape(self.mean_u.shape), t_star.reshape(self.mean_u.shape), self.mean_u, cmap='viridis', alpha=0.8,levels = 1000)
+                ax[0].set_title('Predictive mean for u(t,x)')
+                ax[0].set_xlabel(self.xlabel)
+                ax[0].set_ylabel(self.ylabel)
+                ax[0].scatter(self.X[:,0], self.X[:,1], c='r', marker='o')
+
+                cont2 = ax[1].imshow(mean2, cmap="viridis", alpha=1, extent=[0,1,0,1],origin='lower')
+                ax[1].scatter(self.Y[:,0], self.Y[:,1], c='b', marker='o')
+                ax[1].set_title('Predictive mean for f(t,x)')
+                ax[1].set_xlabel(self.xlabel)
+                ax[1].set_ylabel(self.ylabel)
+                plt.legend()
+                plt.suptitle("GPy predictions")
+                fig.colorbar(cont1, ax=ax[0])
+                fig.colorbar(cont2, ax=ax[1])
+                if save_path != None:
+                    plt.savefig(save_path,bbox_inches='tight')
+            else:
+                fig, ax = plt.subplots(1,2,subplot_kw={"projection": "3d"},figsize=(12,5))
+                ax[0].plot_surface(X_star[:,0].reshape(mean.shape), X_star[:,1].reshape(mean.shape), mean, cmap='viridis', edgecolor='none', alpha=0.5)
+                ax[0].set_title('Predictive mean for u(t,x))')
+                ax[0].set_xlabel(self.xlabel)
+                ax[0].set_ylabel(self.ylabel)
+                ax[0].scatter(self.X[:,0], self.X[:,1], self.u_train, c='r', marker='o')
+
+                ax[1].plot_surface(X_star[:,0].reshape(mean2.shape), X_star[:,1].reshape(mean2.shape), mean2, cmap="viridis", edgecolor='none', alpha=0.5)
+                ax[1].scatter(self.Y[:,0], self.Y[:,1], self.f_train, c='b', marker='o')
+                ax[1].set_title('Predictive mean for f(t,x)')
+                ax[1].set_xlabel(self.xlabel)
+                ax[1].set_ylabel(self.ylabel)
+                plt.legend()
+                self.GPy_models = [model_GPy,model_GPy_2]
+                plt.suptitle("GPy predictions")
+                if save_path != None:
+                    plt.savefig(save_path)
     
-    def plot_prediction(self,X_star, title:str, save_path:str):
+    def plot_prediction(self,X_star, title:str, save_path:str,heat_map:bool = False):
         """plots the prediction of the GP at the points X_star"""
         assert self.mean_u is not None, "Please predict the mean and variance first"
         assert self.var_u is not None, "Please predict the mean and variance first"
@@ -376,33 +418,56 @@ class PhysicsInformedGP_regressor():
         if self.timedependence:
             self.mean_u = self.mean_u.reshape(original_size)
             self.mean_f = self.mean_f.reshape(original_size)
-            fig, ax = plt.subplots(1,2,subplot_kw={"projection": "3d"},figsize=(12,5))
+            
+            if not heat_map:
+                fig, ax = plt.subplots(1,2,subplot_kw={"projection": "3d"},figsize=(12,5))
+                ax[0].plot_surface(x_star.reshape(self.mean_u.shape), t_star.reshape(self.mean_u.shape), self.mean_u, cmap='viridis', edgecolor='none', alpha=0.5)
+                ax[0].set_title('Predictive mean for u(t,x)')
+                ax[0].set_xlabel(self.xlabel)
+                ax[0].set_ylabel(self.ylabel)
+                ax[0].scatter(self.X[:,0], self.X[:,1], self.u_train, c='r', marker='o')
 
-            ax[0].plot_surface(x_star.reshape(self.mean_u.shape), t_star.reshape(self.mean_u.shape), self.mean_u, cmap='viridis', edgecolor='none', alpha=0.5)
-            ax[0].set_title('Predictive mean for u(t,x)')
-            ax[0].set_xlabel('x')
-            ax[0].set_ylabel('t')
-            ax[0].scatter(self.X[:,0], self.X[:,1], self.u_train, c='r', marker='o')
+                ax[1].plot_surface(x_star.reshape(self.mean_f.shape), t_star.reshape(self.mean_f.shape), self.mean_f, cmap="viridis", edgecolor='none', alpha=0.5)
+                ax[1].scatter(self.Y[:,0], self.Y[:,1], self.f_train, c='b', marker='o')
+                ax[1].set_title('Predictive mean for f(t,x)')
+                ax[1].set_xlabel(self.xlabel)
+                ax[1].set_ylabel(self.ylabel)
+                plt.legend()
+                plt.suptitle(title)
+                if save_path != None:
+                    plt.savefig(save_path,bbox_inches='tight')
 
-            ax[1].plot_surface(x_star.reshape(self.mean_f.shape), t_star.reshape(self.mean_f.shape), self.mean_f, cmap="viridis", edgecolor='none', alpha=0.5)
-            ax[1].scatter(self.Y[:,0], self.Y[:,1], self.f_train, c='b', marker='o')
-            ax[1].set_title('Predictive mean for f(t,x)')
-            ax[1].set_xlabel('x')
-            ax[1].set_ylabel('t')
-            plt.legend()
-            plt.suptitle(title)
-            if save_path != None:
-                plt.savefig(save_path,bbox_inches='tight')
+            if heat_map:
+                fig, ax = plt.subplots(1,2,figsize=(12,5))
+                cont1 = ax[0].imshow(self.mean_u, cmap='viridis', alpha=1, extent=[0,1,0,1],origin='lower')
+                #cont1 = ax[0].contourf(x_star.reshape(self.mean_u.shape), t_star.reshape(self.mean_u.shape), self.mean_u, cmap='viridis', alpha=0.8,levels = 1000)
+                ax[0].set_title('Predictive mean for u(t,x)')
+                ax[0].set_xlabel(self.xlabel)
+                ax[0].set_ylabel(self.ylabel)
+                ax[0].scatter(self.X[:,0], self.X[:,1], c='r', marker='o')
+
+                cont2 = ax[1].imshow(self.mean_f, cmap="viridis", alpha=1, extent=[0,1,0,1],origin='lower')
+                ax[1].scatter(self.Y[:,0], self.Y[:,1], c='b', marker='o')
+                ax[1].set_title('Predictive mean for f(t,x)')
+                ax[1].set_xlabel(self.xlabel)
+                ax[1].set_ylabel(self.ylabel)
+                plt.legend()
+                plt.suptitle(title)
+                fig.colorbar(cont1, ax=ax[0])
+                fig.colorbar(cont2, ax=ax[1])
+                if save_path != None:
+                    plt.savefig(save_path,bbox_inches='tight')
+
         else:
             fig,ax = plt.subplots(1,2,figsize=(12, 6))
             ax[0].scatter(self.validation_set[0], self.validation_set[1], c='orange', marker='x', label='Validation set', alpha=0.5, s=15)
             ax[0].plot(self.X, self.u_train, 'r.', markersize=10, label='Observations')
             ax[0].plot(x_star, self.mean_u, 'b', label='Prediction')
-            ax[0].fill_between(x_star.flatten(), self.mean_u.flatten() - 2 * np.sqrt(self.var_u.flatten()),
-                            self.mean_u.flatten() + 2 * np.sqrt(self.var_u.flatten()), alpha=0.2, color='blue')
+            ax[0].fill_between(x_star.flatten(), self.mean_u.flatten() + 2 * np.sqrt(self.var_u.flatten()),
+                            self.mean_u.flatten() - 2 * np.sqrt(self.var_u.flatten()), alpha=0.2, color='blue',label = "95% confidence interval")
             ax[0].legend(loc='upper right', fontsize=10)
-            ax[0].set_xlabel('$t$')
-            ax[0].set_ylabel('$u(t)$')
+            ax[0].set_xlabel(self.xlabel)
+            ax[0].set_ylabel(self.ylabel)
             ax[0].set_title("u(t) prediction")
             ax[0].grid(alpha = 0.7)
 
@@ -410,10 +475,10 @@ class PhysicsInformedGP_regressor():
             ax[1].plot(self.Y, self.f_train, 'r.', markersize=10, label='Observations')
             ax[1].plot(x_star, self.mean_f, 'b', label='Prediction')
             ax[1].fill_between(x_star.flatten(), self.mean_f.flatten() - 2 * np.sqrt(self.var_f.flatten()),
-                                self.mean_f.flatten() + 2 * np.sqrt(self.var_f.flatten()), alpha=0.2, color='blue')
+                                self.mean_f.flatten() + 2 * np.sqrt(self.var_f.flatten()), alpha=0.2, color='blue',label = "95% confidence interval")
             ax[1].legend(loc='upper right', fontsize=10)
-            ax[1].set_xlabel('$t$')
-            ax[1].set_ylabel('$f(t)$')
+            ax[1].set_xlabel(self.xlabel)
+            ax[1].set_ylabel(self.ylabel)
             ax[1].set_title("f(t) prediction")
             ax[1].grid(alpha = 0.7)
             fig.suptitle(title)
@@ -433,18 +498,20 @@ class PhysicsInformedGP_regressor():
         mean_f, var = self.predict_f(np.hstack((x_star,t_star)))
         mean_u, mean_f = mean_u.reshape(size), mean_f.reshape(size)
         fig, ax = plt.subplots(1,2,figsize=(12,5))
-        cont = ax[0].contourf(x_star.reshape(mean_u.shape), t_star.reshape(mean_u.shape), np.abs(mean_u - u_grid.reshape(size)), cmap='viridis', alpha=0.8)
+        #cont = ax[0].contourf(x_star.reshape(mean_u.shape), t_star.reshape(mean_u.shape), np.abs(mean_u - u_grid.reshape(size)), cmap='viridis', alpha=0.8,levels = 100)
+        cont = ax[0].imshow(np.abs(mean_u - u_grid.reshape(size)), cmap='viridis', alpha=1,extent=[0,1,0,1],origin='lower')
         ax[0].set_title(' |$f_*$ - u(t,x)|')
-        ax[0].set_xlabel('x')
-        ax[0].set_ylabel('t')
+        ax[0].set_xlabel(self.xlabel)
+        ax[0].set_ylabel(self.ylabel)
         ax[0].scatter(self.X[:,0], self.X[:,1], c='r', marker='o')
         fig.colorbar(cont, ax=ax[0])
 
-        cont2 = ax[1].contourf(x_star.reshape(mean_f.shape), t_star.reshape(mean_f.shape), np.abs(mean_f - f_grid.reshape(size)), cmap="viridis", alpha=0.8)
+        #cont2 = ax[1].contourf(x_star.reshape(mean_f.shape), t_star.reshape(mean_f.shape), np.abs(mean_f - f_grid.reshape(size)), cmap="viridis", alpha=0.8,levels = 100)
+        cont2 = ax[1].imshow(np.abs(mean_f - f_grid.reshape(size)), cmap='viridis', alpha=1,extent=[0,1,0,1],origin='lower')
         ax[1].scatter(self.Y[:,0], self.Y[:,1], c='b', marker='o')
         ax[1].set_title(' |$f_*$ - f(t,x)|')
-        ax[1].set_xlabel('x')
-        ax[1].set_ylabel('t')
+        ax[1].set_xlabel(self.xlabel)
+        ax[1].set_ylabel(self.ylabel)
         fig.colorbar(cont2, ax=ax[1])
         plt.suptitle(title)
         if save_path != None:
@@ -462,18 +529,20 @@ class PhysicsInformedGP_regressor():
         mean_f, var = self.GPy_models[1].predict(np.hstack((x_star,t_star)))
         mean_u, mean_f = mean_u.reshape(size), mean_f.reshape(size)
         fig, ax = plt.subplots(1,2,figsize=(12,5))
-        cont = ax[0].contourf(x_star.reshape(mean_u.shape), t_star.reshape(mean_u.shape), np.abs(mean_u - u_grid.reshape(size)), cmap='viridis', alpha=0.8)
+        #cont = ax[0].contourf(x_star.reshape(mean_u.shape), t_star.reshape(mean_u.shape), np.abs(mean_u - u_grid.reshape(size)), cmap='viridis', alpha=0.8,levels = 100)
+        cont = ax[0].imshow(np.abs(mean_u - u_grid.reshape(size)), cmap='viridis', alpha=1,extent=[0,1,0,1],origin='lower')
         ax[0].set_title(' |$f_*$ - u(t,x)|')
-        ax[0].set_xlabel('x')
-        ax[0].set_ylabel('t')
+        ax[0].set_xlabel(self.xlabel)
+        ax[0].set_ylabel(self.ylabel)
         ax[0].scatter(self.X[:,0], self.X[:,1], c='r', marker='o')
         fig.colorbar(cont, ax=ax[0])
 
-        cont2 = ax[1].contourf(x_star.reshape(mean_f.shape), t_star.reshape(mean_f.shape), np.abs(mean_f - f_grid.reshape(size)), cmap="viridis", alpha=0.8)
+        #cont2 = ax[1].contourf(x_star.reshape(mean_f.shape), t_star.reshape(mean_f.shape), np.abs(mean_f - f_grid.reshape(size)), cmap="viridis", alpha=0.8,levels = 100)
+        cont2 = ax[1].imshow(np.abs(mean_f - f_grid.reshape(size)), cmap='viridis', alpha=1,extent=[0,1,0,1],origin='lower')
         ax[1].scatter(self.Y[:,0], self.Y[:,1], c='b', marker='o')
         ax[1].set_title(' |$f_*$ - f(t,x)|')
-        ax[1].set_xlabel('x')
-        ax[1].set_ylabel('t')
+        ax[1].set_xlabel(self.xlabel)
+        ax[1].set_ylabel(self.ylabel)
         fig.colorbar(cont2, ax=ax[1])
         plt.suptitle(title)
         if save_path != None:
@@ -497,18 +566,20 @@ class PhysicsInformedGP_regressor():
         self.var_f = self.var_f.reshape(original_size)
         fig, ax = plt.subplots(1,2,figsize=(12,5))
 
-        cont_0 = ax[0].contourf(x_star.reshape(self.var_u.shape), t_star.reshape(self.var_u.shape), np.sqrt(self.var_u), cmap='viridis', alpha=0.8)
+        #cont_0 = ax[0].contourf(x_star.reshape(self.var_u.shape), t_star.reshape(self.var_u.shape), np.sqrt(self.var_u), cmap='viridis', alpha=0.8)
+        cont_0 = ax[0].imshow(np.sqrt(self.var_u), cmap='viridis', alpha=1,extent=[0,1,0,1],origin='lower')
         ax[0].set_title('Predictive std for u(t,x))')
-        ax[0].set_xlabel('x')
-        ax[0].set_ylabel('t')
+        ax[0].set_xlabel(self.xlabel)
+        ax[0].set_ylabel(self.ylabel)
         ax[0].scatter(self.X[:,0], self.X[:,1], marker='o')
         fig.colorbar(cont_0, ax=ax[0])
 
-        cont_1 = ax[1].contourf(x_star.reshape(self.var_f.shape), t_star.reshape(self.var_f.shape), np.sqrt(self.var_f), cmap="viridis", alpha=0.8)
+        #cont_1 = ax[1].contourf(x_star.reshape(self.var_f.shape), t_star.reshape(self.var_f.shape), np.sqrt(self.var_f), cmap="viridis", alpha=0.8)
+        cont_1 = ax[1].imshow(np.sqrt(self.var_f), cmap='viridis', alpha=1,extent=[0,1,0,1],origin='lower')
         ax[1].scatter(self.Y[:,0], self.Y[:,1], marker='o')
         ax[1].set_title('Predictive std for f(t,x)')
-        ax[1].set_xlabel('x')
-        ax[1].set_ylabel('t')
+        ax[1].set_xlabel(self.xlabel)
+        ax[1].set_ylabel(self.ylabel)
         fig.colorbar(cont_1, ax=ax[1])
 
         plt.suptitle(title)
@@ -526,18 +597,20 @@ class PhysicsInformedGP_regressor():
         mean_f, var_f = self.GPy_models[1].predict(np.hstack((x_star,t_star)))
         var_u, var_f = var_u.reshape(u_grid.shape), var_f.reshape(u_grid.shape)
         fig, ax = plt.subplots(1,2,figsize=(12,5))
-        cont = ax[0].contourf(x_star.reshape(u_grid.shape), t_star.reshape(u_grid.shape), var_u, cmap='viridis', alpha=0.8)
+        #cont = ax[0].contourf(x_star.reshape(u_grid.shape), t_star.reshape(u_grid.shape), var_u, cmap='viridis', alpha=0.8)
+        cont = ax[0].imshow(var_u, cmap='viridis', alpha=1,extent=[0,1,0,1],origin='lower')
         ax[0].set_title('GPy std for u(t,x)')
-        ax[0].set_xlabel('x')
-        ax[0].set_ylabel('t')
+        ax[0].set_xlabel(self.xlabel)
+        ax[0].set_ylabel(self.ylabel)
         ax[0].scatter(self.X[:,0], self.X[:,1], c='r', marker='o')
         fig.colorbar(cont, ax=ax[0])
 
-        cont2 = ax[1].contourf(x_star.reshape(u_grid.shape), t_star.reshape(u_grid.shape), var_f, cmap="viridis", alpha=0.8)
+        #cont2 = ax[1].contourf(x_star.reshape(u_grid.shape), t_star.reshape(u_grid.shape), var_f, cmap="viridis", alpha=0.8)
+        cont2 = ax[1].imshow(var_f, cmap='viridis', alpha=1,extent=[0,1,0,1],origin='lower')
         ax[1].scatter(self.Y[:,0], self.Y[:,1], c='b', marker='o')
         ax[1].set_title(' GPy std for f(t,x)')
-        ax[1].set_xlabel('x')
-        ax[1].set_ylabel('t')
+        ax[1].set_xlabel(self.xlabel)
+        ax[1].set_ylabel(self.ylabel)
         fig.colorbar(cont2, ax=ax[1])
         plt.suptitle(title)
         if save_path != None:
@@ -545,27 +618,44 @@ class PhysicsInformedGP_regressor():
     def grad_log_marginal_likelihood(self):
         return grad(self.log_marginal_likelihood_to_optimize())
     
-    def plot_raw_data(self,Training_points=False):
+    def plot_raw_data(self,Training_points=False,heat_map=False):
         if self.timedependence:
             x_star, t_star = self.raw_data[0].reshape(-1,1), self.raw_data[1].reshape(-1,1)
             u_grid = self.raw_data[2]
             f_grid = self.raw_data[3]
             size = (int(np.sqrt(len(x_star))),int(np.sqrt(len(x_star))))
-            fig, ax = plt.subplots(1,2,figsize=(12,5),subplot_kw={"projection": "3d"})
-            cont = ax[0].plot_surface(x_star.reshape(size), t_star.reshape(size), u_grid.reshape(size), cmap='viridis', alpha=0.8, edgecolor='none')
-            ax[0].set_title('u(t,x)')
-            ax[0].set_xlabel('x')
-            ax[0].set_ylabel('t')
-           
-
-            cont2 = ax[1].plot_surface(x_star.reshape(size), t_star.reshape(size), f_grid.reshape(size), cmap="viridis", alpha=0.8)
-            ax[1].set_title('f(t,x)')
-            ax[1].set_xlabel('x')
-            ax[1].set_ylabel('t')
+            if heat_map:
+                fig, ax = plt.subplots(1,2,figsize=(12,5))
+                #cont = ax[0].contour(x_star.reshape(size), t_star.reshape(size), u_grid.reshape(size), cmap='viridis', alpha=0.8, levels = 100)
+                cont = IM = ax[0].imshow(u_grid.reshape(size), cmap="viridis", origin='lower', extent=(0, 1, 0, 1))
+                ax[0].set_title('u(t,x)')
+                ax[0].set_xlabel(self.xlabel)
+                ax[0].set_ylabel(self.ylabel)
+                #cont2 = ax[1].contourf(x_star.reshape(size), t_star.reshape(size), f_grid.reshape(size), cmap="viridis", alpha=0.8,levels = 100)
+                cont2 = ax[1].imshow(f_grid.reshape(size), cmap="viridis", origin='lower', extent=(0, 1, 0, 1))
+                ax[1].set_title('f(t,x)')
+                ax[1].set_xlabel(self.xlabel)
+                ax[1].set_ylabel(self.ylabel)
+                fig.colorbar(cont, ax=ax[0])
+                fig.colorbar(cont2, ax=ax[1])
+                if Training_points:
+                    ax[0].scatter(self.X[:,0], self.X[:,1], c='r', marker='o', label='Training points')
+                    ax[1].scatter(self.Y[:,0], self.Y[:,1], c='b', marker='o', label='Training points')
+            else:
+                fig, ax = plt.subplots(1,2,figsize=(12,5),subplot_kw={"projection": "3d"})
+                cont = ax[0].plot_surface(x_star.reshape(size), t_star.reshape(size), u_grid.reshape(size), cmap='viridis', alpha=0.8, edgecolor='none')
+                ax[0].set_title('u(t,x)')
+                ax[0].set_xlabel(self.xlabel)
+                ax[0].set_ylabel(self.ylabel)
+        
+                cont2 = ax[1].plot_surface(x_star.reshape(size), t_star.reshape(size), f_grid.reshape(size), cmap="viridis", alpha=0.8)
+                ax[1].set_title('f(t,x)')
+                ax[1].set_xlabel(self.xlabel)
+                ax[1].set_ylabel(self.ylabel)
             
-            if Training_points:
-                ax[0].scatter(self.X[:,0], self.X[:,1], self.u_train, c='r', marker='o', label='Training points')
-                ax[1].scatter(self.Y[:,0], self.Y[:,1], self.f_train, c='b', marker='o', label='Training points')
+                if Training_points:
+                    ax[0].scatter(self.X[:,0], self.X[:,1], self.u_train, c='r', marker='o', label='Training points')
+                    ax[1].scatter(self.Y[:,0], self.Y[:,1], self.f_train, c='b', marker='o', label='Training points')
             plt.legend()
         else:
             x_star = self.raw_data[0]
@@ -573,14 +663,14 @@ class PhysicsInformedGP_regressor():
             f_grid = self.raw_data[2]
             fig,ax = plt.subplots(1,2,figsize=(12, 6))
             ax[0].plot(x_star, u_grid, markersize=10, label='Observations')
-            ax[0].set_xlabel('$t$')
-            ax[0].set_ylabel('$u(t)$')
+            ax[0].set_xlabel(self.xlabel)
+            ax[0].set_ylabel(self.ylabel)
             ax[0].set_title("u(t) raw data")
             ax[0].grid(alpha = 0.7)
 
             ax[1].plot(x_star, f_grid, markersize=10, label='Observations')
-            ax[1].set_xlabel('$t$')
-            ax[1].set_ylabel('$f(t)$')
+            ax[1].set_xlabel(self.xlabel)
+            ax[1].set_ylabel(self.ylabel)
             ax[1].set_title("f(t) raw data")
             ax[1].grid(alpha = 0.7)
             if Training_points:
