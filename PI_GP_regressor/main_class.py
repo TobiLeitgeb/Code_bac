@@ -313,7 +313,8 @@ class PhysicsInformedGP_regressor():
             fig, ax = plt.subplots(1,2,figsize=(12, 6))
             y_data, var = model_GPy.predict(X_star)
             ax[0].plot(X_star, y_data, label = "GP prediction")
-            ax[0].fill_between(X_star.ravel(), y_data.ravel() - 2*np.sqrt(var.ravel()), y_data.ravel() + 2*np.sqrt(var.ravel()), alpha=0.2, label = "95% confidence interval")
+            ax[0].scatter(self.X, self.u_train, label = "training points", color = "red", marker = "o", s = 15)
+            ax[0].fill_between(X_star.ravel(), y_data.ravel() - 2*np.sqrt(var.ravel()), y_data.ravel() + 2*np.sqrt(var.ravel()),color = "blue", alpha=0.2, label = "95% confidence interval")
             ax[0].scatter(self.validation_set[0],self.validation_set[1], label = "validation set", color = "orange", marker = "x", s = 15)
             ax[0].set_xlim(0,max(X_star))
             ax[0].set_title("u(t) prediction")
@@ -330,6 +331,7 @@ class PhysicsInformedGP_regressor():
             y_data, var = model_GPy2.predict(X_star)
             MSE_f = np.mean((mean.ravel() - f_val.ravel())**2).item()
             ax[1].plot(X_star, y_data, label = "GP prediction",color = "blue")
+            ax[1].scatter(self.Y, self.f_train, label = "training points", color = "blue", marker = "o", s = 15)
             ax[1].fill_between(X_star.ravel(), y_data.ravel() - 2*np.sqrt(var.ravel()), y_data.ravel() + 2*np.sqrt(var.ravel()), alpha=0.2,color ="blue", label = "95% confidence interval")
             ax[1].scatter(self.validation_set[2],self.validation_set[3], label = "validation set", color = "orange", marker = "x", s = 15)
             ax[1].set_xlim(0,max(X_star))
@@ -517,7 +519,7 @@ class PhysicsInformedGP_regressor():
         if save_path != None:
             plt.savefig(save_path,bbox_inches='tight')
         
-    
+    #def plot_prediction_and_analytical
     def plot_difference_GPy(self,title,save_path):
         assert self.timedependence  == True, "Contourplot of difference only for 2d case"
         data = self.raw_data
