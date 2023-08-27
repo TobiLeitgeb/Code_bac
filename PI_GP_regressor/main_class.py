@@ -1,14 +1,15 @@
 from jax import numpy as jnp
 from jax import jit, grad, vmap, jacfwd
+import jax
 import matplotlib.pyplot as plt
 import numpy as np
-from skopt.space import Real
 from tqdm import tqdm
 from joblib import Parallel, delayed
 from scipy.optimize import minimize
 import pandas as pd
 from scipy.stats import qmc
-import GPy
+jax.config.update('jax_platform_name', 'cpu')
+#import GPy
 
 class PhysicsInformedGP_regressor():
     """class for the GP"""
