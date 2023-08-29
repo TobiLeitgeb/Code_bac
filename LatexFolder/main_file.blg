@@ -5,13 +5,14 @@ Reallocating 'name_of_file' (item size: 1) to 6 items.
 The style file: plain.bst
 Reallocating 'name_of_file' (item size: 1) to 8 items.
 Database file #1: library.bib
+Warning--I didn't find a database entry for "scipy"
 Warning--empty publisher in bishop
 Warning--empty journal in Duvenaud
 Warning--empty publisher in RasmussenCarlEdward
 Warning--empty booktitle in Särkkä
 You've used 8 entries,
             2118 wiz_defined-function locations,
-            542 strings with 4996 characters,
+            543 strings with 5001 characters,
 and the built_in function-call counts, 2120 in all, are:
 = -- 199
 > -- 78
@@ -50,4 +51,4 @@ warning$ -- 4
 while$ -- 19
 width$ -- 9
 write$ -- 83
-(There were 4 warnings)
+(There were 5 warnings)
