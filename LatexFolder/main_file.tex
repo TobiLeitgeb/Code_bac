@@ -18,6 +18,7 @@
 \usepackage{tabularx}
 \usepackage{bm}
 \usepackage{float}
+\usepackage[font=small]{caption}
 \title{Your Paper}
 \author{You}
 
@@ -35,7 +36,8 @@ the $u$ and $f$. However, we do not have knowledge of the ODE parameters
 $\phi$. This is a typical situation in for example lab work, where we have
 measurements and want to determine an underlying physical parameter or
 interpolate the data. This is often done with typical linear regression
-techniques.
+techniques.\\
+
 \section{Fundamentals}
 \subsection{Gaussian Process} %~\cite{pml1Book}\cite{RasmussenCarlEdward}
 As defined in~\cite{RasmussenCarlEdward} a Gaussian Process is a collection of
@@ -117,7 +119,7 @@ From this joint Gaussian prior we can then calculate the predictive posterior di
         \bm{\Sigma_*}                      & = K(\bm{X_*},\bm{X_*}) - K(\bm{X_*},\bm{X}){[K(\bm{X},\bm{X}) + \sigma_n^2 \bm{I}]}^{-1}K(\bm{X},\bm{X_*})
     \end{aligned}
 \end{equation}
-We now have obtained the predictive mean $\bm{\mu_*}$ and the predictive covariance for the new test inputs $\bm{X_*}$.
+We now have obtained the posterior predictive mean $\bm{\mu_*}$ and the posterior covariance $\sigma$ for the new test inputs $\bm{X_*}$.
 
 \subsection{Kernels}
 In~\cite{RasmussenCarlEdward} a kernel is defined as a function
@@ -209,6 +211,7 @@ We now look at noisy observations of both $u$ and $f$,with noise $\sigma_u$ and 
 \end{equation}
 with which we create two data sets $\{\bm{X_u,y_u}\}$ and $\{\bm{X_f,y_f}\}$. Similarly, as we did before for the test points in equation~\ref{eq:joint_f,X_*} we can now write (create) a joint Gaussian distribution of the observations $\bm{y_u}$ and $\bm{y_f}$. We collect $\bm{X_u,X_f}$ in $\bm{X}$ and $\bm{y_u,y_f}$ in $\bm{y}$. With the joint GP at equation~\ref{eq:jointGP}, the joint distribution will take the following form:
 \begin{equation}
+    \label{eq:jointGP_observations}
     \begin{aligned}
         p(\bm{y}|\bm{X},\bm{\theta},\sigma_{n_u}^2,\sigma_{f_u}^2,\bm{\phi}) =
         \mathcal{N}\left(\bm{0},
@@ -224,9 +227,16 @@ model to obtain the optimized hyperparameters $\bm{\theta_*}$ and
 $\bm{\phi_*}$. More information about the optimization process will be provided
 in the next chapter. Here we now continue with the optimized hyperparameters.
 \subsection{Optimization/Finding of the hyperparameters}
-
+A very, if not the most important part of the process is the optimization of the hyperparameters. The optimization is done by maximizing the marginal log likelihood (mll) of the joint GP with respect to the hyperparameter. The mll is defined as:
+\begin{equation}
+    \log p(\bm{y}|\bm{X},\bm{\theta},\sigma_{n_u}^2,\sigma_{f_u}^2,\bm{\phi}) =
+    -\frac{1}{2}\bm{y}^\intercal \bm{K}^{-1}\bm{y} - \frac{1}{2}\log\left\lvert \bm{K}\right\rvert - \frac{n}{2}\log(2\pi)
+\end{equation}
+with $\bm{K}$ being the covariance matrix of the joint GP in equation~\ref{eq:jointGP_observations}. For the optimization we used different gradient based optimizers, aswell as a heuristic search method, namely the Nelder-Mead method. All the optimizers used came from the scipy.optimize.minimize function from the scipy library~\cite{scipy}.
 The optimization of the hyperparameters deemed to be harder than expected.
-Different optimizers were used.
+Different optimizers were used. Mention that the results varie (numerical
+instabilities, etc.) but with sufficient number of optimization runs the values
+always reach nearly the same number of magintude. gradient based optimizers fail with increasing number of training points. However, the  the Nelder-Mead optimizer still performs well with a high number of training points.   
 \subsection{Predictions with the Posterior}
 With the obtained hyperparameters $\bm{\theta_*}$ and $\bm{\phi_*}$ we can make
 new predictions at a test location $\bm{x_*}$. Similar to the construction in
@@ -255,27 +265,44 @@ with $\bm{\kappa_u}$ and $\bm{\kappa_f}$ being:
 \end{equation}
 
 \section{Results}
-For testing the framework we will use ODEs and PDEs of physical models. More
-specifically, we will look at the three main types of PDE, namely Elliptic,
-Hyperbolic, and Parabolic. The numerically obtained solutions will be used as
-the ground truth. For obtaining $u(\bm{x})$, we will fully define the
-differential equation with its initial- and boundary conditions and then use
-mathematicas NDSolve (numerical solution) or NSolve (analytical solution) to
-compute the solution $\{(\bm{x});u(\bm{x}),f(\bm{x})\}$. The training and
-validation points will be sampled from the solution using a sobol
-sequence[cite]. In addition, we will add some noise to the samples for the
-training and validation points, to analyse the impact onto the results and to
-simulate real world data. This will be done by creating two data sets
-$\{(\bm{x_u});\bm{y_u}\}$ and $\{(\bm{x_f});\bm{y_f}\}$ with $\bm{y_i} =
-    u(\bm{x_i}) + \sigma_{ui}^2 ; \; i = u,f$. The implementation of a sobol
-sequence helps with evenly spaced training and validation points, which is
-important for the training process of the model.\\ Through the optimization of
-the mll, we will obtain the parameters of the underlying equation $\phi$, as
-well as the hyperparameters $\theta$ of the kernel. With these parameters we
-will then calculate the predictive mean and covariance and then compare the
-ground truth with the computed mean function. To benchmark the performance we
-will look at the marginal log likelihood and at the mean squared error of the
-validation set with the prediction. As another way of looking at the performance of the informed model we will compare it to a GP regression with a general SE kernel, as described in~\ref{sec:Regression}. For this we will use the GPy library~\cite{gpy2014}.
+In the following we will call the physics informed model which is used here the
+informed model and the vanilla model the model without the physics informed
+framework and only a general SE kernel.\\ \\ For testing the framework we will
+use ODEs and PDEs of physical models. More specifically, we will look at the
+three main types of PDE, namely Elliptic, Hyperbolic, and Parabolic. The
+numerically obtained solutions will be used as the ground truth. For obtaining
+$u(\bm{x})$, we will fully define the differential equation with its initial-
+and boundary conditions and then use mathematicas NDSolve (numerical solution)
+or NSolve (analytical solution) to compute the solution
+$\{(\bm{x});u(\bm{x}),f(\bm{x})\}$. The training and validation points will be
+sampled from the solution domain $[\bm{x}_{\min}, \bm{x}_{\max}]$ using a sobol
+sequence[cite]. We will add some noise to the samples for the training and
+validation points, to analyse the impact onto the results and to simulate real
+world data. Furthermore, often the incoporation of noise improves stability in
+the optimization and prediction process. This will be done by creating two data
+sets $\{(\bm{x_u});\bm{y_u}\}$ and $\{(\bm{x_f});\bm{y_f}\}$ with $\bm{y_i} =
+    u(\bm{x_i}) + \mathcal{N}(\bm{0}|\sigma_{ni}^2 I) ; \; i = u,f$. The
+implementation of a sobol sequence helps with evenly spaced training and
+validation points, which is important for the training process of the model.\\
+Through the optimization of the mll, we will obtain the parameters of the
+underlying equation $\phi$, as well as the hyperparameters $\theta$ of the
+kernel. With these parameters we will then calculate the predictive mean and
+covariance and then compare the ground truth with the computed mean function.
+To benchmark the performance we will look at the marginal log likelihood and at
+the mean squared error of the validation set with the prediction. As another
+way of looking at the performance of the informed model we will compare it to a
+vanilla model with a general SE kernel, as described in~\ref{sec:Regression}.
+For this we will use the GPy library~\cite{gpy2014}. However, it is important
+to acknowledge that the vanilla model with the simple SE kernel only has two
+hyperparameters, namely the length scale $l$ and the variance $\sigma_f^2$.
+Additionaly, the informed model takes advantage of the joint GP. This means
+that the informed model has more parameters to optimize and additional
+information from the joint GP, and therefore it is not a fair comparison.
+However, it is still interesting to see how the informed model performs
+compared to the vanilla model and to have a general benchmark. To further
+investiage this we will give one exmaple with the same amount of
+hyperparameters, namely the Poisson equation and compare the results of the two
+models.\\
 \subsection{Damped oscillator}
 As a first example we will look at a one dimensional differential equation of a
 damped oscillator with mass $m$, damping $\gamma$ and force constant $k$. The
@@ -285,20 +312,30 @@ differential equation is given by:
         m\frac{\partial^2 u(t)}{\partial t^2} + \gamma \frac{\partial u(t)}{\partial t} + k u(t) = f(t) \\ u(0) = 0, \; \frac{\partial u(t)}{\partial t} = 0
     \end{aligned}
 \end{equation}
-The data sets were generated with $m = 1, \gamma = 0.1, k = 1$ and $f(t) = 0$.
+The first data set was generated with $m = 1, \gamma = 0.1, k = 1$ and a simple sinusoidal forcing term $f(t) = 4 \sin(2\pi t)$. For the added noise we used $\sigma_{nu} = 10^{-8}$ and $\sigma_{nf} = 10^{-8}$ which can be seen as noise free data. However, adding some noise imporoves stability in some cases. We calculated the result in the time interval $t \in [0,3]$ from with we sample the training points. The model learns the hyperparameters $\phi$ $(m,\gamma,k)$ to be $(3,3,3)$. These results are very accurate considering we are only using 9 training points for a model with 5 hyperparameters. As elaborated before, the exact value of the final values after optimizing varies. The predictive distribution for the general solution $u(t)$ and the forcing term $f(t)$ can be seen in figure~\ref{fig:damped_oscillator}. Looking at the results for the informed model we can see that the prediction for $u(t)$ and for $f(t)$ are very precise. The posterior mean overlines with the validation points and the uncertanty band is so small that is not even visible. The mean squared error of $u(t)$ and $f(t)$ are $MSE_u = $ and $MSE_f = $. The predictive mean of the vanilla model can also be seen in figure~\ref{fig:damped_oscillator}. The MSEs for the vanilla model are $MSE_{u,va}$ and $MSE_{f,va}$. The MSE for the vanilla model is 3 to 4 orders of magnitude higher than the MSE of the informed model which gets very clear when looking at figure~\ref{fig:damped_oscillator}. The prediction from the vanilla model are not as precise as the ones from the informed model. The uncertanty band is much larger and the mean does not overline with the validation points in many reagions. This is also reflected in the MSEs. The informed model even manages to accuratly predict between the training points without an uncertanty band, as well as the edges of the domain.
 \begin{figure}
     \centering
-    \includegraphics[width=1\textwidth]{../final_examples/oscillator/prediction.png}
-    \caption{Predictive mean of the damped oscillator}
-    \label{fig:damped_oscillator}
+    \includegraphics[width=1\textwidth]{../final_examples/oscillator/merged_1d_plots.png}
+    \caption{(a) \& (b) predictive mean $\mu_u$ and $\mu_f$ for the informed model, two $\sigma$ uncertanty band, training and validation points sampled from $\{\bm{x_u},u(\bm{y_u})\}$ and $\{\bm{x_f},u(\bm{y_f})\}$ respectivly.\ (c) \& (d) predictive mean $\mu_u$ and $\mu_f$ for the vanilla model, two $\sigma$ uncertanty band, training and validation points sampled from $\{\bm{x_u},u(\bm{y_u})\}$ and $\{\bm{x_f},u(\bm{y_f})\}$ respectivly. The noise $\sigma_{nu}$ and $\sigma_{nf}$ were both set to $10^{-8}$. The MSEs of the informed model are $MSE_u = $ and $MSE_f = $. The MSEs for the vanilla model are $MSE_{u,va}$ and $MSE_{f,va}$.}
+    ~\label{fig:damped_oscillator}
 \end{figure}
-
-\begin{figure}
+\\
+To benchmark the performance further we looked at cases with more noise and with more training points.
+Table of the mses with n training points
+\begin{table}
     \centering
-    \includegraphics[width=1\textwidth]{../final_examples/oscillator/GPy_prediction.png}
-    \caption{Predictive mean of the damped oscillator}
-    \label{fig:damped_oscillator}
-\end{figure}
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        n     & 5 & 10 & 20 & 50 \\
+        \hline
+        $MSE_u$ &   &    &    &    \\
+        \hline
+        $MSE_f$ &   &    &    &    \\
+        \hline
+    \end{tabular}
+    \caption{MSEs for the informed model with different number of training points.}
+    \label{tab:my_label}
+\end{table}
 \subsection{Heat Equation}
 The one dimensional time dependent heat equation with a forcing term is:
 \begin{equation}
@@ -307,24 +344,7 @@ The one dimensional time dependent heat equation with a forcing term is:
     \end{aligned}
 \end{equation}
 with $\alpha$ as the thermal diffusivity.
-\begin{figure}
-    \centering
-    \includegraphics[width=1\textwidth]{../final_examples/heat_equation/predictive_mean.png}
-    \caption{}
-    \label{fig:heat_equation}
-\end{figure}
-\begin{figure}
-    \centering
-    \includegraphics[width=1\textwidth]{../final_examples/heat_equation/predictive_variance.png}
-    \caption{}
-    \label{fig:heat_equation}
-\end{figure}
-\begin{figure}
-    \centering
-    \includegraphics[width=1\textwidth]{../final_examples/heat_equation/difference.png}
-    \caption{}
-    \label{fig:heat_equation}
-\end{figure}
+
 
 \subsection{Wave Equation}
 \begin{equation}
