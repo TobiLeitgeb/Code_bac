@@ -37,6 +37,12 @@ Carl~Edward Rasmussen.
 \newblock {\em Gaussian processes for machine learning}.
 \newblock Adaptive computation and machine learning. 2006.
 
+\bibitem{Singer:2009NelderMead}
+S.~Singer and J.~Nelder.
+\newblock {N}elder-{M}ead algorithm.
+\newblock {\em Scholarpedia}, 4(7):2928, 2009.
+\newblock revision \#91557.
+
 \bibitem{Särkkä}
 Simo Särkkä.
 \newblock Linear operators and stochastic partial differential equations in

@@ -1,15 +1,15 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.5) (preloaded format=pdflatex 2023.7.23)  29 AUG 2023 21:38
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.5) (preloaded format=pdflatex 2023.8.27)  30 AUG 2023 21:01
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**"c:/Users/Razer/OneDrive - Technische Universität Graz/Dokumente/Uni/6.Semester/BAC/Code_bac/LatexFolder/main_file.tex"
-(c:/Users/Razer/OneDrive - Technische Universität Graz/Dokumente/Uni/6.Semester/BAC/Code_bac/LatexFolder/main_file.tex
+**/home/tobias/code/Code_bac/LatexFolder/main_file.tex
+(/home/tobias/code/Code_bac/LatexFolder/main_file.tex
 LaTeX2e <2023-06-01> patch level 1
-L3 programming layer <2023-06-30>
-(C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/base\article.cls
+L3 programming layer <2023-08-11>
+(/home/tobias/.miktex/texmfs/install/tex/latex/base/article.cls
 Document Class: article 2023/05/17 v1.4n Standard LaTeX document class
-(C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/base\size10.clo
+(/home/tobias/.miktex/texmfs/install/tex/latex/base/size10.clo
 File: size10.clo 2023/05/17 v1.4n Standard LaTeX file (size option)
 )
 \c@part=\count185
@@ -23,39 +23,33 @@ File: size10.clo 2023/05/17 v1.4n Standard LaTeX file (size option)
 \abovecaptionskip=\skip48
 \belowcaptionskip=\skip49
 \bibindent=\dimen140
-) (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/generic/babel\babel.sty
+) (/home/tobias/.miktex/texmfs/install/tex/generic/babel/babel.sty
 Package: babel 2023/07/15 v3.92 The Babel package
 \babel@savecnt=\count193
 \U@D=\dimen141
-\l@unhyphenated=\language79
- (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/generic/babel\txtbabel.def)
+\l@unhyphenated=\language1
+ (/home/tobias/.miktex/texmfs/install/tex/generic/babel/txtbabel.def)
 \bbl@readstream=\read2
 \bbl@dirlevel=\count194
 
 *************************************
 * Local config file bblopts.cfg used
 *
-(C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/arabi\bblopts.cfg
+(/home/tobias/.miktex/texmfs/install/tex/latex/arabi/bblopts.cfg
 File: bblopts.cfg 2005/09/08 v0.1 add Arabic and Farsi to "declared" options of babel
-) (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/babel-english\english.ldf
+) (/home/tobias/.miktex/texmfs/install/tex/latex/babel-english/english.ldf
 Language: english 2017/06/06 v3.3r English support from the babel system
-Package babel Info: Hyphen rules for 'canadian' set to \l@english
-(babel)             (\language0). Reported on input line 102.
-Package babel Info: Hyphen rules for 'australian' set to \l@ukenglish
-(babel)             (\language73). Reported on input line 105.
-Package babel Info: Hyphen rules for 'newzealand' set to \l@ukenglish
-(babel)             (\language73). Reported on input line 108.
-)) (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/generic/babel/locale/en\babel-english.tex
+)) (/home/tobias/.miktex/texmfs/install/tex/generic/babel/locale/en/babel-english.tex
 Package babel Info: Importing font and identification data for english
 (babel)             from babel-en.ini. Reported on input line 11.
-) (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/geometry\geometry.sty
+) (/home/tobias/.miktex/texmfs/install/tex/latex/geometry/geometry.sty
 Package: geometry 2020/01/02 v5.9 Page Geometry
- (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/graphics\keyval.sty
+ (/home/tobias/.miktex/texmfs/install/tex/latex/graphics/keyval.sty
 Package: keyval 2022/05/29 v1.15 key=value parser (DPC)
 \KV@toks@=\toks17
-) (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/generic/iftex\ifvtex.sty
+) (/home/tobias/.miktex/texmfs/install/tex/generic/iftex/ifvtex.sty
 Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
- (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/generic/iftex\iftex.sty
+ (/home/tobias/.miktex/texmfs/install/tex/generic/iftex/iftex.sty
 Package: iftex 2022/02/03 v1.0f TeX engine tests
 ))
 \Gm@cnth=\count195
@@ -70,21 +64,21 @@ Package: iftex 2022/02/03 v1.0f TeX engine tests
 \Gm@layouthoffset=\dimen148
 \Gm@layoutvoffset=\dimen149
 \Gm@dimlist=\toks18
- (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/geometry\geometry.cfg)) (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsmath.sty
+ (/home/tobias/.miktex/texmfs/install/tex/latex/geometry/geometry.cfg)) (/home/tobias/.miktex/texmfs/install/tex/latex/amsmath/amsmath.sty
 Package: amsmath 2023/05/13 v2.17o AMS math features
 \@mathmargin=\skip50
 
 For additional information on amsmath, use the `?' option.
-(C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amstext.sty
+(/home/tobias/.miktex/texmfs/install/tex/latex/amsmath/amstext.sty
 Package: amstext 2021/08/26 v2.01 AMS text
- (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsgen.sty
+ (/home/tobias/.miktex/texmfs/install/tex/latex/amsmath/amsgen.sty
 File: amsgen.sty 1999/11/30 v2.0 generic functions
 \@emptytoks=\toks19
 \ex@=\dimen150
-)) (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsbsy.sty
+)) (/home/tobias/.miktex/texmfs/install/tex/latex/amsmath/amsbsy.sty
 Package: amsbsy 1999/11/29 v1.2d Bold Symbols
 \pmbraise@=\dimen151
-) (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsopn.sty
+) (/home/tobias/.miktex/texmfs/install/tex/latex/amsmath/amsopn.sty
 Package: amsopn 2022/04/08 v2.04 operator names
 )
 \inf@bad=\count198
@@ -134,31 +128,31 @@ LaTeX Info: Redefining \Relbar on input line 971.
 \mathdisplay@stack=\toks23
 LaTeX Info: Redefining \[ on input line 2953.
 LaTeX Info: Redefining \] on input line 2954.
-) (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\amssymb.sty
+) (/home/tobias/.miktex/texmfs/install/tex/latex/amsfonts/amssymb.sty
 Package: amssymb 2013/01/14 v3.01 AMS font symbols
- (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\amsfonts.sty
+ (/home/tobias/.miktex/texmfs/install/tex/latex/amsfonts/amsfonts.sty
 Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
 \symAMSa=\mathgroup4
 \symAMSb=\mathgroup5
 LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
 LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 (Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
-)) (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphicx.sty
+)) (/home/tobias/.miktex/texmfs/install/tex/latex/graphics/graphicx.sty
 Package: graphicx 2021/09/16 v1.2d Enhanced LaTeX Graphics (DPC,SPQR)
- (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphics.sty
+ (/home/tobias/.miktex/texmfs/install/tex/latex/graphics/graphics.sty
 Package: graphics 2022/03/10 v1.4e Standard LaTeX Graphics (DPC,SPQR)
- (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/graphics\trig.sty
+ (/home/tobias/.miktex/texmfs/install/tex/latex/graphics/trig.sty
 Package: trig 2021/08/11 v1.11 sin cos tan (DPC)
-) (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/graphics-cfg\graphics.cfg
+) (/home/tobias/.miktex/texmfs/install/tex/latex/graphics-cfg/graphics.cfg
 File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
 )
 Package graphics Info: Driver file: pdftex.def on input line 107.
- (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/graphics-def\pdftex.def
+ (/home/tobias/.miktex/texmfs/install/tex/latex/graphics-def/pdftex.def
 File: pdftex.def 2022/09/22 v1.2b Graphics/color driver for pdftex
 ))
 \Gin@req@height=\dimen159
 \Gin@req@width=\dimen160
-) (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/booktabs\booktabs.sty
+) (/home/tobias/.miktex/texmfs/install/tex/latex/booktabs/booktabs.sty
 Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
 \heavyrulewidth=\dimen161
 \lightrulewidth=\dimen162
@@ -177,56 +171,56 @@ Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
 \@thisruleclass=\count278
 \@lastruleclass=\count279
 \@thisrulewidth=\dimen173
-) (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\hyperref.sty
+) (/home/tobias/.miktex/texmfs/install/tex/latex/hyperref/hyperref.sty
 Package: hyperref 2023-07-08 v7.01b Hypertext links for LaTeX
- (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/generic/ltxcmds\ltxcmds.sty
+ (/home/tobias/.miktex/texmfs/install/tex/generic/ltxcmds/ltxcmds.sty
 Package: ltxcmds 2020-05-10 v1.25 LaTeX kernel commands for general use (HO)
-) (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/generic/pdftexcmds\pdftexcmds.sty
+) (/home/tobias/.miktex/texmfs/install/tex/generic/pdftexcmds/pdftexcmds.sty
 Package: pdftexcmds 2020-06-27 v0.33 Utility functions of pdfTeX for LuaTeX (HO)
- (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/generic/infwarerr\infwarerr.sty
+ (/home/tobias/.miktex/texmfs/install/tex/generic/infwarerr/infwarerr.sty
 Package: infwarerr 2019/12/03 v1.5 Providing info/warning/error messages (HO)
 )
 Package pdftexcmds Info: \pdf@primitive is available.
 Package pdftexcmds Info: \pdf@ifprimitive is available.
 Package pdftexcmds Info: \pdfdraftmode found.
-) (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/kvsetkeys\kvsetkeys.sty
+) (/home/tobias/.miktex/texmfs/install/tex/latex/kvsetkeys/kvsetkeys.sty
 Package: kvsetkeys 2022-10-05 v1.19 Key value parser (HO)
-) (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/generic/kvdefinekeys\kvdefinekeys.sty
+) (/home/tobias/.miktex/texmfs/install/tex/generic/kvdefinekeys/kvdefinekeys.sty
 Package: kvdefinekeys 2019-12-19 v1.6 Define keys (HO)
-) (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/generic/pdfescape\pdfescape.sty
+) (/home/tobias/.miktex/texmfs/install/tex/generic/pdfescape/pdfescape.sty
 Package: pdfescape 2019/12/09 v1.15 Implements pdfTeX's escape features (HO)
-) (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/hycolor\hycolor.sty
+) (/home/tobias/.miktex/texmfs/install/tex/latex/hycolor/hycolor.sty
 Package: hycolor 2020-01-27 v1.10 Color options for hyperref/bookmark (HO)
-) (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/letltxmacro\letltxmacro.sty
+) (/home/tobias/.miktex/texmfs/install/tex/latex/letltxmacro/letltxmacro.sty
 Package: letltxmacro 2019/12/03 v1.6 Let assignment for LaTeX macros (HO)
-) (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/auxhook\auxhook.sty
+) (/home/tobias/.miktex/texmfs/install/tex/latex/auxhook/auxhook.sty
 Package: auxhook 2019-12-17 v1.6 Hooks for auxiliary files (HO)
-) (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\nameref.sty
+) (/home/tobias/.miktex/texmfs/install/tex/latex/hyperref/nameref.sty
 Package: nameref 2023-08-07 v2.53 Cross-referencing by name of section
- (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/refcount\refcount.sty
+ (/home/tobias/.miktex/texmfs/install/tex/latex/refcount/refcount.sty
 Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
-) (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/generic/gettitlestring\gettitlestring.sty
+) (/home/tobias/.miktex/texmfs/install/tex/generic/gettitlestring/gettitlestring.sty
 Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
- (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/kvoptions\kvoptions.sty
+ (/home/tobias/.miktex/texmfs/install/tex/latex/kvoptions/kvoptions.sty
 Package: kvoptions 2022-06-15 v3.15 Key value format for package options (HO)
 ))
 \c@section@level=\count280
-) (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/etoolbox\etoolbox.sty
+) (/home/tobias/.miktex/texmfs/install/tex/latex/etoolbox/etoolbox.sty
 Package: etoolbox 2020/10/05 v2.5k e-TeX tools for LaTeX (JAW)
 \etb@tempcnta=\count281
 )
 \@linkdim=\dimen174
 \Hy@linkcounter=\count282
 \Hy@pagecounter=\count283
- (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\pd1enc.def
+ (/home/tobias/.miktex/texmfs/install/tex/latex/hyperref/pd1enc.def
 File: pd1enc.def 2023-07-08 v7.01b Hyperref: PDFDocEncoding definition (HO)
 Now handling font encoding PD1 ...
 ... no UTF-8 mapping file for font encoding PD1
-) (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/generic/intcalc\intcalc.sty
+) (/home/tobias/.miktex/texmfs/install/tex/generic/intcalc/intcalc.sty
 Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
 )
 \Hy@SavedSpaceFactor=\count284
- (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\puenc.def
+ (/home/tobias/.miktex/texmfs/install/tex/latex/hyperref/puenc.def
 File: puenc.def 2023-07-08 v7.01b Hyperref: PDF Unicode definition (HO)
 Now handling font encoding PU ...
 ... no UTF-8 mapping file for font encoding PU
@@ -240,15 +234,15 @@ Package hyperref Info: Backreferencing OFF on input line 4187.
 Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
 Package hyperref Info: Bookmarks ON on input line 4434.
 \c@Hy@tempcnt=\count285
- (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/url\url.sty
+ (/home/tobias/.miktex/texmfs/install/tex/latex/url/url.sty
 \Urlmuskip=\muskip17
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
 LaTeX Info: Redefining \url on input line 4772.
 \XeTeXLinkMargin=\dimen175
- (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/generic/bitset\bitset.sty
+ (/home/tobias/.miktex/texmfs/install/tex/generic/bitset/bitset.sty
 Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
- (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/generic/bigintcalc\bigintcalc.sty
+ (/home/tobias/.miktex/texmfs/install/tex/generic/bigintcalc/bigintcalc.sty
 Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO)
 ))
 \Fld@menulength=\count286
@@ -261,7 +255,7 @@ Package hyperref Info: backreferencing OFF on input line 6066.
 Package hyperref Info: Link coloring ON on input line 6069.
 Package hyperref Info: Link coloring with OCG OFF on input line 6076.
 Package hyperref Info: PDF/A mode OFF on input line 6081.
- (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/base\atbegshi-ltx.sty
+ (/home/tobias/.miktex/texmfs/install/tex/latex/base/atbegshi-ltx.sty
 Package: atbegshi-ltx 2021/01/10 v1.0c Emulation of the original atbegshi
 package with kernel methods
 )
@@ -270,26 +264,26 @@ package with kernel methods
 \c@Hfootnote=\count289
 )
 Package hyperref Info: Driver (autodetected): hpdftex.
- (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\hpdftex.def
+ (/home/tobias/.miktex/texmfs/install/tex/latex/hyperref/hpdftex.def
 File: hpdftex.def 2023-07-08 v7.01b Hyperref driver for pdfTeX
- (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/base\atveryend-ltx.sty
+ (/home/tobias/.miktex/texmfs/install/tex/latex/base/atveryend-ltx.sty
 Package: atveryend-ltx 2020/08/19 v1.0a Emulation of the original atveryend package
 with kernel methods
 )
 \Fld@listcount=\count290
 \c@bookmark@seq@number=\count291
- (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/rerunfilecheck\rerunfilecheck.sty
+ (/home/tobias/.miktex/texmfs/install/tex/latex/rerunfilecheck/rerunfilecheck.sty
 Package: rerunfilecheck 2022-07-10 v1.10 Rerun checks for auxiliary files (HO)
- (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/generic/uniquecounter\uniquecounter.sty
+ (/home/tobias/.miktex/texmfs/install/tex/generic/uniquecounter/uniquecounter.sty
 Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
 )
 Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 285.
 )
 \Hy@SectionHShift=\skip53
-) (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/caption\caption.sty
-Package: caption 2023/03/12 v3.6j Customizing captions (AR)
- (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/caption\caption3.sty
-Package: caption3 2023/03/12 v2.4 caption3 kernel (AR)
+) (/home/tobias/.miktex/texmfs/install/tex/latex/caption/caption.sty
+Package: caption 2023/07/31 v3.6n Customizing captions (AR)
+ (/home/tobias/.miktex/texmfs/install/tex/latex/caption/caption3.sty
+Package: caption3 2023/07/31 v2.4d caption3 kernel (AR)
 \caption@tempdima=\dimen178
 \captionmargin=\dimen179
 \caption@leftmargin=\dimen180
@@ -303,9 +297,9 @@ Package caption Info: Standard document class detected.
 \c@caption@flags=\count292
 \c@continuedfloat=\count293
 Package caption Info: hyperref package is loaded.
-) (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/tools\tabularx.sty
+) (/home/tobias/.miktex/texmfs/install/tex/latex/tools/tabularx.sty
 Package: tabularx 2020/01/15 v2.11c `tabularx' package (DPC)
- (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/tools\array.sty
+ (/home/tobias/.miktex/texmfs/install/tex/latex/tools/array.sty
 Package: array 2022/09/04 v2.5g Tabular extension package (FMi)
 \col@sep=\dimen186
 \ar@mcellbox=\box53
@@ -322,7 +316,7 @@ Package: array 2022/09/04 v2.5g Tabular extension package (FMi)
 \TX@delta=\dimen192
 \TX@cols=\count294
 \TX@ftn=\toks25
-) (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/tools\bm.sty
+) (/home/tobias/.miktex/texmfs/install/tex/latex/tools/bm.sty
 Package: bm 2022/01/05 v1.2f Bold Symbol Support (DPC/FMi)
 \symboldoperators=\mathgroup6
 \symboldletters=\mathgroup7
@@ -331,14 +325,14 @@ Package bm Info: No bold for \OMX/cmex/m/n, using \pmb.
 Package bm Info: No bold for \U/msa/m/n, using \pmb.
 Package bm Info: No bold for \U/msb/m/n, using \pmb.
 LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 149.
-) (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/float\float.sty
+) (/home/tobias/.miktex/texmfs/install/tex/latex/float/float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \c@float@type=\count295
 \float@exts=\toks26
 \float@box=\box55
 \@float@everytoks=\toks27
 \@floatcapt=\box56
-) (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-pdftex.def
+) (/home/tobias/.miktex/texmfs/install/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2023-04-19 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count296
 \l__pdf_internal_box=\box57
@@ -398,7 +392,7 @@ LaTeX Font Info:    ... okay on input line 25.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-(C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mkii
+(/home/tobias/.miktex/texmfs/install/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count297
 \scratchdimen=\dimen193
@@ -411,18 +405,18 @@ LaTeX Font Info:    ... okay on input line 25.
 \MPnumerator=\count301
 \makeMPintoPDFobject=\count302
 \everyMPtoPDFconversion=\toks29
-) (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\epstopdf-base.sty
+) (/home/tobias/.miktex/texmfs/install/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
- (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/00miktex\epstopdf-sys.cfg
+ (/home/tobias/.miktex/texmfs/install/tex/latex/00miktex/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
-)) (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/graphics\color.sty
+)) (/home/tobias/.miktex/texmfs/install/tex/latex/graphics/color.sty
 Package: color 2022/01/06 v1.3d Standard LaTeX Color (DPC)
- (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/graphics-cfg\color.cfg
+ (/home/tobias/.miktex/texmfs/install/tex/latex/graphics-cfg/color.cfg
 File: color.cfg 2016/01/02 v1.6 sample color configuration
 )
 Package color Info: Driver file: pdftex.def on input line 149.
- (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/graphics\mathcolor.ltx))
+ (/home/tobias/.miktex/texmfs/install/tex/latex/graphics/mathcolor.ltx))
 Package hyperref Info: Link coloring ON on input line 25.
  (main_file.out) (main_file.out)
 \@outlinefile=\write3
@@ -432,15 +426,15 @@ Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: float package is loaded.
 Package caption Info: End \AtBeginDocument code.
 LaTeX Font Info:    Trying to load font information for U+msa on input line 27.
- (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
+ (/home/tobias/.miktex/texmfs/install/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
 LaTeX Font Info:    Trying to load font information for U+msb on input line 27.
- (C:\Users\Razer\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
+ (/home/tobias/.miktex/texmfs/install/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1
 
-{C:/Users/Razer/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}]
+{/home/tobias/.miktex/texmfs/data/fonts/map/pdftex/pdftex.map}]
 Underfull \hbox (badness 10000) in paragraph at lines 34--40
 
  []
@@ -451,49 +445,56 @@ Underfull \hbox (badness 10000) in paragraph at lines 166--170
  []
 
 [4]
-
-LaTeX Warning: Citation `scipy' on page 5 undefined on input line 235.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 268--306
+Underfull \hbox (badness 10000) in paragraph at lines 235--241
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 268--306
+Underfull \hbox (badness 10000) in paragraph at lines 235--241
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 235--241
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 269--307
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 269--307
 
  []
 
 [5]
-<../final_examples/oscillator/merged_1d_plots.png, id=162, 788.2248pt x 716.1957pt>
+<../final_examples/oscillator/merged_1d_plots.png, id=164, 788.2248pt x 716.1957pt>
 File: ../final_examples/oscillator/merged_1d_plots.png Graphic file (type png)
 <use ../final_examples/oscillator/merged_1d_plots.png>
-Package pdftex.def Info: ../final_examples/oscillator/merged_1d_plots.png  used on input line 318.
+Package pdftex.def Info: ../final_examples/oscillator/merged_1d_plots.png  used on input line 319.
 (pdftex.def)             Requested size: 443.57848pt x 403.04488pt.
  [6] [7 <../final_examples/oscillator/merged_1d_plots.png>] (main_file.bbl) [8] (main_file.aux)
  ***********
 LaTeX2e <2023-06-01> patch level 1
-L3 programming layer <2023-06-30>
+L3 programming layer <2023-08-11>
  ***********
-
-
-LaTeX Warning: There were undefined references.
-
 Package rerunfilecheck Info: File `main_file.out' has not changed.
 (rerunfilecheck)             Checksum: 33029FCF3FDDF4FA91AEE7A1EE3914D2;2181.
  ) 
 Here is how much of TeX's memory you used:
- 12968 strings out of 475551
- 208849 string characters out of 5762554
- 1935238 words of memory out of 5000000
- 33933 multiletter control sequences out of 15000+600000
+ 12977 strings out of 477438
+ 206703 string characters out of 5813484
+ 1935254 words of memory out of 5000000
+ 33750 multiletter control sequences out of 15000+600000
  573823 words of font info for 94 fonts, out of 8000000 for 9000
- 1141 hyphenation exceptions out of 8191
- 75i,14n,79p,2009b,467s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbsy10.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cmextra/cmbsy5.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cmextra/cmbsy7.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx9.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi5.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi9.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmib10.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cmextra/cmmib6.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cmextra/cmmib7.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cmextra/cmmib9.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr9.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy6.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy9.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmti10.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmtt10.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msam7.pfb><C:/Users/Razer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on main_file.pdf (8 pages, 1054326 bytes).
+ 0 hyphenation exceptions out of 8191
+ 75i,14n,79p,1941b,484s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmbsy10.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cmextra/cmbsy5.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cmextra/cmbsy7.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmbx10.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmbx12.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmbx9.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmex10.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmmi10.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmmi5.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmmi6.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmmi7.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmmi9.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmmib10.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cmextra/cmmib6.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cmextra/cmmib7.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cmextra/cmmib9.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmr10.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmr12.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmr17.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmr6.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmr7.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmr9.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmsy10.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmsy6.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmsy7.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmsy9.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmti10.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmtt10.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/symbols/msam7.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on main_file.pdf (8 pages, 1054870 bytes).
 PDF statistics:
- 335 PDF objects out of 1000 (max. 8388607)
- 62 named destinations out of 1000 (max. 500000)
+ 337 PDF objects out of 1000 (max. 8388607)
+ 63 named destinations out of 1000 (max. 500000)
  126 words of extra memory for PDF output out of 10000 (max. 10000000)
 
