@@ -1,15 +1,15 @@
 # Fdb version 4
-["bibtex main_file"] 1693417572 "main_file.aux" "main_file.bbl" "main_file" 1693422106 0
+["bibtex main_file"] 1693738002 "main_file.aux" "main_file.bbl" "main_file" 1693738004 0
   "./library.bib" 1693422087 3366 4a7c4769c2fa9511b423efdc282fc722 ""
   "/home/tobias/.miktex/texmfs/install/bibtex/bst/bibtex/plain.bst" 1693151903 20613 bd3fbfa9f64872b81ac57a0dd2ed855f ""
-  "main_file.aux" 1693422105 5552 02b9af1d635b28de7316224aed957e09 "pdflatex"
+  "main_file.aux" 1693738003 5826 3eb2de5b430844f36d9d227bba4bd840 "pdflatex"
   (generated)
   "main_file.bbl"
   "main_file.blg"
   (rewritten before read)
-["pdflatex"] 1693422104 "/home/tobias/code/Code_bac/LatexFolder/main_file.tex" "main_file.pdf" "main_file" 1693422106 0
-  "../final_examples/oscillator/merged_1d_plots.png" 1693338828 726974 ac977f1778aa6e1d916400311f5999cc ""
-  "/home/tobias/.miktex/texmfs/data/fonts/map/pdftex/pdftex.map" 1693152374 80909 eab91d9745dd2edfd62a31d53cd5fe15 ""
+["pdflatex"] 1693738002 "/home/tobias/code/Code_bac/LatexFolder/main_file.tex" "main_file.pdf" "main_file" 1693738004 0
+  "../final_examples/oscillator/merged_1d_plots.png" 1693654054 713450 f24935bf786da8eaeb3e01c31201f893 ""
+  "/home/tobias/.miktex/texmfs/data/fonts/map/pdftex/pdftex.map" 1693644547 80909 eab91d9745dd2edfd62a31d53cd5fe15 ""
   "/home/tobias/.miktex/texmfs/data/miktex/data/le/pdftex/pdflatex.fmt" 1693152012 20941758 b267f38180a72e60ef4931d7671875ff ""
   "/home/tobias/.miktex/texmfs/install/fonts/tfm/public/amsfonts/cmextra/cmbsy5.tfm" 1693151902 1120 1e8878807317373affa7f7bba4cf2f6a ""
   "/home/tobias/.miktex/texmfs/install/fonts/tfm/public/amsfonts/cmextra/cmbsy6.tfm" 1693151902 1124 14ccf5552bc7f77ca02a8a402bea8bfb ""
@@ -154,11 +154,11 @@
   "/home/tobias/.miktex/texmfs/install/tex/latex/tools/bm.sty" 1693151906 13231 df28b16cc1506f657b947b66cabad463 ""
   "/home/tobias/.miktex/texmfs/install/tex/latex/tools/tabularx.sty" 1693151906 7147 d80d8cf72d313443d08c13c1af59c90f ""
   "/home/tobias/.miktex/texmfs/install/tex/latex/url/url.sty" 1693151911 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
-  "/home/tobias/code/Code_bac/LatexFolder/main_file.tex" 1693422104 25433 23f6ea32b2ee9703eb4f547615c170a5 ""
-  "main_file.aux" 1693422105 5552 02b9af1d635b28de7316224aed957e09 "pdflatex"
-  "main_file.bbl" 1693417572 1543 2d099020fe32f11b98f10b4dd5dec0cb "bibtex main_file"
-  "main_file.out" 1693422105 2181 33029fcf3fddf4fa91aee7a1ee3914d2 "pdflatex"
-  "main_file.tex" 1693422104 25433 23f6ea32b2ee9703eb4f547615c170a5 ""
+  "/home/tobias/code/Code_bac/LatexFolder/main_file.tex" 1693737999 26178 0ef297e15b30d8152e827079c1b6afea ""
+  "main_file.aux" 1693738003 5826 3eb2de5b430844f36d9d227bba4bd840 "pdflatex"
+  "main_file.bbl" 1693738002 1543 2d099020fe32f11b98f10b4dd5dec0cb "bibtex main_file"
+  "main_file.out" 1693738003 2181 33029fcf3fddf4fa91aee7a1ee3914d2 "pdflatex"
+  "main_file.tex" 1693737999 26178 0ef297e15b30d8152e827079c1b6afea ""
   (generated)
   "main_file.aux"
   "main_file.log"

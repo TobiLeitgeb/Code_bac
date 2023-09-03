@@ -839,7 +839,7 @@ class PhysicsInformedGP_regressor():
     @staticmethod
     def get_data_set_1d(filename, n_training_points, noise: list, seeds=[50, 41]):
         try:
-            df = pd.read_csv("PI_Kernels_class/"+filename)
+            df = pd.read_csv(filename)
         except:
             df = pd.read_csv(filename)
 
@@ -872,7 +872,7 @@ class PhysicsInformedGP_regressor():
     @staticmethod
     def get_validation_set_1d(filename, n_validation_points, noise: list):
         try:
-            df = pd.read_csv("PI_Kernels_class/"+filename)
+            df = pd.read_csv(filename)
         except:
             df = pd.read_csv(filename)
 
@@ -904,7 +904,7 @@ class PhysicsInformedGP_regressor():
     def get_data_set_2d(filename, n_training_points, noise: list):
         # load data from mathematica calculation
         try:
-            df = pd.read_csv("PI_Kernels_class/"+filename)
+            df = pd.read_csv(filename)
         except:
             df = pd.read_csv(filename)
         x = df['space'].values
@@ -950,7 +950,7 @@ class PhysicsInformedGP_regressor():
     @staticmethod
     def get_validation_set_2d(filename, n_validation_points, noise: list):
         try:
-            df = pd.read_csv("PI_Kernels_class/"+filename)
+            df = pd.read_csv(filename)
         except:
             df = pd.read_csv(filename)
         x = df['space'].values
@@ -1019,7 +1019,7 @@ class PhysicsInformedGP_regressor():
         #              c='orange', marker='x', label='Validation set', alpha=0.5, s=15)
         ax[1].plot(self.Y, self.f_train, 'r.',
                    markersize=10, label='training points')
-        ax[1].plot(self.raw_data[0], self.raw_data[2],"--", label="Analytical solution",color = "orange")
+        ax[1].plot(self.raw_data[0], self.raw_data[2],"--", label="Analytical solution",color = "black")
         ax[1].legend(loc='upper right', fontsize=10)
         ax[1].set_xlabel("t", fontsize=font_size)
         ax[1].set_ylabel("f(t)", fontsize=font_size)
@@ -1044,7 +1044,7 @@ class PhysicsInformedGP_regressor():
         #              label="validation set", color="orange", marker="x", s=15)
         ax[2].plot(self.X, self.u_train, 'r.',
                    markersize=10, label='training points')
-        ax[2].plot(self.raw_data[0], self.raw_data[1],"--", label="Analytical solution")
+        ax[2].plot(self.raw_data[0], self.raw_data[1],"--", label="Analytical solution",color = "black")
         ax[2].set_xlabel("t", fontsize=font_size)
         ax[2].set_ylabel("u(t)", fontsize=font_size)
         ax[2].grid(alpha=0.7)
@@ -1068,7 +1068,7 @@ class PhysicsInformedGP_regressor():
         #              label="validation set", color="orange", marker="x", s=15)
         ax[3].plot(self.Y, self.f_train, 'r.',
                    markersize=10, label='training points')
-        ax[3].plot(self.raw_data[0], self.raw_data[2],"--", label="Analytical solution")
+        ax[3].plot(self.raw_data[0], self.raw_data[2],"--", label="Analytical solution",color = "black")
         ax[3].set_xlabel("t", fontsize=font_size)
         ax[3].set_ylabel("f(t)", fontsize=font_size)
         ax[3].grid(alpha=0.7)
