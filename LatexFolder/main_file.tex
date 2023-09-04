@@ -288,13 +288,11 @@ Through the optimization of the mll, we will obtain the parameters of the
 underlying equation $\phi$, as well as the hyperparameters $\theta$ of the
 kernel. With these parameters we will then calculate the predictive mean and
 covariance and then compare the ground truth with the computed mean function.
-To benchmark the performance we will look at the marginal log likelihood and at
-the mean squared error of the validation set with the prediction. As another
+To quantify/benchmark the performance we will look at the marginal log likelihood, the mean squared error (MSE) and the relative L2 error of the validation set(ground truth). As another
 way of looking at the performance of the informed model we will compare it to a
 vanilla model with a general SE kernel, as described in~\ref{sec:Regression}.
 For this we will use the GPy library~\cite{gpy2014}. However, it is important
-to acknowledge that the vanilla model with the simple SE kernel only has two
-hyperparameters, namely the length scale $l$ and the variance $\sigma_f^2$.
+to acknowledge that the vanilla model with the simple SE kernel only has two/three (for cases with time as a second dimension) hyperparameters, namely the length scale $l$ and the variance $\sigma_f^2$.
 Additionaly, the informed model takes advantage of the joint GP. This means
 that the informed model has more parameters to optimize and additional
 information from the joint GP, and therefore it is not a fair comparison.
@@ -313,7 +311,7 @@ differential equation is given by:
     \end{aligned}
 \end{equation}
 The first data set was generated with $m = 1, \gamma = 2, k = 2$ and a simple sinusoidal forcing term $f(t) = 4 \sin(2\pi t)$. For the added noise we used $\sigma_{nu} = 10^{-4}$ and $\sigma_{nf} = 10^{-4}$ which can be seen as noise free data. We calculated the result in the time interval $t \in [0,3]$ from with we sample the training points. The model learns the hyperparameters $\bm{\theta}$ $(l,\sigma_f,m,\gamma,k)$ to be $(0.4890, 0.5860, 0.9989, 1.9925, 1.9987)$. These results are very accurate considering we are only using 9 training points for a model with 5 hyperparameters. As elaborated before, the exact value of the final values after optimizing varies in a small range. The predictive distribution for the general solution $u(t)$ and the forcing term $f(t)$ can be seen in figure~\ref{fig:damped_oscillator}. Looking at the results for the informed model we can see that the prediction for $u(t)$ and for $f(t)$ are very precise. The posterior mean overlines with the validation points and the uncertanty band is so small that is not even visible. The mean squared error of $u(t)$ and $f(t)$ are $MSE_u = 1.419 \cdot 10^{-7}$ and $MSE_f = 4.609 \cdot 10^{-3}$. The predictive mean of the vanilla model can also be seen in figure~\ref{fig:damped_oscillator}. The MSEs for the vanilla model are $MSE_{u,va} = 5.469 \cdot 10^{-4}$ and $MSE_{f,va} = 2.692$. The MSE for the vanilla model is 3 to 4 orders of magnitude higher than the MSE of the informed model which gets very clear when looking at figure~\ref{fig:damped_oscillator}. The predictions from the vanilla model are not very precise with large uncertanties. This is also reflected in the MSEs. The informed model even manages to accuratly predict in areas away from any training points, as well as at the edges of the domain.
-\begin{figure}
+\begin{figure}[htbp!]
     \centering
     \includegraphics[width=1\textwidth]{../final_examples/oscillator/merged_1d_plots.png}
     \caption{(a) \& (b) predictive mean $\mu_u$ and $\mu_f$ for the informed model, two $\sigma$ uncertanty band, training and validation points sampled from $\{\bm{x_u},u(\bm{y_u})\}$ and $\{\bm{x_f},u(\bm{y_f})\}$ respectivly.\ (c) \& (d) predictive mean $\mu_u$ and $\mu_f$ for the vanilla model, two $\sigma$ uncertanty band, training and validation points sampled from $\{\bm{x_u},u(\bm{y_u})\}$ and $\{\bm{x_f},u(\bm{y_f})\}$ respectivly. The noise $\sigma_{nu}$ and $\sigma_{nf}$ were both set to $10^{-8}$. The MSEs of the informed model are $MSE_u = 1.419 \cdot 10^{-7}$ and $MSE_f = 4.609 \cdot 10^{-3}$. The MSEs for the vanilla model are $MSE_{u,va} = 5.469 \cdot 10^{-4}$ and $MSE_{f,va} = 2.692$.}
@@ -354,13 +352,29 @@ with $\alpha$ as the thermal diffusivity.
     \end{aligned}
 \end{equation}
 \subsection{Poisson Equation}
-Here we will look at the Poisson equation in two spatial dimensions with a
+In our last example we will look at a case where we do not incorporate additional ODE parameters $\phi$ in the form of hyperparameters into the kernel. This is to look at the general predictive performance of the informed model. The informed, aswell as the vanilla model will both not incorporate ARD, therefore there will be one singel length scale $l$ for both spatial dimensions.\\
+\\
+ We will look at the Poisson equation in two spatial dimensions with a
 forcing term and with dirichlet boundary conditions:
 \begin{equation}
     \begin{aligned}
-        \nabla^2 u(x,y) = f(x,y) \\ u[0,x] =\\ u(t,0) = ; u(t,L) =
+        \nabla^2 u(x,y) = f(x,y) \\ u[0,x] = \\ u(t,0) = 0; u(t,L) = 0
     \end{aligned}
 \end{equation}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\textwidth]{../final_examples/poisson/predictive_mean.png}
+    \caption{}
+    ~\label{fig:poisson}
+\end{figure}
+The most notable difference between the informed and the vanilla model are the predictions at the boundary of the domain. The vanilla model fails to correctly predict the boundaries, however the informed model manages to predict the boundaries very well. Overall, the performance of the infomed model is significantly better. The relative error for $u$ is and $f$ is. Comparing these values to the vanilla model with relative errors of $u$ and $f$ we can see that the informed model is more than an order of magnitude more accurate. This is also reflected in the MSEs. The MSEs for the informed model are $MSE_u = 1.419 \cdot 10^{-7}$ and $MSE_f = 4.609 \cdot 10^{-3}$. The MSEs for the vanilla model are $MSE_{u,va} = 5.469 \cdot 10^{-4}$ and $MSE_{f,va} = 2.692$.\\
+\\
+
+
+\section{Conclusion and Outlook}
+
+\section{Appendix}
 
 \bibliographystyle{plain}
 \bibliography{library}

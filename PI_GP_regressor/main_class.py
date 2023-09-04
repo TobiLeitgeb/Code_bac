@@ -16,7 +16,7 @@ class PhysicsInformedGP_regressor():
     """class for the GP"""
     _name_kernel = ""
 
-    def __init__(self, kernel: callable, timedependence: bool, params: list) -> None:
+    def __init__(self, kernel: callable, timedependence: bool, params: list, ARD = True) -> None:
         assert callable(kernel[0]), "Please provide a valid kernel"
         assert(type(timedependence) ==
                bool), "Please provide a valid boolean value for timedependence"
@@ -44,6 +44,7 @@ class PhysicsInformedGP_regressor():
         self.GPy_models = None
         self.xlabel, self.ylabel = "", ""
         self.ground_truth = None
+        self.ARD = ARD
 
     def __str__(self) -> str:
         string = "-----------------------------------------------\n"
@@ -416,13 +417,13 @@ class PhysicsInformedGP_regressor():
             self.GPy_models = [model_GPy, model_GPy2]
         else:
             kernel_1 = GPy.kern.RBF(
-                input_dim=2, variance=1., lengthscale=1., ARD=False)
+                input_dim=2, variance=1., lengthscale=1., ARD=self.ARD)
             model_GPy = GPy.models.GPRegression(self.X, self.u_train, kernel_1)
             model_GPy.Gaussian_noise.variance.fix(self.noise[0])
             model_GPy.optimize_restarts(num_restarts=20, verbose=False)
 
             kernel_2 = GPy.kern.RBF(
-                input_dim=2, variance=1., lengthscale=1., ARD=False)
+                input_dim=2, variance=1., lengthscale=1., ARD=self.ARD)
             model_GPy_2 = GPy.models.GPRegression(
                 self.Y, self.f_train, kernel_2)
             model_GPy_2.Gaussian_noise.variance.fix(self.noise[1])
@@ -1098,3 +1099,6 @@ class PhysicsInformedGP_regressor():
         self.GPy_models = [model_GPy, model_GPy2]
         if path != None:
             plt.savefig(path, bbox_inches='tight', dpi=300)
+
+    def plot_merged_2d_plots(self, X_star, path, figsize=(15, 20)):
+        pass
