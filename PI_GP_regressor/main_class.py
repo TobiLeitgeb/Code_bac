@@ -38,6 +38,7 @@ class PhysicsInformedGP_regressor():
         self.var_f = None
         self.validation_set = None
         self.MSE = {"u": None, "f": None}
+        self.rel_l2_error = {"u": None, "f": None}
         self.filename = None
         self.results_list = None
         self.GPy_models = None
@@ -52,6 +53,7 @@ class PhysicsInformedGP_regressor():
         string += "Hyperparameters: " + str(self.params) + "\n"
         string += "Log marginal likelihood: " + str(self.result.fun) + "\n"
         string += "Mean squared error: " + str(self.MSE) + "\n"
+        string += "Relative l2 error: " + str(self.rel_l2_error) + "\n"
         string += "-----------------------------------------------\n"
         return string
 
@@ -151,7 +153,7 @@ class PhysicsInformedGP_regressor():
         self.set_params(opt_result.x)
         self.result = opt_result
         pass
-
+    
     def optimization_restarts_parallel_CG(self, n_restarts: int, n_threads: int, opt_dictionary: dict) -> dict:
         """
             performs the optimization of the hyperparameters in parallel and returns the best result.
@@ -345,7 +347,15 @@ class PhysicsInformedGP_regressor():
             (mean_validation_set_u.ravel() - u_values.ravel())**2).item()
         self.MSE["f"] = np.mean(
             (mean_validation_set_f.ravel() - f_values.ravel())**2).item()
+        self.rel_l2_error["u"] = self.relative_l2_error(
+            u_values.ravel(), mean_validation_set_u.ravel())
+        self.rel_l2_error["f"] = self.relative_l2_error(
+            f_values.ravel(), mean_validation_set_f.ravel())
 
+    def relative_l2_error(self, ground_truth,predicted_solution):
+        """computes the relative l2 error between the ground truth and the predicted solution"""
+        assert ground_truth.shape == predicted_solution.shape, "Please provide a valid ground truth and predicted solution"
+        return np.linalg.norm(ground_truth-predicted_solution)/np.linalg.norm(ground_truth)
     def use_GPy(self, X_star, save_path: str = None, heat_map: bool = False):
         """uses the GPy library to compute the GP"""
         if not self.timedependence:
@@ -358,6 +368,8 @@ class PhysicsInformedGP_regressor():
             t_val, u_val = self.validation_set[0], self.validation_set[1]
             mean, var = model_GPy.predict(t_val.reshape(-1, 1))
             MSE_u = np.mean((mean.ravel() - u_val.ravel())**2).item()
+            self.rel_l2_error["u"] = self.relative_l2_error(
+                u_val.ravel(), mean.ravel())
             fig, ax = plt.subplots(1, 2, figsize=(12, 6))
             y_data, var = model_GPy.predict(X_star)
             ax[0].plot(X_star, y_data, label="GP prediction", color="blue")
@@ -382,6 +394,8 @@ class PhysicsInformedGP_regressor():
             mean,var = model_GPy2.predict(t_val.reshape(-1,1))
             y_data, var = model_GPy2.predict(X_star)
             MSE_f = np.mean((mean.ravel() - f_val.ravel())**2).item()
+            self.rel_l2_error["f"] = self.relative_l2_error(
+                f_val.ravel(), mean.ravel())
             ax[1].plot(X_star, y_data, label="GP prediction", color="blue")
             ax[1].fill_between(X_star.ravel(), y_data.ravel() - 2*np.sqrt(var.ravel()), y_data.ravel(
             ) + 2*np.sqrt(var.ravel()), alpha=0.2, color="blue", label="95% confidence interval")
@@ -402,13 +416,13 @@ class PhysicsInformedGP_regressor():
             self.GPy_models = [model_GPy, model_GPy2]
         else:
             kernel_1 = GPy.kern.RBF(
-                input_dim=2, variance=1., lengthscale=1., ARD=True)
+                input_dim=2, variance=1., lengthscale=1., ARD=False)
             model_GPy = GPy.models.GPRegression(self.X, self.u_train, kernel_1)
             model_GPy.Gaussian_noise.variance.fix(self.noise[0])
             model_GPy.optimize_restarts(num_restarts=20, verbose=False)
 
             kernel_2 = GPy.kern.RBF(
-                input_dim=2, variance=1., lengthscale=1., ARD=True)
+                input_dim=2, variance=1., lengthscale=1., ARD=False)
             model_GPy_2 = GPy.models.GPRegression(
                 self.Y, self.f_train, kernel_2)
             model_GPy_2.Gaussian_noise.variance.fix(self.noise[1])
@@ -418,7 +432,7 @@ class PhysicsInformedGP_regressor():
             mean = mean.reshape(original_shape)
             mean2, var2 = model_GPy_2.predict(X_star)
             mean2 = mean2.reshape(original_shape)
-
+            self.GPy_models = [model_GPy, model_GPy_2]
             if heat_map:
                 fig, ax = plt.subplots(1, 2, figsize=(12, 5))
                 cont1 = ax[0].imshow(mean, cmap='viridis', alpha=1, extent=[
@@ -460,7 +474,6 @@ class PhysicsInformedGP_regressor():
                 ax[1].set_xlabel(self.xlabel)
                 ax[1].set_ylabel(self.ylabel)
                 plt.legend()
-                self.GPy_models = [model_GPy, model_GPy_2]
                 plt.suptitle("GPy predictions")
                 if save_path != None:
                     plt.savefig(save_path)
@@ -641,6 +654,10 @@ class PhysicsInformedGP_regressor():
         MSE_f = np.mean((mean_f - f_grid.reshape(size))**2).item()
         print("MSE_u: ", MSE_u)
         print("MSE_f: ", MSE_f)
+        print("relative error u: ", self.relative_l2_error(
+            u_grid.reshape(size), mean_u))
+        print("relative error f: ", self.relative_l2_error(
+            f_grid.reshape(size), mean_f))
 
     def plot_variance(self, X_star, title: str, save_path: str):
         """plots the variance of the GP at the points X_star"""
