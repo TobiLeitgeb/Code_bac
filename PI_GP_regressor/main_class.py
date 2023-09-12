@@ -1098,3 +1098,29 @@ class PhysicsInformedGP_regressor():
         self.GPy_models = [model_GPy, model_GPy2]
         if path != None:
             plt.savefig(path, bbox_inches='tight', dpi=300)
+
+    def plot_joined_2d_plots(self,savepath, figsize):
+        #plot mean, variance and diff
+        fig, ax = plt.subplots(3, 3, figsize=figsize, subplot_kw={"projection": "3d"})
+        ax = ax.flatten()
+        #plot mean u 3d
+        ax[0].plot_surface(self.raw_data[0], self.raw_data[1], self.raw_data[2], cmap='viridis', alpha=0.8, edgecolor='none')
+        ax[0].set_title("(a)")
+        ax[0].set_xlabel(self.xlabel)
+        ax[0].set_ylabel(self.ylabel)
+        ax[0].set_zlabel("u(t,x)")
+        #plot mean f 3d
+        ax[1].plot_surface(self.raw_data[0], self.raw_data[1], self.raw_data[3], cmap='viridis', alpha=0.8, edgecolor='none')
+        ax[1].set_title("(b)")
+        ax[1].set_xlabel(self.xlabel)
+        ax[1].set_ylabel(self.ylabel)
+        ax[1].set_zlabel("f(t,x)")
+        #plot variance
+        cont = ax[2].imshnow(self.var_u, cmap='viridis', alpha=1, extent=[0, 1, 0, 1], origin='lower')
+        ax[2].set_title("(c)")
+        ax[2].set_xlabel(self.xlabel)
+        ax[2].set_ylabel(self.ylabel)
+        fig.colorbar(cont, ax=ax[2])
+        #plot variance
+        
+
