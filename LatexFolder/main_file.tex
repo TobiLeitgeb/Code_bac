@@ -19,6 +19,7 @@
 \usepackage{bm}
 \usepackage{float}
 \usepackage[font=small]{caption}
+\usepackage{pythonhighlight}
 \title{Your Paper}
 \author{You}
 
@@ -36,7 +37,9 @@ the $u$ and $f$. However, we do not have knowledge of the ODE parameters
 $\phi$. This is a typical situation in for example lab work, where we have
 measurements and want to determine an underlying physical parameter or
 interpolate the data. This is often done with typical linear regression
-techniques.\\
+techniques.\\ very easy to implement a better working kernel. one would always be able to build a better kernel for a specific problem. However this would require a lot of time and effort. with this framework we have a clear way of implementing a kernel that is based on the underlying physics. We do not need to analytically compute a kernel for a specific problem. We can just take the differential equation and a kernel and apply the differential operator to the kernel. This way we can easily implement a kernel for a specific problem. The next interesting thing is that we also use the knowledge of the forcing term for our prediction and for the calculation of the ODE hyperparameters $\phi$. and we can predict the forcing term aswell. When comparing this to a inverse problem using a neural network we can see that the implementation is also a lot harder.\\
+We start with a general introduction to Gaussian Processes, Regression with Gaussian Processes and kernels. We
+then introduce the physics informed framework and the optimization process. In the end we will look at several example problems and discuss the results and the performance of the framework.\\
 
 \section{Fundamentals}
 \subsection{Gaussian Process} %~\cite{pml1Book}\cite{RasmussenCarlEdward}
@@ -253,6 +256,7 @@ in~\cite{RAISSI}:
 with
 \begin{equation}
     \begin{aligned}
+        \label{eq:predictive_mean_cov}
         \mu_u = \bm{\kappa_u}\bm{K}^{-1}\bm{y}, \; \Sigma_* = k_{uu}(\bm{x_*,x_*}) - \bm{\kappa_u}\bm{K}^{-1}\bm{\kappa_u}^\intercal  \\
         \mu_f = \bm{\kappa_f}\bm{K}^{-1}\bm{y}, \;  \Sigma_* = k_{ff}(\bm{x_*,x_*}) - \bm{\kappa_f}\bm{K}^{-1}\bm{\kappa_f}^\intercal \\
     \end{aligned}
@@ -264,6 +268,17 @@ with $\bm{\kappa_u}$ and $\bm{\kappa_f}$ being:
         \bm{\kappa_f} = [k_{fu}(\bm{x_*},\bm{X_u})k_{ff}(\bm{x_*,\bm{X_f}})]
     \end{aligned}
 \end{equation}
+For the actual implementation we again used the Cholesky decomposition of $\bm{K}$ to compute the inverse of $\bm{K}$. This is done by first computing the Cholesky decomposition of $\bm{K}$:
+\begin{equation}
+    \bm{K} = \bm{L}\bm{L}^\intercal
+\end{equation}
+with $\bm{L}$ being a lower triangular matrix. We can then write equation \ref{eq:predictive_mean_cov} as:
+\begin{equation}
+    \begin{aligned}
+        \mu_i = \bm{\kappa_i} \bm{L^{\intercal} \backslash (L\backslash y)}, \; \Sigma_i = k_{ii}(\bm{x_*,x_*}) - \bm{\kappa_i} \bm{L^{\intercal} \backslash (L\backslash \kappa_i^{\intercal})}
+    \end{aligned}
+\end{equation}
+with $\backslash$ as the left matrix divide operator. This is a stable way of computing the inverse of $\bm{K}$. This way of calculating the predictive mean and covariance is also used in \cite{RasmussenCarlEdward} and \cite{RAISSI}.
 
 \section{Results}
 In the following we will call the physics informed model, which is used here the
@@ -328,6 +343,8 @@ To benchmark the performance further we looked at cases with different numer of 
         $n$     & 5 & 10 & 20 & 50 \\
         \midrule
         $mll$ &   3.722&  -10.049  &   -53.227 &  -32.808 \\
+        $L²_u$& & & & \\
+        $L²_f$ & & & & \\
         $MSE_u$ & 5.583 $\cdot 10^{-3}$  &  1.070 $\cdot 10^{-7}$  &  2.463 $\cdot 10^{-8}$  &   4.022 $\cdot 10^{-8}$ \\
         $MSE_f$ &  4.974 & 2.347 $\cdot 10^{-3}$  & 1.076 $\cdot 10^{-3}$ &  0.105 \\
         \bottomrule
@@ -346,13 +363,21 @@ with $\alpha$ as the thermal diffusivity.
 
 
 \subsection{Wave Equation}
+For the second example we will look at the one dimensional time dependent wave equation. The wave equation is a hyperbolic partial differential equation that describes the propagation of waves of various types. In our case we can think of the wave equation as a string that is fixed at both ends. The wave equation is given by:
 \begin{equation}
     \begin{aligned}
         \frac{1}{c^2} \frac{\partial^2 u(x,t)}{\partial t^2} - \frac{\partial^2 u(x,t)}{\partial x^2} = f(x,t) \\ u[0,x] =\\ u(t,0) = ; u(t,L) =
     \end{aligned}
 \end{equation}
+with $c$ as the wave speed. The ground truth was calculated with $c = 3$ and with $f(x,t) = $. We used 20 training points for both $u$ and $f$. The training data was sampled from the domain $x \in [0,1]$ and $t \in [0,1]$. The noise was set to $\sigma_{nu} = 10^{-4}$ and $\sigma_{nf} = 10^{-4}$, which can be considered as nearly noise free. The hyperparameters ($l_x$, $l_t$,$\sigma_f$, $c$) were optimized to be $(,,)$.
+\begin{figure}
+    \centering
+    \includegraphics[width=1\textwidth]{../final_examples/wave_equation/predictive_mean.png}
+    \caption{Plots for the informed model. (a) \& (b) predictive mean $\bm{\mu_u}$ and $\bm{\mu_f}$ with training points in red. (c) \& (d) predictive standard deviations $\bm{\sigma_u}$ and $\bm{\sigma_f}$. (e) \& (f) difference between the predictive mean $\bm{\mu}$ and the ground truths $u$ and $f$. The MSEs for the informed model are $MSE_u =  \cdot 10^{-7}$ and $MSE_f =  \cdot 10^{-3}$. The relative $L²$ errors are $L^2_u = $ and $L^2_f = $.}
+    ~\label{fig:wave}
+\end{figure}
 \subsection{Poisson Equation}
-In our last example we will look at a case where we do not incorporate additional ODE parameters $\phi$ in the form of hyperparameters into the kernel. This is to look at the general predictive performance of the informed model. The informed, aswell as the vanilla model will both not incorporate ARD, therefore there will be one singel length scale $l$ for both spatial dimensions.\\
+In our last example we will look at a case where we do not incorporate additional ODE parameters $\phi$ in the form of hyperparameters into the kernel. This is to look at the general predictive performance of the informed model. The informed, aswell as the vanilla model will both not incorporate ARD, therefore there will only be one singel length scale $l$ for both spatial dimensions.\\
 \\
  We will look at the Poisson equation in two spatial dimensions with a
 forcing term and with dirichlet boundary conditions:
@@ -362,19 +387,27 @@ forcing term and with dirichlet boundary conditions:
     \end{aligned}
 \end{equation}
 
-\begin{figure}
-    \centering
-    \includegraphics[width=1\textwidth]{../final_examples/poisson/predictive_mean.png}
-    \caption{}
-    ~\label{fig:poisson}
-\end{figure}
-The most notable difference between the informed and the vanilla model are the predictions at the boundary of the domain. The vanilla model fails to correctly predict the boundaries, however the informed model manages to predict the boundaries very well. Overall, the performance of the infomed model is significantly better. The relative error for $u$ is and $f$ is. Comparing these values to the vanilla model with relative errors of $u$ and $f$ we can see that the informed model is more than an order of magnitude more accurate. This is also reflected in the MSEs. The MSEs for the informed model are $MSE_u = 1.419 \cdot 10^{-7}$ and $MSE_f = 4.609 \cdot 10^{-3}$. The MSEs for the vanilla model are $MSE_{u,va} = 5.469 \cdot 10^{-4}$ and $MSE_{f,va} = 2.692$.\\
+
+ Overall, the performance of the infomed model is significantly better. The relative error for $L²_u$ is and $L²_f$ is. The predictive mean, the predictive variance and the calculated difference between the prediction and the ground truth are shown in figure \ref{fig:poisson}. Comparing this to the vanilla model with relative errors of $L²_u = 0.0989$ and $L²_f = 0.0728$ we can see that the informed model is more than an order of magnitude more accurate. The predictive mean and the difference to the ground truth can be seen in figure \ref{fig:poisson_GPY}. The better prediction is also reflected in the MSEs. The MSEs for the informed model are $MSE_u = . \cdot 10^{-7}$ and $MSE_f =  \cdot 10^{-3}$. The MSEs for the vanilla model are $MSE_{u,va} = 9.862  \cdot 10^{-5}$ and $MSE_{f,va} = 0.130$. The \\
 \\
 
-
+\begin{figure}[htbp!]
+    \centering
+    \includegraphics[width=1\textwidth]{../final_examples/poisson/merged_2d_plots.png}
+    \caption{Plots for the informed model. (a) \& (b)  predictive mean $\bm{\mu_u}$ and $\bm{\mu_f}$ with training points in red. (c) \& (d) predictive standard deviations $\bm{\sigma_u}$ and $\bm{\sigma_f}$. (e) \& (f) difference between the predictive mean $\bm{\mu}$ and the ground truths $u$ and $f$. The MSEs for the informed model are $MSE_u =  \cdot 10^{-7}$ and $MSE_f =  \cdot 10^{-3}$. The relative $L²$ errors are $L^2_u = $ and $L^2_f = $.}
+    ~\label{fig:poisson}
+\end{figure}
+\begin{figure}[htbp!]
+    \centering
+    \includegraphics[width=1\textwidth]{../final_examples/poisson/GPy_mean_diff.png}
+    \caption{Plots for the vanilla model. (a) \& (b) predictive mean $\bm{\mu_u}$ and $\bm{\mu_f}$} with training points in red. (c) \& (d) difference between the predictive mean $\bm{\mu}$ and the ground truths $u$ and $f$. The MSEs for the vanilla model are $MSE_{u,va} = 9.862  \cdot 10^{-5}$ and $MSE_{f,va} = 0.130$. The relative $L^2$ errors are $L^2_u = 0.0989$ and $L²_f = 0.0728$.
+    ~\label{fig:poisson_GPY}
+\end{figure}
+With this example we can see that the informed models better performance is not only due to the additional hyperparameters. How big the role of the joint GP is, is hard to say, but it is clear that the informed model is notably more accurate than the vanilla model. The most notable difference between the informed and the vanilla model are the predictions at the boundary of the domain. The informed model is able to predict the domain boundaries very accuratly. On the other hand, the vanilla model has big problems at predicting the \\
 \section{Conclusion and Outlook}
 
 \section{Appendix}
+\subsection{Numerical implementation of the Kernel}
 
 \bibliographystyle{plain}
 \bibliography{library}

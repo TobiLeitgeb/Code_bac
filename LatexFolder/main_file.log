@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.5) (preloaded format=pdflatex 2023.8.27)  4 SEP 2023 22:58
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.5) (preloaded format=pdflatex 2023.8.27)  6 SEP 2023 23:51
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -332,31 +332,71 @@ Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \float@box=\box55
 \@float@everytoks=\toks27
 \@floatcapt=\box56
-) (/home/tobias/.miktex/texmfs/install/tex/latex/l3backend/l3backend-pdftex.def
+) (/home/tobias/.miktex/texmfs/install/tex/latex/pythonhighlight/pythonhighlight.sty
+Package: pythonhighlight 2017/02/09 python code highlighting; provided by Olivier Verdier <olivier.verdier@gmail.com>
+ (/home/tobias/.miktex/texmfs/install/tex/latex/listings/listings.sty
+\lst@mode=\count296
+\lst@gtempboxa=\box57
+\lst@token=\toks28
+\lst@length=\count297
+\lst@currlwidth=\dimen193
+\lst@column=\count298
+\lst@pos=\count299
+\lst@lostspace=\dimen194
+\lst@width=\dimen195
+\lst@newlines=\count300
+\lst@lineno=\count301
+\lst@maxwidth=\dimen196
+ (/home/tobias/.miktex/texmfs/install/tex/latex/listings/lstmisc.sty
+File: lstmisc.sty 2023/02/27 1.9 (Carsten Heinz)
+\c@lstnumber=\count302
+\lst@skipnumbers=\count303
+\lst@framebox=\box58
+) (/home/tobias/.miktex/texmfs/install/tex/latex/listings/listings.cfg
+File: listings.cfg 2023/02/27 1.9 listings configuration
+))
+Package: listings 2023/02/27 1.9 (Carsten Heinz)
+ (/home/tobias/.miktex/texmfs/install/tex/latex/xcolor/xcolor.sty
+Package: xcolor 2022/06/12 v2.14 LaTeX color extensions (UK)
+ (/home/tobias/.miktex/texmfs/install/tex/latex/graphics-cfg/color.cfg
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package xcolor Info: Driver file: pdftex.def on input line 227.
+ (/home/tobias/.miktex/texmfs/install/tex/latex/graphics/mathcolor.ltx)
+Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1353.
+Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1357.
+Package xcolor Info: Model `RGB' extended on input line 1369.
+Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1371.
+Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1372.
+Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1373.
+Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1374.
+Package xcolor Info: Model `Gray' substituted by `gray' on input line 1375.
+Package xcolor Info: Model `wave' substituted by `hsb' on input line 1376.
+)) (/home/tobias/.miktex/texmfs/install/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2023-04-19 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count296
-\l__pdf_internal_box=\box57
+\l__color_backend_stack_int=\count304
+\l__pdf_internal_box=\box59
 ) (main_file.aux)
 \openout1 = `main_file.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 25.
-LaTeX Font Info:    ... okay on input line 25.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 25.
-LaTeX Font Info:    ... okay on input line 25.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 25.
-LaTeX Font Info:    ... okay on input line 25.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 25.
-LaTeX Font Info:    ... okay on input line 25.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 25.
-LaTeX Font Info:    ... okay on input line 25.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 25.
-LaTeX Font Info:    ... okay on input line 25.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 25.
-LaTeX Font Info:    ... okay on input line 25.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 25.
-LaTeX Font Info:    ... okay on input line 25.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 25.
-LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -394,127 +434,239 @@ LaTeX Font Info:    ... okay on input line 25.
 
 (/home/tobias/.miktex/texmfs/install/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count297
-\scratchdimen=\dimen193
-\scratchbox=\box58
-\nofMPsegments=\count298
-\nofMParguments=\count299
-\everyMPshowfont=\toks28
-\MPscratchCnt=\count300
-\MPscratchDim=\dimen194
-\MPnumerator=\count301
-\makeMPintoPDFobject=\count302
-\everyMPtoPDFconversion=\toks29
+\scratchcounter=\count305
+\scratchdimen=\dimen197
+\scratchbox=\box60
+\nofMPsegments=\count306
+\nofMParguments=\count307
+\everyMPshowfont=\toks29
+\MPscratchCnt=\count308
+\MPscratchDim=\dimen198
+\MPnumerator=\count309
+\makeMPintoPDFobject=\count310
+\everyMPtoPDFconversion=\toks30
 ) (/home/tobias/.miktex/texmfs/install/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
  (/home/tobias/.miktex/texmfs/install/tex/latex/00miktex/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
-)) (/home/tobias/.miktex/texmfs/install/tex/latex/graphics/color.sty
-Package: color 2022/01/06 v1.3d Standard LaTeX Color (DPC)
- (/home/tobias/.miktex/texmfs/install/tex/latex/graphics-cfg/color.cfg
-File: color.cfg 2016/01/02 v1.6 sample color configuration
-)
-Package color Info: Driver file: pdftex.def on input line 149.
- (/home/tobias/.miktex/texmfs/install/tex/latex/graphics/mathcolor.ltx))
-Package hyperref Info: Link coloring ON on input line 25.
+))
+Package hyperref Info: Link coloring ON on input line 26.
  (main_file.out) (main_file.out)
 \@outlinefile=\write3
 \openout3 = `main_file.out'.
 
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: float package is loaded.
+Package caption Info: listings package is loaded.
 Package caption Info: End \AtBeginDocument code.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 27.
+\c@lstlisting=\count311
+LaTeX Font Info:    Trying to load font information for U+msa on input line 28.
  (/home/tobias/.miktex/texmfs/install/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 27.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 28.
  (/home/tobias/.miktex/texmfs/install/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1
 
 {/home/tobias/.miktex/texmfs/data/fonts/map/pdftex/pdftex.map}]
-Underfull \hbox (badness 10000) in paragraph at lines 34--40
+Underfull \hbox (badness 10000) in paragraph at lines 35--43
 
  []
 
 [2] [3]
-Underfull \hbox (badness 10000) in paragraph at lines 166--170
+Underfull \hbox (badness 10000) in paragraph at lines 169--173
 
  []
 
 [4]
-Underfull \hbox (badness 10000) in paragraph at lines 235--241
+Underfull \hbox (badness 10000) in paragraph at lines 238--244
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 235--241
+Underfull \hbox (badness 10000) in paragraph at lines 238--244
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 235--241
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 269--304
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 269--304
+Underfull \hbox (badness 10000) in paragraph at lines 238--244
 
  []
 
 [5]
-<../final_examples/oscillator/merged_1d_plots.png, id=172, 788.2248pt x 716.1957pt>
+Underfull \hbox (badness 10000) in paragraph at lines 284--319
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 284--319
+
+ []
+
+[6]
+<../final_examples/oscillator/merged_1d_plots.png, id=186, 788.2248pt x 716.1957pt>
 File: ../final_examples/oscillator/merged_1d_plots.png Graphic file (type png)
 <use ../final_examples/oscillator/merged_1d_plots.png>
-Package pdftex.def Info: ../final_examples/oscillator/merged_1d_plots.png  used on input line 316.
+Package pdftex.def Info: ../final_examples/oscillator/merged_1d_plots.png  used on input line 331.
 (pdftex.def)             Requested size: 443.57848pt x 403.04488pt.
- [6] [7 <../final_examples/oscillator/merged_1d_plots.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 355--359
+
+
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 346.
+
+
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 346.
+
+Missing character: There is no ² in font cmr10!
+
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 347.
+
+
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 347.
+
+Missing character: There is no ² in font cmr10!
+[7] [8 <../final_examples/oscillator/merged_1d_plots.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 372--376
 
  []
 
-<../final_examples/poisson/predictive_mean.png, id=197, 676.4472pt x 313.07364pt>
-File: ../final_examples/poisson/predictive_mean.png Graphic file (type png)
-<use ../final_examples/poisson/predictive_mean.png>
-Package pdftex.def Info: ../final_examples/poisson/predictive_mean.png  used on input line 367.
-(pdftex.def)             Requested size: 443.57848pt x 205.29642pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 371--373
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 383.
+
+
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 383.
+
+Missing character: There is no ² in font cmr10!
+
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 383.
+
+
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 383.
+
+Missing character: There is no ² in font cmr10!
+
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 383.
+
+
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 383.
+
+Missing character: There is no ² in font cmr10!
+
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 383.
+
+
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 383.
+
+Missing character: There is no ² in font cmr10!
+
+Underfull \hbox (badness 10000) in paragraph at lines 383--385
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 371--373
+Underfull \hbox (badness 10000) in paragraph at lines 383--385
 
  []
 
-(main_file.bbl [8]) [9 <../final_examples/poisson/predictive_mean.png>] (main_file.aux)
+<../final_examples/poisson/merged_2d_plots.png, id=213, 662.9568pt x 786.0567pt>
+File: ../final_examples/poisson/merged_2d_plots.png Graphic file (type png)
+<use ../final_examples/poisson/merged_2d_plots.png>
+Package pdftex.def Info: ../final_examples/poisson/merged_2d_plots.png  used on input line 388.
+(pdftex.def)             Requested size: 443.57848pt x 525.9476pt.
+
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 389.
+
+
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 389.
+
+Missing character: There is no ² in font cmr9!
+
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 389.
+
+
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 389.
+
+Missing character: There is no ² in font cmr9!
+
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 389.
+
+
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 389.
+
+Missing character: There is no ² in font cmr9!
+
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 389.
+
+
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 389.
+
+Missing character: There is no ² in font cmr9!
+
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 389.
+
+
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 389.
+
+Missing character: There is no ² in font cmr9!
+
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 389.
+
+
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 389.
+
+Missing character: There is no ² in font cmr9!
+<../final_examples/poisson/GPy_mean_diff.png, id=214, 718.1229pt x 631.6398pt>
+File: ../final_examples/poisson/GPy_mean_diff.png Graphic file (type png)
+<use ../final_examples/poisson/GPy_mean_diff.png>
+Package pdftex.def Info: ../final_examples/poisson/GPy_mean_diff.png  used on input line 394.
+(pdftex.def)             Requested size: 443.57848pt x 390.16693pt.
+
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 395.
+
+
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 395.
+
+Missing character: There is no ² in font cmr10!
+
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 395.
+
+
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 395.
+
+Missing character: There is no ² in font cmr10!
+
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 395.
+
+
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 395.
+
+Missing character: There is no ² in font cmr10!
+
+Underfull \hbox (badness 10000) in paragraph at lines 398--399
+
+ []
+
+(main_file.bbl [9] [10 <../final_examples/poisson/merged_2d_plots.png>] [11 <../final_examples/poisson/GPy_mean_diff.png>]) [12] (main_file.aux)
  ***********
 LaTeX2e <2023-06-01> patch level 1
 L3 programming layer <2023-08-11>
  ***********
 Package rerunfilecheck Info: File `main_file.out' has not changed.
-(rerunfilecheck)             Checksum: 5A57F4FC36DE86D927AFAF8F4E93815F;2425.
+(rerunfilecheck)             Checksum: F5BFB0828BE8D395C309F312FC9ABCE1;2685.
  ) 
 Here is how much of TeX's memory you used:
- 12991 strings out of 477438
- 207157 string characters out of 5813484
+ 14801 strings out of 477438
+ 232726 string characters out of 5813484
  1935254 words of memory out of 5000000
- 33760 multiletter control sequences out of 15000+600000
- 573823 words of font info for 94 fonts, out of 8000000 for 9000
+ 35546 multiletter control sequences out of 15000+600000
+ 574495 words of font info for 96 fonts, out of 8000000 for 9000
  0 hyphenation exceptions out of 8191
- 75i,14n,79p,1880b,573s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,14n,79p,1880b,575s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmbsy10.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cmextra/cmbsy5.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cmextra/cmbsy7.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmbx10.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmbx12.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmbx9.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmex10.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmmi10.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmmi5.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmmi6.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmmi7.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmmi9.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmmib10.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cmextra/cmmib6.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cmextra/cmmib7.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cmextra/cmmib9.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmr10.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmr12.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmr17.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmr6.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmr7.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmr9.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmsy10.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmsy6.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmsy7.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmsy9.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmti10.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmtt10.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/symbols/msam7.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on main_file.pdf (9 pages, 1705066 bytes).
+Output written on main_file.pdf (12 pages, 2940670 bytes).
 PDF statistics:
- 354 PDF objects out of 1000 (max. 8388607)
- 67 named destinations out of 1000 (max. 500000)
- 147 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 382 PDF objects out of 1000 (max. 8388607)
+ 74 named destinations out of 1000 (max. 500000)
+ 160 words of extra memory for PDF output out of 10000 (max. 10000000)
 

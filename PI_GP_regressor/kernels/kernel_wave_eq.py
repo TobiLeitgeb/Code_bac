@@ -3,16 +3,15 @@ from jax import jit, vmap, grad
 
 @jit
 def rbf_kernel_single_x(x: float, y: float, params: list) -> float:
-    """general RBF kernel k(x,y)"""
+    """general RBF kernel k(x,y) for the spatial part."""
     l_x, sigma_f_sq = params[0], params[1]
     sqdist = jnp.sum(x-y)**2
     return sigma_f_sq * jnp.exp(-0.5 / l_x**2 * sqdist)
 @jit
 def rbf_kernel_single_t(t: float, s: float, l_t: float) -> float:
-    """general RBF kernel. takes scalar inputs t,s and returns k(t,s)"""
+    """general RBF kernel k(t,s) for the temporal part."""
     sqdist = jnp.sum(t-s)**2
-    value = jnp.exp(-0.5 / l_t**2 * sqdist)
-    return value
+    return jnp.exp(-0.5 / l_t**2 * sqdist)
 
 @jit
 def k_uu(X, Y, params):

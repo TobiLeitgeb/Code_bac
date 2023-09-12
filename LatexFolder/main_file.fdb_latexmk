@@ -1,17 +1,20 @@
 # Fdb version 4
-["bibtex main_file"] 1693861106 "main_file.aux" "main_file.bbl" "main_file" 1693861108 0
+["bibtex main_file"] 1694037088 "main_file.aux" "main_file.bbl" "main_file" 1694037091 0
   "./library.bib" 1693422087 3366 4a7c4769c2fa9511b423efdc282fc722 ""
   "/home/tobias/.miktex/texmfs/install/bibtex/bst/bibtex/plain.bst" 1693151903 20613 bd3fbfa9f64872b81ac57a0dd2ed855f ""
-  "main_file.aux" 1693861108 6236 072a643a809e23dd1784c27ce4cf930b "pdflatex"
+  "main_file.aux" 1694037090 7765 b001ad4472ea6d45636b997526a619fd "pdflatex"
   (generated)
   "main_file.bbl"
   "main_file.blg"
   (rewritten before read)
-["pdflatex"] 1693861106 "/home/tobias/code/Code_bac/LatexFolder/main_file.tex" "main_file.pdf" "main_file" 1693861108 0
+["pdflatex"] 1694037088 "/home/tobias/code/Code_bac/LatexFolder/main_file.tex" "main_file.pdf" "main_file" 1694037091 0
   "../final_examples/oscillator/merged_1d_plots.png" 1693654054 713450 f24935bf786da8eaeb3e01c31201f893 ""
-  "../final_examples/poisson/predictive_mean.png" 1693823932 739414 951d1104ea2921b5dcdd9f97748c03c2 ""
-  "/home/tobias/.miktex/texmfs/data/fonts/map/pdftex/pdftex.map" 1693644547 80909 eab91d9745dd2edfd62a31d53cd5fe15 ""
+  "../final_examples/poisson/GPy_mean_diff.png" 1694028765 1136318 84c06957fd845d099ddbfd262c53f852 ""
+  "../final_examples/poisson/merged_2d_plots.png" 1694028762 973894 96a046e003791d176bb59045d6f7872a ""
+  "/home/tobias/.miktex/texmfs/data/fonts/map/pdftex/pdftex.map" 1694032222 80909 eab91d9745dd2edfd62a31d53cd5fe15 ""
   "/home/tobias/.miktex/texmfs/data/miktex/data/le/pdftex/pdflatex.fmt" 1693152012 20941758 b267f38180a72e60ef4931d7671875ff ""
+  "/home/tobias/.miktex/texmfs/install/fonts/tfm/jknappen/ec/tcrm0900.tfm" 1693151904 1444 b1efc6b76338296f8076c1701e4660f3 ""
+  "/home/tobias/.miktex/texmfs/install/fonts/tfm/jknappen/ec/tcrm1000.tfm" 1693151904 1436 c7f957a372ef2fbe93c0982f96625e12 ""
   "/home/tobias/.miktex/texmfs/install/fonts/tfm/public/amsfonts/cmextra/cmbsy5.tfm" 1693151902 1120 1e8878807317373affa7f7bba4cf2f6a ""
   "/home/tobias/.miktex/texmfs/install/fonts/tfm/public/amsfonts/cmextra/cmbsy6.tfm" 1693151902 1124 14ccf5552bc7f77ca02a8a402bea8bfb ""
   "/home/tobias/.miktex/texmfs/install/fonts/tfm/public/amsfonts/cmextra/cmbsy7.tfm" 1693151902 1120 7f9f170e8aa57527ad6c49feafd45d54 ""
@@ -149,17 +152,22 @@
   "/home/tobias/.miktex/texmfs/install/tex/latex/kvsetkeys/kvsetkeys.sty" 1693152346 13815 760b0c02f691ea230f5359c4e1de23a7 ""
   "/home/tobias/.miktex/texmfs/install/tex/latex/l3backend/l3backend-pdftex.def" 1693151906 29940 9473d58112bc8a88f5505b823a053dde ""
   "/home/tobias/.miktex/texmfs/install/tex/latex/letltxmacro/letltxmacro.sty" 1693152366 5766 13a9e8766c47f30327caf893ece86ac8 ""
+  "/home/tobias/.miktex/texmfs/install/tex/latex/listings/listings.cfg" 1693151906 1829 d8258b7d94f5f955e70c623e525f9f45 ""
+  "/home/tobias/.miktex/texmfs/install/tex/latex/listings/listings.sty" 1693151906 80947 75a96bb4c9f40ae31d54a01d924df2ff ""
+  "/home/tobias/.miktex/texmfs/install/tex/latex/listings/lstmisc.sty" 1693151906 77021 d05e9115c67855816136d82929db8892 ""
+  "/home/tobias/.miktex/texmfs/install/tex/latex/pythonhighlight/pythonhighlight.sty" 1694032222 4900 3e3ef6513daecbdc80ef326918df2377 ""
   "/home/tobias/.miktex/texmfs/install/tex/latex/refcount/refcount.sty" 1693152367 9878 9e94e8fa600d95f9c7731bb21dfb67a4 ""
   "/home/tobias/.miktex/texmfs/install/tex/latex/rerunfilecheck/rerunfilecheck.sty" 1693152372 9714 ba3194bd52c8499b3f1e3eb91d409670 ""
   "/home/tobias/.miktex/texmfs/install/tex/latex/tools/array.sty" 1693151906 12691 ddae4e0162a664f166015d992388b742 ""
   "/home/tobias/.miktex/texmfs/install/tex/latex/tools/bm.sty" 1693151906 13231 df28b16cc1506f657b947b66cabad463 ""
   "/home/tobias/.miktex/texmfs/install/tex/latex/tools/tabularx.sty" 1693151906 7147 d80d8cf72d313443d08c13c1af59c90f ""
   "/home/tobias/.miktex/texmfs/install/tex/latex/url/url.sty" 1693151911 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
-  "/home/tobias/code/Code_bac/LatexFolder/main_file.tex" 1693861104 27649 6f9a5e98864d17b02cbc67afba2a5ab8 ""
-  "main_file.aux" 1693861108 6236 072a643a809e23dd1784c27ce4cf930b "pdflatex"
-  "main_file.bbl" 1693861106 1543 2d099020fe32f11b98f10b4dd5dec0cb "bibtex main_file"
-  "main_file.out" 1693861108 2425 5a57f4fc36de86d927afaf8f4e93815f "pdflatex"
-  "main_file.tex" 1693861104 27649 6f9a5e98864d17b02cbc67afba2a5ab8 ""
+  "/home/tobias/.miktex/texmfs/install/tex/latex/xcolor/xcolor.sty" 1693151911 56148 51a9a8571c07b9921892ae11063ae853 ""
+  "/home/tobias/code/Code_bac/LatexFolder/main_file.tex" 1694037085 31433 08aca8250d400caf89a44e19991fb028 ""
+  "main_file.aux" 1694037090 7765 b001ad4472ea6d45636b997526a619fd "pdflatex"
+  "main_file.bbl" 1694037088 1543 2d099020fe32f11b98f10b4dd5dec0cb "bibtex main_file"
+  "main_file.out" 1694037090 2685 f5bfb0828be8d395c309f312fc9abce1 "pdflatex"
+  "main_file.tex" 1694037085 31433 08aca8250d400caf89a44e19991fb028 ""
   (generated)
   "main_file.aux"
   "main_file.log"
