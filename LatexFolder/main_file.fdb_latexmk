@@ -1,16 +1,17 @@
 # Fdb version 4
-["bibtex main_file"] 1694037088 "main_file.aux" "main_file.bbl" "main_file" 1694037091 0
+["bibtex main_file"] 1694513030 "main_file.aux" "main_file.bbl" "main_file" 1694513034 0
   "./library.bib" 1693422087 3366 4a7c4769c2fa9511b423efdc282fc722 ""
   "/home/tobias/.miktex/texmfs/install/bibtex/bst/bibtex/plain.bst" 1693151903 20613 bd3fbfa9f64872b81ac57a0dd2ed855f ""
-  "main_file.aux" 1694037090 7765 b001ad4472ea6d45636b997526a619fd "pdflatex"
+  "main_file.aux" 1694513033 8833 1c6312fd2396e309c49bb9f37f488e1f "pdflatex"
   (generated)
   "main_file.bbl"
   "main_file.blg"
   (rewritten before read)
-["pdflatex"] 1694037088 "/home/tobias/code/Code_bac/LatexFolder/main_file.tex" "main_file.pdf" "main_file" 1694037091 0
+["pdflatex"] 1694513031 "/home/tobias/code/Code_bac/LatexFolder/main_file.tex" "main_file.pdf" "main_file" 1694513034 0
   "../final_examples/oscillator/merged_1d_plots.png" 1693654054 713450 f24935bf786da8eaeb3e01c31201f893 ""
   "../final_examples/poisson/GPy_mean_diff.png" 1694028765 1136318 84c06957fd845d099ddbfd262c53f852 ""
   "../final_examples/poisson/merged_2d_plots.png" 1694028762 973894 96a046e003791d176bb59045d6f7872a ""
+  "../final_examples/wave_equation/predictive_mean.png" 1693823712 623654 0e1e9e628b8e2c05b324281f8248868b ""
   "/home/tobias/.miktex/texmfs/data/fonts/map/pdftex/pdftex.map" 1694032222 80909 eab91d9745dd2edfd62a31d53cd5fe15 ""
   "/home/tobias/.miktex/texmfs/data/miktex/data/le/pdftex/pdflatex.fmt" 1693152012 20941758 b267f38180a72e60ef4931d7671875ff ""
   "/home/tobias/.miktex/texmfs/install/fonts/tfm/jknappen/ec/tcrm0900.tfm" 1693151904 1444 b1efc6b76338296f8076c1701e4660f3 ""
@@ -163,11 +164,11 @@
   "/home/tobias/.miktex/texmfs/install/tex/latex/tools/tabularx.sty" 1693151906 7147 d80d8cf72d313443d08c13c1af59c90f ""
   "/home/tobias/.miktex/texmfs/install/tex/latex/url/url.sty" 1693151911 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
   "/home/tobias/.miktex/texmfs/install/tex/latex/xcolor/xcolor.sty" 1693151911 56148 51a9a8571c07b9921892ae11063ae853 ""
-  "/home/tobias/code/Code_bac/LatexFolder/main_file.tex" 1694037085 31433 08aca8250d400caf89a44e19991fb028 ""
-  "main_file.aux" 1694037090 7765 b001ad4472ea6d45636b997526a619fd "pdflatex"
-  "main_file.bbl" 1694037088 1543 2d099020fe32f11b98f10b4dd5dec0cb "bibtex main_file"
-  "main_file.out" 1694037090 2685 f5bfb0828be8d395c309f312fc9abce1 "pdflatex"
-  "main_file.tex" 1694037085 31433 08aca8250d400caf89a44e19991fb028 ""
+  "/home/tobias/code/Code_bac/LatexFolder/main_file.tex" 1694513027 32795 b4a228785f52831fc8a7db4a1b9dca4b ""
+  "main_file.aux" 1694513033 8833 1c6312fd2396e309c49bb9f37f488e1f "pdflatex"
+  "main_file.bbl" 1694513030 1543 2d099020fe32f11b98f10b4dd5dec0cb "bibtex main_file"
+  "main_file.out" 1694513033 2685 f5bfb0828be8d395c309f312fc9abce1 "pdflatex"
+  "main_file.tex" 1694513027 32795 b4a228785f52831fc8a7db4a1b9dca4b ""
   (generated)
   "main_file.aux"
   "main_file.log"

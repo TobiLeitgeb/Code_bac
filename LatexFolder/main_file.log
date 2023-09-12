@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.5) (preloaded format=pdflatex 2023.8.27)  6 SEP 2023 23:51
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.5) (preloaded format=pdflatex 2023.8.27)  12 SEP 2023 12:03
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -527,127 +527,108 @@ LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 347.
 
 Missing character: There is no ² in font cmr10!
 [7] [8 <../final_examples/oscillator/merged_1d_plots.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 372--376
+<../final_examples/wave_equation/predictive_mean.png, id=211, 671.82191pt x 313.07364pt>
+File: ../final_examples/wave_equation/predictive_mean.png Graphic file (type png)
+<use ../final_examples/wave_equation/predictive_mean.png>
+Package pdftex.def Info: ../final_examples/wave_equation/predictive_mean.png  used on input line 375.
+(pdftex.def)             Requested size: 443.57848pt x 206.71043pt.
+
+
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 376.
+
+
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 376.
+
+Missing character: There is no ² in font cmr9!
+
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 376.
+
+
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 376.
+
+Missing character: There is no ² in font cmr9!
+
+Underfull \hbox (badness 10000) in paragraph at lines 380--384
 
  []
 
 
-LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 383.
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 391.
 
 
-LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 383.
-
-Missing character: There is no ² in font cmr10!
-
-LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 383.
-
-
-LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 383.
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 391.
 
 Missing character: There is no ² in font cmr10!
 
-LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 383.
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 391.
 
 
-LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 383.
-
-Missing character: There is no ² in font cmr10!
-
-LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 383.
-
-
-LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 383.
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 391.
 
 Missing character: There is no ² in font cmr10!
 
-Underfull \hbox (badness 10000) in paragraph at lines 383--385
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 391.
+
+
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 391.
+
+Missing character: There is no ² in font cmr10!
+
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 391.
+
+
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 391.
+
+Missing character: There is no ² in font cmr10!
+
+Underfull \hbox (badness 10000) in paragraph at lines 391--393
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 383--385
+Underfull \hbox (badness 10000) in paragraph at lines 391--393
 
  []
 
-<../final_examples/poisson/merged_2d_plots.png, id=213, 662.9568pt x 786.0567pt>
+[9 <../final_examples/wave_equation/predictive_mean.png>]
+<../final_examples/poisson/merged_2d_plots.png, id=224, 662.9568pt x 786.0567pt>
 File: ../final_examples/poisson/merged_2d_plots.png Graphic file (type png)
 <use ../final_examples/poisson/merged_2d_plots.png>
-Package pdftex.def Info: ../final_examples/poisson/merged_2d_plots.png  used on input line 388.
+Package pdftex.def Info: ../final_examples/poisson/merged_2d_plots.png  used on input line 396.
 (pdftex.def)             Requested size: 443.57848pt x 525.9476pt.
 
-LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 389.
+
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 397.
 
 
-LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 389.
-
-Missing character: There is no ² in font cmr9!
-
-LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 389.
-
-
-LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 389.
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 397.
 
 Missing character: There is no ² in font cmr9!
 
-LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 389.
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 397.
 
 
-LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 389.
-
-Missing character: There is no ² in font cmr9!
-
-LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 389.
-
-
-LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 389.
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 397.
 
 Missing character: There is no ² in font cmr9!
-
-LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 389.
-
-
-LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 389.
-
-Missing character: There is no ² in font cmr9!
-
-LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 389.
-
-
-LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 389.
-
-Missing character: There is no ² in font cmr9!
-<../final_examples/poisson/GPy_mean_diff.png, id=214, 718.1229pt x 631.6398pt>
+<../final_examples/poisson/GPy_mean_diff.png, id=225, 718.1229pt x 631.6398pt>
 File: ../final_examples/poisson/GPy_mean_diff.png Graphic file (type png)
 <use ../final_examples/poisson/GPy_mean_diff.png>
-Package pdftex.def Info: ../final_examples/poisson/GPy_mean_diff.png  used on input line 394.
+Package pdftex.def Info: ../final_examples/poisson/GPy_mean_diff.png  used on input line 402.
 (pdftex.def)             Requested size: 443.57848pt x 390.16693pt.
 
-LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 395.
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 403.
 
 
-LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 395.
-
-Missing character: There is no ² in font cmr10!
-
-LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 395.
-
-
-LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 395.
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 403.
 
 Missing character: There is no ² in font cmr10!
 
-LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 395.
-
-
-LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 395.
-
-Missing character: There is no ² in font cmr10!
-
-Underfull \hbox (badness 10000) in paragraph at lines 398--399
+Underfull \hbox (badness 10000) in paragraph at lines 406--407
 
  []
 
-(main_file.bbl [9] [10 <../final_examples/poisson/merged_2d_plots.png>] [11 <../final_examples/poisson/GPy_mean_diff.png>]) [12] (main_file.aux)
+[10 <../final_examples/poisson/merged_2d_plots.png>] [11 <../final_examples/poisson/GPy_mean_diff.png>] (main_file.bbl) [12] (main_file.aux)
  ***********
 LaTeX2e <2023-06-01> patch level 1
 L3 programming layer <2023-08-11>
@@ -656,17 +637,17 @@ Package rerunfilecheck Info: File `main_file.out' has not changed.
 (rerunfilecheck)             Checksum: F5BFB0828BE8D395C309F312FC9ABCE1;2685.
  ) 
 Here is how much of TeX's memory you used:
- 14801 strings out of 477438
- 232726 string characters out of 5813484
+ 14810 strings out of 477438
+ 233157 string characters out of 5813484
  1935254 words of memory out of 5000000
- 35546 multiletter control sequences out of 15000+600000
+ 35554 multiletter control sequences out of 15000+600000
  574495 words of font info for 96 fonts, out of 8000000 for 9000
  0 hyphenation exceptions out of 8191
- 75i,14n,79p,1880b,575s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,14n,79p,1880b,486s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmbsy10.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cmextra/cmbsy5.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cmextra/cmbsy7.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmbx10.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmbx12.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmbx9.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmex10.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmmi10.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmmi5.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmmi6.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmmi7.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmmi9.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmmib10.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cmextra/cmmib6.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cmextra/cmmib7.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cmextra/cmmib9.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmr10.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmr12.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmr17.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmr6.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmr7.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmr9.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmsy10.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmsy6.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmsy7.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmsy9.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmti10.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmtt10.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/symbols/msam7.pfb></home/tobias/.miktex/texmfs/install/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on main_file.pdf (12 pages, 2940670 bytes).
+Output written on main_file.pdf (12 pages, 3479540 bytes).
 PDF statistics:
- 382 PDF objects out of 1000 (max. 8388607)
- 74 named destinations out of 1000 (max. 500000)
- 160 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 385 PDF objects out of 1000 (max. 8388607)
+ 75 named destinations out of 1000 (max. 500000)
+ 165 words of extra memory for PDF output out of 10000 (max. 10000000)
 
