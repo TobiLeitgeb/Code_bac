@@ -1,0 +1,2 @@
+"None"
+"Table[{t, x, Evaluate[u[t, x] /. First[sol]], f[t, x]}, {t, 0, T, 0.01}, {x, 0, L, 0.01}]"
