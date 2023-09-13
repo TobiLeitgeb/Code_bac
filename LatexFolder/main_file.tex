@@ -145,7 +145,7 @@ For a two-dimensional case with time being the second dimension, two independent
 \begin{equation}
     k(\bm{x_p}, \bm{x_q}) = \sigma_f^2  \exp\left({-\frac{0.5}{l_x^2} {(x_p-x_q)}^2}\right) \exp\left({-\frac{0.5}{l_t^2} {(t_p-t_q)}^2}\right)
 \end{equation}
-There are many kernels one can choose from. A good overview over some kernel functions, as well as how they can be modified, can be found in~\cite{Duvenaud} as well as in~\cite{görtler2019a}. Later we will modify the SE kernels with linear operators, more specifically with differential operators.
+There are many kernels one can choose from. A good overview over some kernel functions, as well as how they can be modified, can be found in~\cite{Duvenaud} as well as in~\cite{görtler2019a}. Later we will modify the SE kernels with linear operators, more specifically with differential operators. For this the SE kernel is a good choice, because it is infinitely differentiable with rather simple and smooth derivatives. This is important for the overall numerical stabililty when using the modified kernel. 
 \subsection{Marginal likelihood}
 
 For the optimization of the hyperparameters $\theta$ and $\phi$ the negative
@@ -377,7 +377,7 @@ with $c$ as the wave speed. The ground truth was calculated with $c = 3$ and wit
     ~\label{fig:wave}
 \end{figure}
 \subsection{Poisson Equation}
-In our last example we will look at a case where we do not incorporate additional ODE parameters $\phi$ in the form of hyperparameters into the kernel. This is to look at the general predictive performance of the informed model. The informed, aswell as the vanilla model will both not incorporate ARD, therefore there will only be one singel length scale $l$ for both spatial dimensions.\\
+In our last example we will look at a case where we do not incorporate additional ODE parameters $\phi$ in the form of hyperparameters into the kernel. This is to better look at the general predictive performance of the informed model in comparison to the vanilla model. The informed, aswell as the vanilla model will both not incorporate ARD, therefore there will only be one singel length scale $l$ for both spatial dimensions. With this example we now have the same amount of optimizable hyperparameters. \\
 \\
  We will look at the Poisson equation in two spatial dimensions with a
 forcing term and with dirichlet boundary conditions:

@@ -226,7 +226,7 @@ class PhysicsInformedGP_regressor():
         results = [res for res in results if np.all(res.x > 0) and res.success]
         self.results_list = results
         best_result = min(results, key=lambda x: x.fun)
-        print(best_result)
+        print("Theta: ", best_result.x, "\n","Log marginal likelihood: ", best_result.fun)
 
         return best_result
 
@@ -323,35 +323,33 @@ class PhysicsInformedGP_regressor():
             var = jnp.diag(cov_f_star)
 
         return f_star, var
-
+#x_mesh, t_mesh, u_grid, f_grid
     def error(self):
         """computes the mean squared error of the computed model"""
         assert self.validation_set is not None, "Please set the validation set first"
         if self.timedependence:
-            x_star, t_star = self.validation_set[0].reshape(
-                -1, 1), self.validation_set[1].reshape(-1, 1)
-            X_star_u = np.hstack((x_star, t_star))
-            x_star, t_star = self.validation_set[2].reshape(
-                -1, 1), self.validation_set[3].reshape(-1, 1)
-            X_star_f = np.hstack((x_star, t_star))
-            u_values = self.validation_set[4]
-            f_values = self.validation_set[5]
+            x_star, t_star = self.raw_data[0].reshape(
+                -1, 1), self.raw_data[1].reshape(-1, 1)
+            X_star = np.hstack((x_star, t_star))
+            
+            u_values = self.raw_data[2]
+            f_values = self.raw_data[3]
         else:
-            X_star_u = self.validation_set[0]
-            X_star_f = self.validation_set[2]
-            u_values = self.validation_set[1]
-            f_values = self.validation_set[3]
+            X_star = self.raw_data[0].reshape(-1, 1)
+            u_values = self.raw_data[1]
+            f_values = self.raw_data[2]
 
-        mean_validation_set_u, var = self.predict_u(X_star_u)
-        mean_validation_set_f, var = self.predict_f(X_star_f)
+        mean_ground_truth_u, var = self.predict_u(X_star)
+        mean_ground_truth_f, var = self.predict_f(X_star)
         self.MSE["u"] = np.mean(
-            (mean_validation_set_u.ravel() - u_values.ravel())**2).item()
+            (mean_ground_truth_u.ravel() - u_values.ravel())**2).item()
         self.MSE["f"] = np.mean(
-            (mean_validation_set_f.ravel() - f_values.ravel())**2).item()
+            (mean_ground_truth_f.ravel() - f_values.ravel())**2).item()
+        
         self.rel_l2_error["u"] = self.relative_l2_error(
-            u_values.ravel(), mean_validation_set_u.ravel())
+            u_values.ravel(), mean_ground_truth_u.ravel())
         self.rel_l2_error["f"] = self.relative_l2_error(
-            f_values.ravel(), mean_validation_set_f.ravel())
+            f_values.ravel(), mean_ground_truth_f.ravel())
 
     def relative_l2_error(self, ground_truth,predicted_solution):
         """computes the relative l2 error between the ground truth and the predicted solution"""

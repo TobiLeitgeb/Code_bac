@@ -1,13 +1,13 @@
 # Fdb version 4
-["bibtex main_file"] 1694513030 "main_file.aux" "main_file.bbl" "main_file" 1694513034 0
+["bibtex main_file"] 1694638308 "main_file.aux" "main_file.bbl" "main_file" 1694638311 0
   "./library.bib" 1693422087 3366 4a7c4769c2fa9511b423efdc282fc722 ""
   "/home/tobias/.miktex/texmfs/install/bibtex/bst/bibtex/plain.bst" 1693151903 20613 bd3fbfa9f64872b81ac57a0dd2ed855f ""
-  "main_file.aux" 1694513033 8833 1c6312fd2396e309c49bb9f37f488e1f "pdflatex"
+  "main_file.aux" 1694638311 8833 c9e6d1b4712600326b6e6f6c9c6d487a "pdflatex"
   (generated)
   "main_file.bbl"
   "main_file.blg"
   (rewritten before read)
-["pdflatex"] 1694513031 "/home/tobias/code/Code_bac/LatexFolder/main_file.tex" "main_file.pdf" "main_file" 1694513034 0
+["pdflatex"] 1694638308 "/home/tobias/code/Code_bac/LatexFolder/main_file.tex" "main_file.pdf" "main_file" 1694638311 0
   "../final_examples/oscillator/merged_1d_plots.png" 1693654054 713450 f24935bf786da8eaeb3e01c31201f893 ""
   "../final_examples/poisson/GPy_mean_diff.png" 1694028765 1136318 84c06957fd845d099ddbfd262c53f852 ""
   "../final_examples/poisson/merged_2d_plots.png" 1694028762 973894 96a046e003791d176bb59045d6f7872a ""
@@ -164,11 +164,11 @@
   "/home/tobias/.miktex/texmfs/install/tex/latex/tools/tabularx.sty" 1693151906 7147 d80d8cf72d313443d08c13c1af59c90f ""
   "/home/tobias/.miktex/texmfs/install/tex/latex/url/url.sty" 1693151911 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
   "/home/tobias/.miktex/texmfs/install/tex/latex/xcolor/xcolor.sty" 1693151911 56148 51a9a8571c07b9921892ae11063ae853 ""
-  "/home/tobias/code/Code_bac/LatexFolder/main_file.tex" 1694513027 32795 b4a228785f52831fc8a7db4a1b9dca4b ""
-  "main_file.aux" 1694513033 8833 1c6312fd2396e309c49bb9f37f488e1f "pdflatex"
-  "main_file.bbl" 1694513030 1543 2d099020fe32f11b98f10b4dd5dec0cb "bibtex main_file"
-  "main_file.out" 1694513033 2685 f5bfb0828be8d395c309f312fc9abce1 "pdflatex"
-  "main_file.tex" 1694513027 32795 b4a228785f52831fc8a7db4a1b9dca4b ""
+  "/home/tobias/code/Code_bac/LatexFolder/main_file.tex" 1694638305 33128 1b48faf1ce5907503184bdff3c1d2cec ""
+  "main_file.aux" 1694638311 8833 c9e6d1b4712600326b6e6f6c9c6d487a "pdflatex"
+  "main_file.bbl" 1694638308 1543 2d099020fe32f11b98f10b4dd5dec0cb "bibtex main_file"
+  "main_file.out" 1694638311 2685 f5bfb0828be8d395c309f312fc9abce1 "pdflatex"
+  "main_file.tex" 1694638305 33128 1b48faf1ce5907503184bdff3c1d2cec ""
   (generated)
   "main_file.aux"
   "main_file.log"
