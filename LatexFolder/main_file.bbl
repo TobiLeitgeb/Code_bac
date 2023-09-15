@@ -28,8 +28,7 @@ Jochen Görtler, Rebecca Kehlbeck, and Oliver Deussen.
 
 \bibitem{RAISSI}
 Maziar Raissi, Paris Perdikaris, and George~Em Karniadakis.
-\newblock Machine learning of linear differential equations using gaussian
-  processes.
+\newblock Machine learning of linear differential equations using gaussian processes.
 \newblock {\em Journal of Computational Physics}, 348:683--693, 2017.
 
 \bibitem{RasmussenCarlEdward}
@@ -45,8 +44,7 @@ S.~Singer and J.~Nelder.
 
 \bibitem{Särkkä}
 Simo Särkkä.
-\newblock Linear operators and stochastic partial differential equations in
-  gaussian process regression.
+\newblock Linear operators and stochastic partial differential equations in gaussian process regression.
 \newblock pages 151--158, 06 2011.
 
 \end{thebibliography}
