@@ -145,7 +145,7 @@ For a two-dimensional case with time being the second dimension, two independent
 \begin{equation}
     k(\bm{x_p}, \bm{x_q}) = \sigma_f^2  \exp\left({-\frac{0.5}{l_x^2} {(x_p-x_q)}^2}\right) \exp\left({-\frac{0.5}{l_t^2} {(t_p-t_q)}^2}\right)
 \end{equation}
-There are many kernels one can choose from. A good overview over some kernel functions, as well as how they can be modified, can be found in~\cite{Duvenaud} as well as in~\cite{görtler2019a}. Later we will modify the SE kernels with linear operators, more specifically with differential operators. For this the SE kernel is a good choice, because it is infinitely differentiable with rather simple and smooth derivatives. This is important for the overall numerical stabililty when using the modified kernel. 
+There are many kernels one can choose from. A good overview over some kernel functions, as well as how they can be modified, can be found in~\cite{Duvenaud} as well as in~\cite{görtler2019a}. Later we will modify the SE kernels with linear operators, more specifically with differential operators. For this the SE kernel is a good choice, because it is infinitely differentiable with rather simple and smooth derivatives. This is important for the overall numerical stabililty when calculating the gradients of the modified kernel in the optimization process.\\ 
 \subsection{Marginal likelihood}
 
 For the optimization of the hyperparameters $\theta$ and $\phi$ the negative
@@ -161,15 +161,15 @@ A useful property of Gaussian Processes is that their linear transformation is
 still a Gaussian Process. This main
 
 \section{Physics informed framework}
-We choose our problem setup similar to the one proposed in~\cite{RAISSI}. We
-have some sort of linear differential equation or ODE of a physical model:
+We choose our problem setup similar/eual to the one proposed in~\cite{RAISSI}. At the top we 
+have some sort of linear differential equation of a physical model:
 \begin{equation}
     \label{eq:Lu=f}
     \mathcal{L}_{\bm{x}}^\phi u(\bm{x}) = f(\bm{x})
 \end{equation}
-with $\mathcal{L}_{\bm{x}}^\phi$ being the differential operator that resembles the differential equation and $\phi$ being a list containing the a-priori unknown parameters which also define the differential equation. The function $f(\bm{x})$ acts as the forcing term and $u(\bm{x})$ is the solution of the differential equation.  \\
+which can be written as a linear operator $\mathcal{L}_{\bm{x}}^\phi$ acting on the function $u(\bm{x})$. $\mathcal{L}_{\bm{x}}^\phi$ is a differential operator that resembles the differential equation with $\phi$ being a list containing the a-priori unknown parameters which also define the differential equation. The function $f(\bm{x})$ acts as the forcing term and $u(\bm{x})$ is the solution of the differential equation.  \\
 \\
-We now start by assuming that $u(\bm{x})$ is a Gaussian Process of the form:
+We now start by assuming that the solution of the differential equation $u(\bm{x})$ is a Gaussian Process of the form:
 \begin{equation}
     u(\bm{x}) \thicksim \mathcal{G}\mathcal{P}(\bm{0},k_{uu}(\bm{x},\bm{x'};\bm{\theta}))
 \end{equation}
@@ -181,7 +181,7 @@ with now $k_{ff}$ being the kernel defining the $\mathcal{G}\mathcal{P}$ (on) $f
 \begin{equation}
     k_{ff}(\bm{x},\bm{x'};\bm{\theta}, \bm{\phi}) = \mathcal{L}_{\bm{x}}^\phi \mathcal{L}_{\bm{x'}}^\phi k_{uu}(\bm{x},\bm{x'};\bm{\theta})
 \end{equation}
-We will later need the mixed terms between $u(x)$ and $f(x)$, namely $k_{uf}$ and $k_{fu}$ which are formed by:
+We also need the mixed terms between $u(x)$ and $f(x)$, namely $k_{uf}$ and $k_{fu}$ which are formed by:
 \begin{equation}
     \begin{aligned}
         k_{uf}(\bm{x,x'};\bm{\theta,\phi}) & = \mathcal{L}_{\bm{x'}}^\phi k_{uu}(\bm{x},\bm{x'};\bm{\theta}) \\
@@ -228,7 +228,7 @@ with which we create two data sets $\{\bm{X_u,y_u}\}$ and $\{\bm{X_f,y_f}\}$. Si
 We can directly use $\bm{K}$ to compute the mag log likelihood and train the
 model to obtain the optimized hyperparameters $\bm{\theta_*}$ and
 $\bm{\phi_*}$. More information about the optimization process will be provided
-in the next chapter. Here we now continue with the optimized hyperparameters.
+in the next chapter.
 
 \subsection{Optimization/Finding of the hyperparameters}
 Arguably the most important part of the overall framework is the optimization of the hyperparameters. The optimization is done by minimizing the negative marginal log likelihood (mll) of the joint GP with respect to the hyperparameters $\bm{\theta, \phi}$. The mll is defined as:
@@ -240,7 +240,7 @@ with $\bm{K}$ being the covariance matrix of the joint GP in equation~\ref{eq:jo
 \\
 A common problem in the optimization process of non-convex funtion is the problem of converging to a local minimum. To avoid this problem we started the optimization process for different initial values of the hperparameters. The initial values were sampled from uniform distributions, only the length scale hyperparameter $l$ was sampled from a log uniform distribution because of it beeing a scale parameter. Because of the random initialization, and the presumably high number of local minima in the optimization landscape, the results for the hyperparameters varied. However, for a sufficient number of optimization runs the results normally reached a similar accuracy and similar hyperparamter values.\\
 \\
-To conclude, the optimization process is the key part of the framework, because we can directly make predictions with the optimized hyperparameters, but also obtain the parameters $\phi$ of the underlying differential equation. A key step for improving the overall framework would be to improve the optimization process. However, this would be very time consuming and the obtained results are sufficently accurate for the scope of this work.\\
+To conclude, the optimization process is the key part of the framework, because we can directly make predictions with the optimized hyperparameters, but also obtain the parameters $\phi$ of the underlying differential equation. A key step for improving the overall framework would be to improve the optimization process. However, this would be very time consuming and the obtained results are sufficently accurate, aswell as the computation time beeing reasonably short, for the scope of this work.\\
 \subsection{Predictions with the Posterior}
 With the obtained hyperparameters $\bm{\theta_*}$ and $\bm{\phi_*}$ we can make
 new predictions at a test location $\bm{x_*}$. Similar to the construction in
@@ -390,7 +390,7 @@ forcing term and with dirichlet boundary conditions:
 
  Overall, the performance of the infomed model is significantly better. The relative error for $L²_u$ is and $L²_f$ is. The predictive mean, the predictive variance and the calculated difference between the prediction and the ground truth are shown in figure \ref{fig:poisson}. Comparing this to the vanilla model with relative errors of $L²_u = 0.0989$ and $L²_f = 0.0728$ we can see that the informed model is more than an order of magnitude more accurate. The predictive mean and the difference to the ground truth can be seen in figure \ref{fig:poisson_GPY}. The better prediction is also reflected in the MSEs. The MSEs for the informed model are $MSE_u = . \cdot 10^{-7}$ and $MSE_f =  \cdot 10^{-3}$. The MSEs for the vanilla model are $MSE_{u,va} = 9.862  \cdot 10^{-5}$ and $MSE_{f,va} = 0.130$. The \\
 \\
-
+13
 \begin{figure}[htbp!]
     \centering
     \includegraphics[width=1\textwidth]{../final_examples/poisson/merged_2d_plots.png}

@@ -1228,4 +1228,54 @@ class PhysicsInformedGP_regressor():
         if savepath != None:
             plt.savefig(savepath, bbox_inches='tight', dpi=300)
         
+    def plot_1d_cut(self, axis_plus_index: list, savepath):
+        "cut along an axis of the 2d plot"
+        assert axis_plus_index[0] == 0 or axis_plus_index[0] == 1, "axis must be 0 or 1"
+        if axis_plus_index[0] == 0:
+            xlabel = "t"
+            ylabel = f"u(t,x={axis_plus_index[1]})"
+        if axis_plus_index[0] == 1:
+            xlabel = "x"
+            ylabel = f"u(t={axis_plus_index[1]},x)"
+
+        x_star, t_star = self.raw_data[0].reshape(
+            -1, 1), self.raw_data[1].reshape(-1, 1)
+        u_grid = self.raw_data[2]
+        f_grid = self.raw_data[3]
+        size = (int(np.sqrt(len(x_star))), int(np.sqrt(len(x_star))))
         
+        mean_u, var_u = self.predict_u(np.hstack([x_star, t_star]))
+        mean_f, var_f = self.predict_f(np.hstack([x_star, t_star]))
+        #gpy
+        #mean_u_gpy, var_u_gpy = self.GPy_models[0].predict(np.hstack([x_star, t_star]))
+        #mean_f_gpy, var_f_gpy = self.GPy_models[1].predict(np.hstack([x_star, t_star]))
+
+
+
+        if axis_plus_index[0] == 0:
+            u_gt_cut = u_grid[axis_plus_index[1], :]
+            f_gt_cut = f_grid[axis_plus_index[1], :]
+            u_mean_cut = self.mean_u[axis_plus_index[1], :]
+            u_var_cut = self.var_u[axis_plus_index[1], :]
+            f_mean_cut = self.mean_f[axis_plus_index[1], :]
+            f_var_cut = self.var_f[axis_plus_index[1], :]
+
+        if axis_plus_index[0] == 1:
+            u_gt_cut = u_grid[:, axis_plus_index[1]]
+            f_gt_cut = f_grid[:, axis_plus_index[1]]
+            u_mean_cut = self.mean_u[:, axis_plus_index[1]]
+            u_var_cut = self.var_u[:, axis_plus_index[1]]
+            f_mean_cut = self.mean_f[:, axis_plus_index[1]]
+            f_var_cut = self.var_f[:, axis_plus_index[1]]
+
+        fig, ax = plt.subplots(1, 2, figsize=(12, 6))
+        x_axis = np.linspace(0, 1, len(u_mean_cut))
+        ax[0].plot(np.unique(x_star), u_gt_cut, label="ground truth")
+        ax[0].plot(x_axis, u_mean_cut, label="mean")
+        ax[0].fill_between(x_axis, u_mean_cut - 2*np.sqrt(u_var_cut),
+                            u_mean_cut + 2*np.sqrt(u_var_cut), alpha=0.2, label="$2\\sigma$")
+        ax[0].legend()
+        ax[0].set_title("u(t,x) along axis " + xlabel + " at index " + str(axis_plus_index[1]))
+        ax[0].set_xlabel(xlabel)
+        ax[0].set_ylabel(ylabel)
+
