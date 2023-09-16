@@ -1,18 +1,18 @@
 # Fdb version 4
-["bibtex main_file"] 1694781573 "main_file.aux" "main_file.bbl" "main_file" 1694781599 0
+["bibtex main_file"] 1694781573 "main_file.aux" "main_file.bbl" "main_file" 1694898711 0
   "./library.bib" 1694724070 3366 4a7c4769c2fa9511b423efdc282fc722 ""
   "/usr/local/texlive/2023/texmf-dist/bibtex/bst/base/plain.bst" 1292289607 20613 bd3fbfa9f64872b81ac57a0dd2ed855f ""
-  "main_file.aux" 1694781598 8907 313fed6bdbe0e36b0134c6cc4316347c "pdflatex"
+  "main_file.aux" 1694898711 8907 313fed6bdbe0e36b0134c6cc4316347c "pdflatex"
   (generated)
   "main_file.bbl"
   "main_file.blg"
   (rewritten before read)
-["pdflatex"] 1694781596 "/Users/tobileitgeb/Code/Code_bac/LatexFolder/main_file.tex" "main_file.pdf" "main_file" 1694781599 0
+["pdflatex"] 1694898708 "/Users/tobileitgeb/Code/Code_bac/LatexFolder/main_file.tex" "main_file.pdf" "main_file" 1694898711 0
   "../final_examples/oscillator/merged_1d_plots.png" 1694724070 713450 f24935bf786da8eaeb3e01c31201f893 ""
   "../final_examples/poisson/GPy_mean_diff.png" 1694724070 1136318 84c06957fd845d099ddbfd262c53f852 ""
-  "../final_examples/poisson/merged_2d_plots.png" 1694724070 973894 96a046e003791d176bb59045d6f7872a ""
-  "../final_examples/wave_equation/predictive_mean.png" 1694724070 623654 0e1e9e628b8e2c05b324281f8248868b ""
-  "/Users/tobileitgeb/Code/Code_bac/LatexFolder/main_file.tex" 1694781596 33129 91f8cd6301239854a76847bb5fa8ed29 ""
+  "../final_examples/poisson/merged_2d_plots.png" 1694895859 987362 108091ef19406c547f2681feb693de7f ""
+  "../final_examples/wave_equation/predictive_mean.png" 1694898249 625085 c30b8686fbb96f33569b979559d66233 ""
+  "/Users/tobileitgeb/Code/Code_bac/LatexFolder/main_file.tex" 1694898708 33326 2e74b2a21e9073ad8657fc017743a85a ""
   "/usr/local/texlive/2023/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/tfm/jknappen/ec/tcrm0900.tfm" 1136768653 1536 c4f439db76ef96a9c53bc437f35ffe20 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/tfm/jknappen/ec/tcrm1000.tfm" 1136768653 1536 e07581a4bb3136ece9eeb4c3ffab8233 ""
@@ -166,10 +166,10 @@
   "/usr/local/texlive/2023/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1694780642 4623355 b8cad38412faebe1ce5b780a45db67bd ""
   "/usr/local/texlive/2023/texmf-var/web2c/pdftex/pdflatex.fmt" 1694780609 7883456 af80180e85011d0e993a51a003aec67c ""
   "/usr/local/texlive/2023/texmf.cnf" 1678822455 577 1b2b1af17af2508fb20dd85783af4050 ""
-  "main_file.aux" 1694781598 8907 313fed6bdbe0e36b0134c6cc4316347c "pdflatex"
+  "main_file.aux" 1694898711 8907 313fed6bdbe0e36b0134c6cc4316347c "pdflatex"
   "main_file.bbl" 1694781573 1539 7b7a1964b475aaed904542458293bdfb "bibtex main_file"
-  "main_file.out" 1694781598 2685 f5bfb0828be8d395c309f312fc9abce1 "pdflatex"
-  "main_file.tex" 1694781596 33129 91f8cd6301239854a76847bb5fa8ed29 ""
+  "main_file.out" 1694898711 2685 f5bfb0828be8d395c309f312fc9abce1 "pdflatex"
+  "main_file.tex" 1694898708 33326 2e74b2a21e9073ad8657fc017743a85a ""
   (generated)
   "main_file.aux"
   "main_file.log"
