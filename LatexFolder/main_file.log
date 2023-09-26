@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.9.15)  16 SEP 2023 23:11
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.9.15)  26 SEP 2023 20:29
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -586,61 +586,66 @@ Missing character: There is no ² in font cmr10!
 <../final_examples/poisson/merged_2d_plots.png, id=216, 662.9568pt x 786.0567pt>
 File: ../final_examples/poisson/merged_2d_plots.png Graphic file (type png)
 <use ../final_examples/poisson/merged_2d_plots.png>
-Package pdftex.def Info: ../final_examples/poisson/merged_2d_plots.png  used on input line 396.
+Package pdftex.def Info: ../final_examples/poisson/merged_2d_plots.png  used on input line 395.
 (pdftex.def)             Requested size: 443.57848pt x 525.9476pt.
 
-LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 397.
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 396.
 
 
-LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 397.
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 396.
 
 Missing character: There is no ² in font cmr9!
 
-LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 397.
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 396.
 
 
-LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 397.
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 396.
 
 Missing character: There is no ² in font cmr9!
 <../final_examples/poisson/GPy_mean_diff.png, id=217, 718.1229pt x 631.6398pt>
 File: ../final_examples/poisson/GPy_mean_diff.png Graphic file (type png)
 <use ../final_examples/poisson/GPy_mean_diff.png>
-Package pdftex.def Info: ../final_examples/poisson/GPy_mean_diff.png  used on input line 402.
+Package pdftex.def Info: ../final_examples/poisson/GPy_mean_diff.png  used on input line 401.
 (pdftex.def)             Requested size: 443.57848pt x 390.16693pt.
 
-LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 403.
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 402.
 
 
-LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 403.
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 402.
 
 Missing character: There is no ² in font cmr10!
+<../final_examples/poisson/boundaries.png, id=219, 931.5603pt x 569.4876pt>
+File: ../final_examples/poisson/boundaries.png Graphic file (type png)
+<use ../final_examples/poisson/boundaries.png>
+Package pdftex.def Info: ../final_examples/poisson/boundaries.png  used on input line 408.
+(pdftex.def)             Requested size: 443.57848pt x 271.17853pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 391--407
+Underfull \hbox (badness 10000) in paragraph at lines 391--413
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 391--407
+Underfull \hbox (badness 10000) in paragraph at lines 391--413
 
  []
 
-[9 <../final_examples/wave_equation/predictive_mean.png>] (./main_file.bbl) [10] [11 <../final_examples/poisson/merged_2d_plots.png>] [12 <../final_examples/poisson/GPy_mean_diff.png>] (./main_file.aux)
+[9 <../final_examples/wave_equation/predictive_mean.png>] [10 <../final_examples/poisson/merged_2d_plots.png>] (./main_file.bbl [11 <../final_examples/poisson/GPy_mean_diff.png>]) [12 <../final_examples/poisson/boundaries.png>] (./main_file.aux)
 Package rerunfilecheck Info: File `main_file.out' has not changed.
 (rerunfilecheck)             Checksum: F5BFB0828BE8D395C309F312FC9ABCE1;2685.
  ) 
 Here is how much of TeX's memory you used:
- 14546 strings out of 476025
- 232020 string characters out of 5790017
+ 14555 strings out of 476025
+ 232345 string characters out of 5790017
  1868388 words of memory out of 5000000
- 34708 multiletter control sequences out of 15000+600000
+ 34715 multiletter control sequences out of 15000+600000
  528713 words of font info for 92 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,14n,76p,1886b,471s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,14n,76p,1886b,569s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbsy10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmbsy5.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmbsy7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib6.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib9.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/symbols/msam7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on main_file.pdf (12 pages, 3453893 bytes).
+Output written on main_file.pdf (12 pages, 3885429 bytes).
 PDF statistics:
- 390 PDF objects out of 1000 (max. 8388607)
- 304 compressed objects within 4 object streams
- 75 named destinations out of 1000 (max. 500000)
- 165 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 394 PDF objects out of 1000 (max. 8388607)
+ 306 compressed objects within 4 object streams
+ 76 named destinations out of 1000 (max. 500000)
+ 170 words of extra memory for PDF output out of 10000 (max. 10000000)
 

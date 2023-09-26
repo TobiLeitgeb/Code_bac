@@ -770,6 +770,11 @@ INPUT ../final_examples/poisson/GPy_mean_diff.png
 INPUT ../final_examples/poisson/GPy_mean_diff.png
 INPUT ../final_examples/poisson/GPy_mean_diff.png
 INPUT ../final_examples/poisson/GPy_mean_diff.png
+INPUT ../final_examples/poisson/boundaries.png
+INPUT ../final_examples/poisson/boundaries.png
+INPUT ../final_examples/poisson/boundaries.png
+INPUT ../final_examples/poisson/boundaries.png
+INPUT ../final_examples/poisson/boundaries.png
 INPUT ./main_file.bbl
 INPUT main_file.bbl
 INPUT ./main_file.bbl

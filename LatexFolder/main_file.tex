@@ -388,14 +388,13 @@ forcing term and with dirichlet boundary conditions:
 \end{equation}
 
 
- Overall, the performance of the infomed model is significantly better. The relative error for $L²_u$ is and $L²_f$ is. The predictive mean, the predictive variance and the calculated difference between the prediction and the ground truth are shown in figure \ref{fig:poisson}. Comparing this to the vanilla model with relative errors of $L²_u = 0.0989$ and $L²_f = 0.0728$ we can see that the informed model is more than an order of magnitude more accurate. The predictive mean and the difference to the ground truth can be seen in figure \ref{fig:poisson_GPY}. The better prediction is also reflected in the MSEs. The MSEs for the informed model are $MSE_u = . \cdot 10^{-7}$ and $MSE_f =  \cdot 10^{-3}$. The MSEs for the vanilla model are $MSE_{u,va} = 9.862  \cdot 10^{-5}$ and $MSE_{f,va} = 0.130$. The \\
+ Overall, the performance of the infomed model is significantly better. The relative error for $L²_u$ is and $L²_f$ is. The predictive mean, the predictive variance and the calculated difference between the prediction and the ground truth are shown in figure \ref{fig:poisson}. Comparing this to the vanilla model with relative errors of $L²_u = 0.0989$ and $L²_f = 0.0728$ we can see that the informed model is more than an order of magnitude more accurate. The predictive mean and the difference to the ground truth can be seen in figure \ref{fig:poisson_GPY}. The better prediction is also reflected in the MSEs. The MSEs for the informed model are $MSE_u = . \cdot 10^{-7}$ and $MSE_f =  \cdot 10^{-3}$. The MSEs for the vanilla model are $MSE_{u,va} = 9.862  \cdot 10^{-5}$ and $MSE_{f,va} = 0.130$.\\
 \\
-13
 \begin{figure}[htbp!]
     \centering
     \includegraphics[width=1\textwidth]{../final_examples/poisson/merged_2d_plots.png}
     \caption{Plots for the informed model. (a) \& (b)  predictive mean $\bm{\mu_u}$ and $\bm{\mu_f}$ with training points in red. (c) \& (d) predictive standard deviations $\bm{\sigma_u}$ and $\bm{\sigma_f}$. (e) \& (f) difference between the predictive mean $\bm{\mu}$ and the ground truths $u$ and $f$. The MSEs for the informed model are $MSE_u =  \cdot 10^{-7}$ and $MSE_f =  \cdot 10^{-3}$. The relative $L²$ errors are $L^2_u = $ and $L^2_f = $.}
-    ~\label{fig:poisson}
+    \label{fig:poisson}
 \end{figure}
 \begin{figure}[htbp!]
     \centering
@@ -403,13 +402,20 @@ forcing term and with dirichlet boundary conditions:
     \caption{Plots for the vanilla model. (a) \& (b) predictive mean $\bm{\mu_u}$ and $\bm{\mu_f}$} with training points in red. (c) \& (d) difference between the predictive mean $\bm{\mu}$ and the ground truths $u$ and $f$. The MSEs for the vanilla model are $MSE_{u,va} = 9.862  \cdot 10^{-5}$ and $MSE_{f,va} = 0.130$. The relative $L^2$ errors are $L^2_u = 0.0989$ and $L²_f = 0.0728$.
     ~\label{fig:poisson_GPY}
 \end{figure}
-With this example we can see that the informed models better performance is not only due to the additional hyperparameters. How big the role of the joint GP is, is hard to say, but it is clear that the informed model is notably more accurate than the vanilla model. The most notable difference between the informed and the vanilla model are the predictions at the boundary of the domain. The informed model is able to predict the domain boundaries very accuratly. On the other hand, the vanilla model has big problems at predicting the \\
+The area that strikes the most when looking at the prediction with the informed model are the boundaries of the domain. In figure \ref{fig:poisson_boundaries} the slices of the predictive mean together with the ground truth are shown. It is remarkable how precise the model manages to predict the boundaries of the domain, without even using more training points on or near the boundary. 
+\begin{figure}
+    \centering
+    \includegraphics[width=1\textwidth]{../final_examples/poisson/boundaries.png}
+    \caption{Plots for the investigation of the domain boundaries}
+    \label{fig:poisson_boundaries}
+\end{figure}
+With this example we can see that the informed models better performance is not only due to the additional hyperparameters. How big the role of the joint GP is, is hard to say, but it is clear that the informed model is notably more accurate than the vanilla model. The most notable difference between the informed and the vanilla model are the predictions at the boundary of the domain. The informed model is able to predict the domain boundaries very accuratly.  \\
 \section{Conclusion and Outlook}
 
 \section{Appendix}
 \subsection{Numerical implementation of the Kernel}
 
 \bibliographystyle{plain}
-\bibliography{library}
 
+\bibliography{library}
 \end{document}

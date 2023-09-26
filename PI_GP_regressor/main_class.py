@@ -1228,16 +1228,10 @@ class PhysicsInformedGP_regressor():
         if savepath != None:
             plt.savefig(savepath, bbox_inches='tight', dpi=300)
         
-    def plot_1d_cut(self, axis_plus_index: list, savepath):
+    def plot_1d_cut(self, axis: list,index: list, savepath = None):
         "cut along an axis of the 2d plot"
-        assert axis_plus_index[0] == 0 or axis_plus_index[0] == 1, "axis must be 0 or 1"
-        if axis_plus_index[0] == 0:
-            xlabel = "t"
-            ylabel = f"u(t,x={axis_plus_index[1]})"
-        if axis_plus_index[0] == 1:
-            xlabel = "x"
-            ylabel = f"u(t={axis_plus_index[1]},x)"
-
+        titles = ["(a)", "(b)","(c)","(d)"]
+        axis_titles = [self.xlabel,self.ylabel]
         x_star, t_star = self.raw_data[0].reshape(
             -1, 1), self.raw_data[1].reshape(-1, 1)
         u_grid = self.raw_data[2]
@@ -1246,36 +1240,54 @@ class PhysicsInformedGP_regressor():
         
         mean_u, var_u = self.predict_u(np.hstack([x_star, t_star]))
         mean_f, var_f = self.predict_f(np.hstack([x_star, t_star]))
+        var_u, var_f = var_u.reshape(size), var_f.reshape(size)
+        mean_u, mean_f = mean_u.reshape(size), mean_f.reshape(size)
         #gpy
         #mean_u_gpy, var_u_gpy = self.GPy_models[0].predict(np.hstack([x_star, t_star]))
         #mean_f_gpy, var_f_gpy = self.GPy_models[1].predict(np.hstack([x_star, t_star]))
 
 
+        fontsize = 10
+        fig, ax = plt.subplots(2, 2, figsize=(13, 8))
+        
+        ax = ax.flatten()
+        for i in range(len(ax)):
+            if axis[i] == 0:
+                print(mean_u.shape)
+                u_gt_cut = u_grid[index[i], :]
+                f_gt_cut = f_grid[index[i], :]
+                u_mean_cut = mean_u[index[i], :]
+                u_var_cut = var_u[index[i], :]
+                f_mean_cut = mean_f[index[i], :]
+                f_var_cut = var_f[index[i], :]
+                xlabel = axis_titles[0]
+                ylabel = f"u({axis_titles[0]},{axis_titles[1]}={int(index[i]/100)})"
+                x_axis = np.linspace(0, 1, 101)
 
-        if axis_plus_index[0] == 0:
-            u_gt_cut = u_grid[axis_plus_index[1], :]
-            f_gt_cut = f_grid[axis_plus_index[1], :]
-            u_mean_cut = self.mean_u[axis_plus_index[1], :]
-            u_var_cut = self.var_u[axis_plus_index[1], :]
-            f_mean_cut = self.mean_f[axis_plus_index[1], :]
-            f_var_cut = self.var_f[axis_plus_index[1], :]
 
-        if axis_plus_index[0] == 1:
-            u_gt_cut = u_grid[:, axis_plus_index[1]]
-            f_gt_cut = f_grid[:, axis_plus_index[1]]
-            u_mean_cut = self.mean_u[:, axis_plus_index[1]]
-            u_var_cut = self.var_u[:, axis_plus_index[1]]
-            f_mean_cut = self.mean_f[:, axis_plus_index[1]]
-            f_var_cut = self.var_f[:, axis_plus_index[1]]
+            elif axis[i] == 1:
+                u_gt_cut = u_grid[:, index[i]]
+                f_gt_cut = f_grid[:, index[i]]
+                u_mean_cut = mean_u[:, index[i]]
+                u_var_cut = var_u[:, index[i]]
+                f_mean_cut = mean_f[:, index[i]]
+                f_var_cut = var_f[:, index[i]]
+                xlabel = axis_titles[1]
+                ylabel = f"u({axis_titles[0]}={int(index[i]/100)},{axis_titles[1]})"      
+                x_axis = np.linspace(0, 1, 101)
+            ax[i].plot(x_axis, u_gt_cut, label="Ground truth", color="black")
+            ax[i].plot(x_axis, u_mean_cut, label="Mean", color="blue")
+            ax[i].fill_between(x_axis, u_mean_cut - 2*np.sqrt(u_var_cut), 
+                               u_mean_cut + 2*np.sqrt(u_var_cut), color="blue", alpha=0.2, label="$2\\sigma$")
+            ax[i].set_xlabel(xlabel,fontsize=fontsize)
+            ax[i].set_ylabel(ylabel,fontsize=fontsize)
+            ax[i].legend()
+            ax[i].grid(alpha=0.7)
+            ax[i].set_title(titles[i],fontsize=fontsize)
+            plt.tight_layout()
+            if savepath is not None:
+                plt.savefig(savepath,bbox_inches = "tight",dpi = 300)
 
-        fig, ax = plt.subplots(1, 2, figsize=(12, 6))
-        x_axis = np.linspace(0, 1, len(u_mean_cut))
-        ax[0].plot(np.unique(x_star), u_gt_cut, label="ground truth")
-        ax[0].plot(x_axis, u_mean_cut, label="mean")
-        ax[0].fill_between(x_axis, u_mean_cut - 2*np.sqrt(u_var_cut),
-                            u_mean_cut + 2*np.sqrt(u_var_cut), alpha=0.2, label="$2\\sigma$")
-        ax[0].legend()
-        ax[0].set_title("u(t,x) along axis " + xlabel + " at index " + str(axis_plus_index[1]))
-        ax[0].set_xlabel(xlabel)
-        ax[0].set_ylabel(ylabel)
+            
+                 
 
