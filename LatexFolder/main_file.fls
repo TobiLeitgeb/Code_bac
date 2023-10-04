@@ -753,13 +753,11 @@ INPUT /usr/local/texlive/2023/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam1
 INPUT /usr/local/texlive/2023/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm10.tfm
 INPUT /usr/local/texlive/2023/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmmib9.tfm
 INPUT /usr/local/texlive/2023/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy9.tfm
-INPUT /usr/local/texlive/2023/texmf-dist/fonts/tfm/jknappen/ec/tcrm1000.tfm
 INPUT ../final_examples/wave_equation/predictive_mean.png
 INPUT ../final_examples/wave_equation/predictive_mean.png
 INPUT ../final_examples/wave_equation/predictive_mean.png
 INPUT ../final_examples/wave_equation/predictive_mean.png
 INPUT ../final_examples/wave_equation/predictive_mean.png
-INPUT /usr/local/texlive/2023/texmf-dist/fonts/tfm/jknappen/ec/tcrm0900.tfm
 INPUT ../final_examples/poisson/merged_2d_plots.png
 INPUT ../final_examples/poisson/merged_2d_plots.png
 INPUT ../final_examples/poisson/merged_2d_plots.png

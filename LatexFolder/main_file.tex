@@ -333,8 +333,8 @@ The first data set was generated with $m = 1, \gamma = 2, k = 2$ and a simple si
     ~\label{fig:damped_oscillator}
 \end{figure}
 \\
-To investiagete the impact of noise we will look at the same example as before, but with added noise. We will use $\sigma_{nu} = $ and $\sigma_{nf}$. This is a significant amount of noise, but the model still manages to predict the hyperparameters as $(,,)$
-To benchmark the performance further we looked at cases with different numer of training points. The results can be seen in table~\ref{tab:variing_n_trainingpoints}.
+To investiagete the impact of noise we will look at the same example as before, but with added noise. We will use $\sigma_{nu} = $ and $\sigma_{nf}$. This is a significant amount of noise, but the model still manages to predict the hyperparameters as $(1,1,1)$.
+To benchmark the performance further we looked at cases with different number of training points. The results can be seen in table~\ref{tab:variing_n_trainingpoints}.
 \begin{table}[htbp!]
     \caption{MSEs for the informed model with different number of training points $n$. The used noise was $\sigma_{nu} = $ and $\sigma_{nf}$.}
     \centering
@@ -343,8 +343,8 @@ To benchmark the performance further we looked at cases with different numer of 
         $n$     & 5 & 10 & 20 & 50 \\
         \midrule
         $mll$ &   3.722&  -10.049  &   -53.227 &  -32.808 \\
-        $L²_u$& & & & \\
-        $L²_f$ & & & & \\
+        $L^2_u$& & & & \\
+        $L^2_f$ & & & & \\
         $MSE_u$ & 5.583 $\cdot 10^{-3}$  &  1.070 $\cdot 10^{-7}$  &  2.463 $\cdot 10^{-8}$  &   4.022 $\cdot 10^{-8}$ \\
         $MSE_f$ &  4.974 & 2.347 $\cdot 10^{-3}$  & 1.076 $\cdot 10^{-3}$ &  0.105 \\
         \bottomrule
@@ -369,11 +369,11 @@ For the second example we will look at the one dimensional time dependent wave e
         \frac{1}{c^2} \frac{\partial^2 u(x,t)}{\partial t^2} - \frac{\partial^2 u(x,t)}{\partial x^2} = f(x,t) \\ u[0,x] =\\ u(t,0) = ; u(t,L) =
     \end{aligned}
 \end{equation}
-with $c$ as the wave speed. The ground truth was calculated with $c = 3$ and with $f(x,t) = $. We used 20 training points for both $u$ and $f$. The training data was sampled from the domain $x \in [0,1]$ and $t \in [0,1]$. The noise was set to $\sigma_{nu} = 10^{-4}$ and $\sigma_{nf} = 10^{-4}$, which can be considered as nearly noise free. The hyperparameters ($l_x$, $l_t$,$\sigma_f$, $c$) were optimized to be $(,,)$.
+with $c$ as the wave speed. The ground truth was calculated with $c = 3$ and with $f(x,t) = $. We used 20 training points for both $u$ and $f$. The training data was sampled from the domain $x \in [0,1]$ and $t \in [0,1]$. The noise was set to $\sigma_{nu} = 10^{-4}$ and $\sigma_{nf} = 10^{-4}$, which can be considered as nearly noise free. The hyperparameters ($l_x$, $l_t$,$\sigma_f$, $c$) were optimized to be $(1,1,1)$.
 \begin{figure}
     \centering
     \includegraphics[width=1\textwidth]{../final_examples/wave_equation/predictive_mean.png}
-    \caption{Plots for the informed model. (a) \& (b) predictive mean $\bm{\mu_u}$ and $\bm{\mu_f}$ with training points in red. (c) \& (d) predictive standard deviations $\bm{\sigma_u}$ and $\bm{\sigma_f}$. (e) \& (f) difference between the predictive mean $\bm{\mu}$ and the ground truths $u$ and $f$. The MSEs for the informed model are $MSE_u =  \cdot 10^{-7}$ and $MSE_f =  \cdot 10^{-3}$. The relative $L²$ errors are $L^2_u = $ and $L^2_f = $.}
+    \caption{Plots for the informed model. (a) \& (b) predictive mean $\bm{\mu_u}$ and $\bm{\mu_f}$ with training points in red. (c) \& (d) predictive standard deviations $\bm{\sigma_u}$ and $\bm{\sigma_f}$. (e) \& (f) difference between the predictive mean $\bm{\mu}$ and the ground truths $u$ and $f$. The MSEs for the informed model are $MSE_u =  \cdot 10^{-7}$ and $MSE_f =  \cdot 10^{-3}$. The relative $L^2$ errors are $L^2_u = $ and $L^2_f = $.}
     ~\label{fig:wave}
 \end{figure}
 \subsection{Poisson Equation}
@@ -386,23 +386,21 @@ forcing term and with dirichlet boundary conditions:
         \nabla^2 u(x,y) = f(x,y) \\ u[0,x] = \\ u(t,0) = 0; u(t,L) = 0
     \end{aligned}
 \end{equation}
-
-
- Overall, the performance of the infomed model is significantly better. The relative error for $L²_u$ is and $L²_f$ is. The predictive mean, the predictive variance and the calculated difference between the prediction and the ground truth are shown in figure \ref{fig:poisson}. Comparing this to the vanilla model with relative errors of $L²_u = 0.0989$ and $L²_f = 0.0728$ we can see that the informed model is more than an order of magnitude more accurate. The predictive mean and the difference to the ground truth can be seen in figure \ref{fig:poisson_GPY}. The better prediction is also reflected in the MSEs. The MSEs for the informed model are $MSE_u = . \cdot 10^{-7}$ and $MSE_f =  \cdot 10^{-3}$. The MSEs for the vanilla model are $MSE_{u,va} = 9.862  \cdot 10^{-5}$ and $MSE_{f,va} = 0.130$.\\
+ Overall, the performance of the infomed model is significantly better. The relative error for $L^2_u$ is and $L^2_f$ is. The predictive mean, the predictive variance and the calculated difference between the prediction and the ground truth are shown in figure \ref{fig:poisson}. Comparing this to the vanilla model with relative errors of $L^2_u = 0.0989$ and $L^2_f = 0.0728$ we can see that the informed model is more than an order of magnitude more accurate. The predictive mean and the difference to the ground truth can be seen in figure \ref{fig:poisson_GPY}. The better prediction is also reflected in the MSEs. The MSEs for the informed model are $MSE_u = . \cdot 10^{-7}$ and $MSE_f =  \cdot 10^{-3}$. The MSEs for the vanilla model are $MSE_{u,va} = 9.862  \cdot 10^{-5}$ and $MSE_{f,va} = 0.130$.\\
 \\
 \begin{figure}[htbp!]
     \centering
     \includegraphics[width=1\textwidth]{../final_examples/poisson/merged_2d_plots.png}
-    \caption{Plots for the informed model. (a) \& (b)  predictive mean $\bm{\mu_u}$ and $\bm{\mu_f}$ with training points in red. (c) \& (d) predictive standard deviations $\bm{\sigma_u}$ and $\bm{\sigma_f}$. (e) \& (f) difference between the predictive mean $\bm{\mu}$ and the ground truths $u$ and $f$. The MSEs for the informed model are $MSE_u =  \cdot 10^{-7}$ and $MSE_f =  \cdot 10^{-3}$. The relative $L²$ errors are $L^2_u = $ and $L^2_f = $.}
+    \caption{Plots for the informed model. (a) \& (b)  predictive mean $\bm{\mu_u}$ and $\bm{\mu_f}$ with training points in red. (c) \& (d) predictive standard deviations $\bm{\sigma_u}$ and $\bm{\sigma_f}$. (e) \& (f) difference between the predictive mean $\bm{\mu}$ and the ground truths $u$ and $f$. The MSEs for the informed model are $MSE_u =  \cdot 10^{-7}$ and $MSE_f =  \cdot 10^{-3}$. The relative $L^2$ errors are $L^2_u = $ and $L^2_f = $.}
     \label{fig:poisson}
 \end{figure}
 \begin{figure}[htbp!]
     \centering
     \includegraphics[width=1\textwidth]{../final_examples/poisson/GPy_mean_diff.png}
-    \caption{Plots for the vanilla model. (a) \& (b) predictive mean $\bm{\mu_u}$ and $\bm{\mu_f}$} with training points in red. (c) \& (d) difference between the predictive mean $\bm{\mu}$ and the ground truths $u$ and $f$. The MSEs for the vanilla model are $MSE_{u,va} = 9.862  \cdot 10^{-5}$ and $MSE_{f,va} = 0.130$. The relative $L^2$ errors are $L^2_u = 0.0989$ and $L²_f = 0.0728$.
+    \caption{Plots for the vanilla model. (a) \& (b) predictive mean $\bm{\mu_u}$ and $\bm{\mu_f}$} with training points in red. (c) \& (d) difference between the predictive mean $\bm{\mu}$ and the ground truths $u$ and $f$. The MSEs for the vanilla model are $MSE_{u,va} = 9.862  \cdot 10^{-5}$ and $MSE_{f,va} = 0.130$. The relative $L^2$ errors are $L^2_u = 0.0989$ and $L^2_f = 0.0728$.
     ~\label{fig:poisson_GPY}
 \end{figure}
-The area that strikes the most when looking at the prediction with the informed model are the boundaries of the domain. In figure \ref{fig:poisson_boundaries} the slices of the predictive mean together with the ground truth are shown. It is remarkable how precise the model manages to predict the boundaries of the domain, without even using more training points on or near the boundary. 
+The area that strikes the most when looking at the prediction with the informed model are the boundaries of the domain. In figure \ref{fig:poisson_boundaries} the slices of the predictive mean together with the ground truth are shown. It is remarkable how precise the model manages to predict the boundaries of the domain, without even using more training points on or near the boundary. It is important to keep the magnitude of the plotted y axis in sight.
 \begin{figure}
     \centering
     \includegraphics[width=1\textwidth]{../final_examples/poisson/boundaries.png}

@@ -1,22 +1,20 @@
 # Fdb version 4
-["bibtex main_file"] 1695752991 "main_file.aux" "main_file.bbl" "main_file" 1695752995 0
+["bibtex main_file"] 1696459634 "main_file.aux" "main_file.bbl" "main_file" 1696460979 0
   "./library.bib" 1694724070 3366 4a7c4769c2fa9511b423efdc282fc722 ""
   "/usr/local/texlive/2023/texmf-dist/bibtex/bst/base/plain.bst" 1292289607 20613 bd3fbfa9f64872b81ac57a0dd2ed855f ""
-  "main_file.aux" 1695752995 9210 286cbd5861bc1a641c34c3cb77b0eab5 "pdflatex"
+  "main_file.aux" 1696460979 9210 3d41b8f9099f3d7dcd4b39e5635d5d65 "pdflatex"
   (generated)
   "main_file.bbl"
   "main_file.blg"
   (rewritten before read)
-["pdflatex"] 1695752991 "/Users/tobileitgeb/Code/Code_bac/LatexFolder/main_file.tex" "main_file.pdf" "main_file" 1695752995 0
+["pdflatex"] 1696460975 "/Users/tobileitgeb/Code/Code_bac/LatexFolder/main_file.tex" "main_file.pdf" "main_file" 1696460979 0
   "../final_examples/oscillator/merged_1d_plots.png" 1694724070 713450 f24935bf786da8eaeb3e01c31201f893 ""
   "../final_examples/poisson/GPy_mean_diff.png" 1694724070 1136318 84c06957fd845d099ddbfd262c53f852 ""
-  "../final_examples/poisson/boundaries.png" 1695156628 488829 5363ca665d86d7b731104efc9159d4be ""
+  "../final_examples/poisson/boundaries.png" 1696460390 441406 cc191310c73bd618dd4442f6a8416639 ""
   "../final_examples/poisson/merged_2d_plots.png" 1694895859 987362 108091ef19406c547f2681feb693de7f ""
   "../final_examples/wave_equation/predictive_mean.png" 1694898249 625085 c30b8686fbb96f33569b979559d66233 ""
-  "/Users/tobileitgeb/Code/Code_bac/LatexFolder/main_file.tex" 1695752987 33862 668b45eb0f1160111c658b540420eac6 ""
+  "/Users/tobileitgeb/Code/Code_bac/LatexFolder/main_file.tex" 1696460975 33937 dff142f2d3665740e97ccc05be0efedd ""
   "/usr/local/texlive/2023/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
-  "/usr/local/texlive/2023/texmf-dist/fonts/tfm/jknappen/ec/tcrm0900.tfm" 1136768653 1536 c4f439db76ef96a9c53bc437f35ffe20 ""
-  "/usr/local/texlive/2023/texmf-dist/fonts/tfm/jknappen/ec/tcrm1000.tfm" 1136768653 1536 e07581a4bb3136ece9eeb4c3ffab8233 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy5.tfm" 1246382020 1120 1e8878807317373affa7f7bba4cf2f6a ""
   "/usr/local/texlive/2023/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy6.tfm" 1246382020 1124 14ccf5552bc7f77ca02a8a402bea8bfb ""
   "/usr/local/texlive/2023/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy7.tfm" 1246382020 1120 7f9f170e8aa57527ad6c49feafd45d54 ""
@@ -167,10 +165,10 @@
   "/usr/local/texlive/2023/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1694780642 4623355 b8cad38412faebe1ce5b780a45db67bd ""
   "/usr/local/texlive/2023/texmf-var/web2c/pdftex/pdflatex.fmt" 1694780609 7883456 af80180e85011d0e993a51a003aec67c ""
   "/usr/local/texlive/2023/texmf.cnf" 1678822455 577 1b2b1af17af2508fb20dd85783af4050 ""
-  "main_file.aux" 1695752995 9210 286cbd5861bc1a641c34c3cb77b0eab5 "pdflatex"
-  "main_file.bbl" 1695752991 1539 7b7a1964b475aaed904542458293bdfb "bibtex main_file"
-  "main_file.out" 1695752995 2685 f5bfb0828be8d395c309f312fc9abce1 "pdflatex"
-  "main_file.tex" 1695752987 33862 668b45eb0f1160111c658b540420eac6 ""
+  "main_file.aux" 1696460979 9210 3d41b8f9099f3d7dcd4b39e5635d5d65 "pdflatex"
+  "main_file.bbl" 1696459634 1539 7b7a1964b475aaed904542458293bdfb "bibtex main_file"
+  "main_file.out" 1696460979 2685 f5bfb0828be8d395c309f312fc9abce1 "pdflatex"
+  "main_file.tex" 1696460975 33937 dff142f2d3665740e97ccc05be0efedd ""
   (generated)
   "main_file.aux"
   "main_file.log"

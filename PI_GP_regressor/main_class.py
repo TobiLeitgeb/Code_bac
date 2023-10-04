@@ -25,26 +25,11 @@ class PhysicsInformedGP_regressor():
         self.k_uu, self.k_uf, self.k_fu, self.k_ff = kernel[1], kernel[2], kernel[3], kernel[4]
         self.timedependence = timedependence
         self.params = dict(zip(params, 1*np.ones(len(params))))
-        self.X = None
-        self.Y = None
-        self.u_train, self.f_train = None, None
-        self.targets = None
-        self.raw_data = None
-        self.noise = None
-        self.result = None
-        self.mean_u = None
-        self.var_u = None
-        self.mean_f = None
-        self.var_f = None
-        self.validation_set = None
         self.MSE = {"u": None, "f": None}
         self.rel_l2_error = {"u": None, "f": None}
-        self.filename = None
-        self.results_list = None
-        self.GPy_models = None
         self.xlabel, self.ylabel = "", ""
-        self.ground_truth = None
         self.ARD = ARD
+        self.jitter = 1e-7
 
     def __str__(self) -> str:
         string = "-----------------------------------------------\n"
@@ -119,7 +104,7 @@ class PhysicsInformedGP_regressor():
         K = self.gram_matrix(self.X, self.Y, params, self.noise)
 
         # add some jitter for stability
-        L = jnp.linalg.cholesky(K + 1e-7 * jnp.eye(len(K)))
+        L = jnp.linalg.cholesky(K + self.jitter * jnp.eye(len(K)))
 
         alpha = jnp.linalg.solve(L.T, jnp.linalg.solve(L, self.targets))
         mll = 1/2 * jnp.dot(self.targets.T, alpha) + 0.5*jnp.sum(
@@ -265,28 +250,16 @@ class PhysicsInformedGP_regressor():
 
         K = self.gram_matrix(self.X, self.Y, params, self.noise) 
         # add some jitter for stability
-        L = jnp.linalg.cholesky(K+ jnp.eye(len(K)) * 1e-7)
-        if self.timedependence:
-            assert X_star.shape[1] == 2, "Please provide a valid test data set"
-            q_1 = self.k_uu(X_star, self.X, params)
-            q_2 = self.k_uf(X_star, self.Y, params)
-            q = jnp.hstack((q_1, q_2))
-
-            alpha = jnp.linalg.solve(L.T, jnp.linalg.solve(L, self.targets))
-            f_star = jnp.dot(q, alpha)
-            alpha_var = jnp.linalg.solve(L.T, jnp.linalg.solve(L, q.T))
-            cov_f_star = self.k_uu(X_star, X_star, params) - q@alpha_var
-            var = jnp.diag(cov_f_star)
-        else:
-            assert X_star.shape[1] == 1, "Please provide a valid test data set"
-            q_1 = self.k_uu(X_star, self.X, params) #
-            q_2 = self.k_uf(X_star, self.Y, params)
-            q = jnp.hstack((q_1, q_2))
-            alpha = jnp.linalg.solve(L.T, jnp.linalg.solve(L, self.targets))
-            f_star = jnp.dot(q, alpha)
-            alpha_var = jnp.linalg.solve(L.T, jnp.linalg.solve(L, q.T))
-            cov_f_star = self.k_uu(X_star, X_star, params) - q@alpha_var
-            var = jnp.diag(cov_f_star)
+        L = jnp.linalg.cholesky(K+ jnp.eye(len(K)) * self.jitter)
+        
+        q_1 = self.k_uu(X_star, self.X, params) #
+        q_2 = self.k_uf(X_star, self.Y, params)
+        q = jnp.hstack((q_1, q_2))
+        alpha = jnp.linalg.solve(L.T, jnp.linalg.solve(L, self.targets))
+        f_star = jnp.dot(q, alpha)
+        alpha_var = jnp.linalg.solve(L.T, jnp.linalg.solve(L, q.T))
+        cov_f_star = self.k_uu(X_star, X_star, params) - q@alpha_var
+        var = jnp.diag(cov_f_star)
         return f_star, var
 
     def predict_f(self, X_star):
@@ -298,32 +271,19 @@ class PhysicsInformedGP_regressor():
 
         K = self.gram_matrix(self.X, self.Y, params, self.noise)
         # add some jitter for stability
-        L = jnp.linalg.cholesky(K+ jnp.eye(len(K)) * 1e-7)
+        L = jnp.linalg.cholesky(K + jnp.eye(len(K)) * self.jitter)
 
-        if self.timedependence:
-            assert X_star.shape[1] == 2, "Please provide a valid test data set"
-            q_1 = self.k_fu(X_star, self.X, params)
-            q_2 = self.k_ff(X_star, self.Y, params)
-            q = jnp.hstack((q_1, q_2))
-            alpha = jnp.linalg.solve(L.T, jnp.linalg.solve(L, self.targets))
-            f_star = jnp.dot(q, alpha)
-            alpha_var = jnp.linalg.solve(L.T, jnp.linalg.solve(L, q.T))
-            cov_f_star = self.k_ff(X_star, X_star, params) - q@alpha_var
-            var = jnp.diag(cov_f_star)
-
-        else:
-            assert X_star.shape[1] == 1, "Please provide a valid test data set"
-            q_1 = self.k_fu(X_star, self.X, params)
-            q_2 = self.k_ff(X_star, self.Y, params) #
-            q = jnp.hstack((q_1, q_2))
-            alpha = jnp.linalg.solve(L.T, jnp.linalg.solve(L, self.targets))
-            f_star = jnp.dot(q, alpha)
-            alpha_var = jnp.linalg.solve(L.T, jnp.linalg.solve(L, q.T))
-            cov_f_star = self.k_ff(X_star, X_star, params) - q@alpha_var
-            var = jnp.diag(cov_f_star)
+        q_1 = self.k_fu(X_star, self.X, params)
+        q_2 = self.k_ff(X_star, self.Y, params) #
+        q = jnp.hstack((q_1, q_2))
+        alpha = jnp.linalg.solve(L.T, jnp.linalg.solve(L, self.targets))
+        f_star = jnp.dot(q, alpha)
+        alpha_var = jnp.linalg.solve(L.T, jnp.linalg.solve(L, q.T))
+        cov_f_star = self.k_ff(X_star, X_star, params) - q@alpha_var
+        var = jnp.diag(cov_f_star)
 
         return f_star, var
-#x_mesh, t_mesh, u_grid, f_grid
+
     def error(self):
         """computes the mean squared error of the computed model"""
         assert self.validation_set is not None, "Please set the validation set first"
@@ -355,6 +315,8 @@ class PhysicsInformedGP_regressor():
         """computes the relative l2 error between the ground truth and the predicted solution"""
         assert ground_truth.shape == predicted_solution.shape, "Please provide a valid ground truth and predicted solution"
         return np.linalg.norm(ground_truth-predicted_solution)/np.linalg.norm(ground_truth)
+    
+    ##----------------------------- PLOT FUNCTIONS ---------------------------------##
     def use_GPy(self, X_star, save_path: str = None, heat_map: bool = False):
         """uses the GPy library to compute the GP"""
         if not self.timedependence:
