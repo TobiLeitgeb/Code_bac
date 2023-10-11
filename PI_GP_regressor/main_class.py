@@ -102,8 +102,6 @@ class PhysicsInformedGP_regressor():
     def log_marginal_likelohood(self, params):
         """computes the log marginal likelihood of the GP"""
         K = self.gram_matrix(self.X, self.Y, params, self.noise)
-
-        # add some jitter for stability
         L = jnp.linalg.cholesky(K + self.jitter * jnp.eye(len(K)))
 
         alpha = jnp.linalg.solve(L.T, jnp.linalg.solve(L, self.targets))
@@ -245,41 +243,40 @@ class PhysicsInformedGP_regressor():
         self.mean_f, self.var_f = self.predict_f(X_star)
 
     def predict_u(self, X_star):
-        """predicts the mean and variance of the GP at the points X_star"""
+        """calculates the mean and variance of the GP at the points X_star"""
         params = self.get_params()
 
         K = self.gram_matrix(self.X, self.Y, params, self.noise) 
-        # add some jitter for stability
         L = jnp.linalg.cholesky(K+ jnp.eye(len(K)) * self.jitter)
         
-        q_1 = self.k_uu(X_star, self.X, params) #
+        q_1 = self.k_uu(X_star, self.X, params) 
         q_2 = self.k_uf(X_star, self.Y, params)
-        q = jnp.hstack((q_1, q_2))
+        kappa = jnp.hstack((q_1, q_2))
+        #predictive mean
         alpha = jnp.linalg.solve(L.T, jnp.linalg.solve(L, self.targets))
-        f_star = jnp.dot(q, alpha)
-        alpha_var = jnp.linalg.solve(L.T, jnp.linalg.solve(L, q.T))
-        cov_f_star = self.k_uu(X_star, X_star, params) - q@alpha_var
+        f_star = kappa@alpha
+        #predictive variance
+        alpha_var = jnp.linalg.solve(L.T, jnp.linalg.solve(L, kappa.T))
+        cov_f_star = self.k_uu(X_star, X_star, params) - kappa@alpha_var
         var = jnp.diag(cov_f_star)
         return f_star, var
 
     def predict_f(self, X_star):
-        """predicts the mean and variance of the GP at the points X_star
-        X_star: points at which the GP is evaluated(for 2d case: (x,t) meshgrid)
-        returns: mean and variance tuple of the GP at the points X_star
-        """
+        """predicts the mean and variance of the GP at the points X_star"""
         params = self.get_params()
 
         K = self.gram_matrix(self.X, self.Y, params, self.noise)
-        # add some jitter for stability
         L = jnp.linalg.cholesky(K + jnp.eye(len(K)) * self.jitter)
 
         q_1 = self.k_fu(X_star, self.X, params)
-        q_2 = self.k_ff(X_star, self.Y, params) #
-        q = jnp.hstack((q_1, q_2))
+        q_2 = self.k_ff(X_star, self.Y, params) 
+        kappa = jnp.hstack((q_1, q_2))
+        #predictive mean
         alpha = jnp.linalg.solve(L.T, jnp.linalg.solve(L, self.targets))
-        f_star = jnp.dot(q, alpha)
-        alpha_var = jnp.linalg.solve(L.T, jnp.linalg.solve(L, q.T))
-        cov_f_star = self.k_ff(X_star, X_star, params) - q@alpha_var
+        f_star = kappa@alpha
+        #predictive cov
+        alpha_var = jnp.linalg.solve(L.T, jnp.linalg.solve(L, kappa.T))
+        cov_f_star = self.k_ff(X_star, X_star, params) - kappa@alpha_var
         var = jnp.diag(cov_f_star)
 
         return f_star, var
@@ -830,6 +827,7 @@ class PhysicsInformedGP_regressor():
         engine = qmc.Sobol(d, seed=seeds[0], scramble=True)
         sample = engine.random(n_training_points)
         # sample is in [0,1]^d, so we need to scale it to the range of x and t
+        np.random.seed(1)
         indices = sample * np.array(len(t))
         indices = np.floor(indices).astype(int)
         t_train_u = t[indices]
@@ -837,6 +835,7 @@ class PhysicsInformedGP_regressor():
             np.random.normal(0, np.sqrt(noise[0]), u[indices].shape)
 
         # training data for f(t)
+        np.random.seed(2)
         engine = qmc.Sobol(d, seed=seeds[1])
         sample = engine.random(n_training_points)
         indices = sample * np.array(len(t))
@@ -924,6 +923,18 @@ class PhysicsInformedGP_regressor():
                 0, np.sqrt(noise[1]), f_grid[indices[:, 1], indices[:, 0]].shape)
 
         return x_train_u.reshape(-1, 1), x_train_f.reshape(-1, 1), t_train_u.reshape(-1, 1), t_train_f.reshape(-1, 1), u_train.reshape(-1, 1), f_train.reshape(-1, 1), [x_mesh, t_mesh, u_grid, f_grid]
+
+
+    @staticmethod
+    def get_data_set_3d(filename, n_training_points, noise: list):
+        df = pd.read_csv(filename)
+        dataset = df.values   # shape (n, t_max) n = meshgrid size (101x101)=10201
+        
+        #I hardcode the meshgrid here
+        x = np.linspace(0, 2,101)
+        y = np.linspace(0, 2,101)
+        X, Y = np.meshgrid(x,y)
+        
 
     @staticmethod
     def get_validation_set_2d(filename, n_validation_points, noise: list):

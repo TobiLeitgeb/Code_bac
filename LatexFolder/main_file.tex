@@ -19,7 +19,37 @@
 \usepackage{bm}
 \usepackage{float}
 \usepackage[font=small]{caption}
-\usepackage{pythonhighlight}
+\usepackage{listings}
+\usepackage{xcolor}
+
+% Define colors using xcolor
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mypurple}{HTML}{800080}
+
+\lstset{
+    language=Python,
+    basicstyle=\small\ttfamily,
+    numbers=left,
+    numberstyle=\tiny\color{mygray},
+    tabsize=4,
+    breaklines=true,
+    breakatwhitespace=true,
+    frame=single,
+    caption=My Python Code,
+    label=lst:python-example,
+    aboveskip=10pt,
+    belowskip=10pt,
+    keywordstyle=\color{blue},
+    commentstyle=\color{green!40!black},
+    stringstyle=\color{red},
+    identifierstyle=\color{mypurple},
+    emph={some_keyword},
+    morekeywords={new_keyword},
+    escapeinside={\%*}{*)},
+    literate=%
+        {->}{{\textcolor{red}{->}}}2
+        {>=}{{\textcolor{red}{>=}}}2
+}
 \title{Your Paper}
 \author{You}
 
@@ -268,6 +298,9 @@ with $\bm{\kappa_u}$ and $\bm{\kappa_f}$ being:
         \bm{\kappa_f} = [k_{fu}(\bm{x_*},\bm{X_u})k_{ff}(\bm{x_*,\bm{X_f}})]
     \end{aligned}
 \end{equation}
+
+\lstinputlisting[firstline=247,lastline=263]{../PI_GP_regressor/main_class.py}
+\section{Numerical/Computational implementation}
 For the actual implementation we again used the Cholesky decomposition of $\bm{K}$ to compute the inverse of $\bm{K}$. This is done by first computing the Cholesky decomposition of $\bm{K}$:
 \begin{equation}
     \bm{K} = \bm{L}\bm{L}^\intercal
