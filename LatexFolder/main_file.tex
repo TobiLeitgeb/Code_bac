@@ -299,8 +299,12 @@ with $\bm{\kappa_u}$ and $\bm{\kappa_f}$ being:
     \end{aligned}
 \end{equation}
 
-\lstinputlisting[firstline=247,lastline=263]{../PI_GP_regressor/main_class.py}
+
 \section{Numerical/Computational implementation}
+
+
+\lstinputlisting[firstline=109,lastline=117,caption={Log marginal likelihood}]{../PI_GP_regressor/main_class.py}
+
 For the actual implementation we again used the Cholesky decomposition of $\bm{K}$ to compute the inverse of $\bm{K}$. This is done by first computing the Cholesky decomposition of $\bm{K}$:
 \begin{equation}
     \bm{K} = \bm{L}\bm{L}^\intercal
@@ -313,8 +317,10 @@ with $\bm{L}$ being a lower triangular matrix. We can then write equation \ref{e
 \end{equation}
 with $\backslash$ as the left matrix divide operator. This is a stable way of computing the inverse of $\bm{K}$. This way of calculating the predictive mean and covariance is also used in \cite{RasmussenCarlEdward} and \cite{RAISSI}.
 
+\lstinputlisting[firstline=247,lastline=263,caption={Predictive distribution}]{../PI_GP_regressor/main_class.py}
+
 \section{Results}
-In the following we will call the physics informed model, which is used here the
+In the following we will call the physics informed model, which is used here, the
 informed model and the vanilla model the model without the physics informed
 framework and only a general SE kernel.\\ \\ For testing the framework we will
 use ODEs and PDEs of physical models. More specifically, we will look at the
@@ -396,10 +402,10 @@ with $\alpha$ as the thermal diffusivity.
 
 
 \subsection{Wave Equation}
-For the second example we will look at the one dimensional time dependent wave equation. The wave equation is a hyperbolic partial differential equation that describes the propagation of waves of various types. In our case we can think of the wave equation as a string that is fixed at both ends. The wave equation is given by:
+For the second example we will look at the two dimensional time dependent wave equation. The wave equation is a hyperbolic partial differential equation that describes the propagation of waves of various types. In our case we can think of the wave equation as a string that is fixed at both ends. The wave equation is given by:
 \begin{equation}
     \begin{aligned}
-        \frac{1}{c^2} \frac{\partial^2 u(x,t)}{\partial t^2} - \frac{\partial^2 u(x,t)}{\partial x^2} = f(x,t) \\ u[0,x] =\\ u(t,0) = ; u(t,L) =
+        \frac{1}{c^2} \frac{\partial^2 u(x,y,t)}{\partial t^2} - (\frac{\partial^2}{\partial x^2} +\frac{\partial^2}{\partial y^2})u(x,y,t) = f(x,y,t) \\ u[0,x] =\\ u(t,0) = ; u(t,L) =
     \end{aligned}
 \end{equation}
 with $c$ as the wave speed. The ground truth was calculated with $c = 3$ and with $f(x,t) = $. We used 20 training points for both $u$ and $f$. The training data was sampled from the domain $x \in [0,1]$ and $t \in [0,1]$. The noise was set to $\sigma_{nu} = 10^{-4}$ and $\sigma_{nf} = 10^{-4}$, which can be considered as nearly noise free. The hyperparameters ($l_x$, $l_t$,$\sigma_f$, $c$) were optimized to be $(1,1,1)$.

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.10.5)  11 OCT 2023 00:30
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.10.5)  16 OCT 2023 12:12
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -376,7 +376,11 @@ File: lstlang1.sty 2023/02/27 1.9 listings language file
 File: l3backend-pdftex.def 2023-04-19 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count304
 \l__pdf_internal_box=\box59
-) (./main_file.aux)
+) (./main_file.aux
+
+LaTeX Warning: Label `lst:python-example' multiply defined.
+
+)
 \openout1 = `main_file.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 56.
@@ -501,81 +505,83 @@ Underfull \hbox (badness 10000) in paragraph at lines 268--274
  []
 
 [5]
-Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on input line 302.
- (../PI_GP_regressor/main_class.py)
-Underfull \hbox (badness 10000) in paragraph at lines 317--352
+Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on input line 306.
+ (../PI_GP_regressor/main_class.py) (../PI_GP_regressor/main_class.py) [6]
+Underfull \hbox (badness 10000) in paragraph at lines 323--358
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 317--352
+Underfull \hbox (badness 10000) in paragraph at lines 323--358
 
  []
 
-[6]
-<../final_examples/oscillator/merged_1d_plots.png, id=211, 788.2248pt x 716.1957pt>
+<../final_examples/oscillator/merged_1d_plots.png, id=222, 788.2248pt x 716.1957pt>
 File: ../final_examples/oscillator/merged_1d_plots.png Graphic file (type png)
 <use ../final_examples/oscillator/merged_1d_plots.png>
-Package pdftex.def Info: ../final_examples/oscillator/merged_1d_plots.png  used on input line 364.
+Package pdftex.def Info: ../final_examples/oscillator/merged_1d_plots.png  used on input line 370.
 (pdftex.def)             Requested size: 443.57848pt x 403.04488pt.
- [7] [8 <../final_examples/oscillator/merged_1d_plots.png>]
-<../final_examples/wave_equation/predictive_mean.png, id=235, 671.82191pt x 313.07364pt>
+[7] [8 <../final_examples/oscillator/merged_1d_plots.png>]
+<../final_examples/wave_equation/predictive_mean.png, id=246, 671.82191pt x 313.07364pt>
 File: ../final_examples/wave_equation/predictive_mean.png Graphic file (type png)
 <use ../final_examples/wave_equation/predictive_mean.png>
-Package pdftex.def Info: ../final_examples/wave_equation/predictive_mean.png  used on input line 408.
+Package pdftex.def Info: ../final_examples/wave_equation/predictive_mean.png  used on input line 414.
 (pdftex.def)             Requested size: 443.57848pt x 206.71043pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 413--417
+Underfull \hbox (badness 10000) in paragraph at lines 419--423
 
  []
 
-[9 <../final_examples/wave_equation/predictive_mean.png>]
-<../final_examples/poisson/merged_2d_plots.png, id=246, 662.9568pt x 786.0567pt>
+<../final_examples/poisson/merged_2d_plots.png, id=249, 662.9568pt x 786.0567pt>
 File: ../final_examples/poisson/merged_2d_plots.png Graphic file (type png)
 <use ../final_examples/poisson/merged_2d_plots.png>
-Package pdftex.def Info: ../final_examples/poisson/merged_2d_plots.png  used on input line 426.
+Package pdftex.def Info: ../final_examples/poisson/merged_2d_plots.png  used on input line 432.
 (pdftex.def)             Requested size: 443.57848pt x 525.9476pt.
-<../final_examples/poisson/GPy_mean_diff.png, id=247, 718.1229pt x 631.6398pt>
+<../final_examples/poisson/GPy_mean_diff.png, id=250, 718.1229pt x 631.6398pt>
 File: ../final_examples/poisson/GPy_mean_diff.png Graphic file (type png)
 <use ../final_examples/poisson/GPy_mean_diff.png>
-Package pdftex.def Info: ../final_examples/poisson/GPy_mean_diff.png  used on input line 432.
+Package pdftex.def Info: ../final_examples/poisson/GPy_mean_diff.png  used on input line 438.
 (pdftex.def)             Requested size: 443.57848pt x 390.16693pt.
-<../final_examples/poisson/boundaries.png, id=249, 931.5603pt x 569.4876pt>
+<../final_examples/poisson/boundaries.png, id=252, 931.5603pt x 569.4876pt>
 File: ../final_examples/poisson/boundaries.png Graphic file (type png)
 <use ../final_examples/poisson/boundaries.png>
-Package pdftex.def Info: ../final_examples/poisson/boundaries.png  used on input line 439.
+Package pdftex.def Info: ../final_examples/poisson/boundaries.png  used on input line 445.
 (pdftex.def)             Requested size: 443.57848pt x 271.17853pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 421--444
+Underfull \hbox (badness 10000) in paragraph at lines 427--450
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 421--444
+Underfull \hbox (badness 10000) in paragraph at lines 427--450
 
  []
 
-(./main_file.bbl) [10] [11 <../final_examples/poisson/merged_2d_plots.png>] [12 <../final_examples/poisson/GPy_mean_diff.png>] [13 <../final_examples/poisson/boundaries.png>] (./main_file.aux)
+[9] (./main_file.bbl [10 <../final_examples/wave_equation/predictive_mean.png>] [11 <../final_examples/poisson/merged_2d_plots.png>] [12 <../final_examples/poisson/GPy_mean_diff.png>]) [13 <../final_examples/poisson/boundaries.png>] (./main_file.aux)
  ***********
 LaTeX2e <2023-06-01> patch level 1
 L3 programming layer <2023-08-29>
  ***********
+
+
+LaTeX Warning: There were multiply-defined labels.
+
 Package rerunfilecheck Info: File `main_file.out' has not changed.
 (rerunfilecheck)             Checksum: 97F1022092914AD136E143852031B2D2;2922.
  ) 
 Here is how much of TeX's memory you used:
- 15287 strings out of 474934
- 236718 string characters out of 5759811
- 1984791 words of memory out of 5000000
- 36532 multiletter control sequences out of 15000+600000
+ 15321 strings out of 474934
+ 237152 string characters out of 5759811
+ 2019791 words of memory out of 5000000
+ 36553 multiletter control sequences out of 15000+600000
  573990 words of font info for 95 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,14n,79p,1886b,1346s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,14n,79p,1886b,1363s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbsy10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmbsy5.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmbsy7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib6.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib9.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/symbols/msam7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on main_file.pdf (13 pages, 3884839 bytes).
+Output written on main_file.pdf (13 pages, 3887342 bytes).
 PDF statistics:
- 433 PDF objects out of 1000 (max. 8388607)
- 340 compressed objects within 4 object streams
- 95 named destinations out of 1000 (max. 500000)
+ 446 PDF objects out of 1000 (max. 8388607)
+ 353 compressed objects within 4 object streams
+ 106 named destinations out of 1000 (max. 500000)
  178 words of extra memory for PDF output out of 10000 (max. 10000000)
 

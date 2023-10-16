@@ -16,7 +16,7 @@ class PhysicsInformedGP_regressor():
     """class for the GP"""
     _name_kernel = ""
 
-    def __init__(self, kernel: callable, timedependence: bool, params: list, ARD = True) -> None:
+    def __init__(self, kernel: callable, timedependence: bool, params: list,Dimensions, ARD = True) -> None:
         assert callable(kernel[0]), "Please provide a valid kernel"
         assert(type(timedependence) ==
                bool), "Please provide a valid boolean value for timedependence"
@@ -30,6 +30,7 @@ class PhysicsInformedGP_regressor():
         self.xlabel, self.ylabel = "", ""
         self.ARD = ARD
         self.jitter = 1e-7
+        self.D = Dimensions
 
     def __str__(self) -> str:
         string = "-----------------------------------------------\n"
@@ -56,7 +57,7 @@ class PhysicsInformedGP_regressor():
 
     def set_training_data(self, filename: str, n_training_points, noise, seeds_training: list = [40, 14]):
         """sets the training data and the raw data"""
-        if self.timedependence:
+        if self.timedependence and self.D == 2:
             x_u, x_f, t_u, t_f, u_train, f_train, self.raw_data = self.get_data_set_2d(
                 filename, n_training_points, noise)
             self.X = np.hstack([x_u, t_u])
@@ -66,7 +67,7 @@ class PhysicsInformedGP_regressor():
             self.f_train = f_train
             assert self.X.shape[1] == 2, "Please provide a valid training data set"
 
-        else:
+        elif not self.timedependence:
             x_u, u_train, x_f, f_train, self.raw_data = self.get_data_set_1d(
                 filename, n_training_points, noise, seeds_training)
             self.X = x_u
@@ -74,6 +75,12 @@ class PhysicsInformedGP_regressor():
             self.targets = np.concatenate([u_train, f_train])
             self.u_train = u_train
             self.f_train = f_train
+
+        elif self.D == 3:
+            self.X, self.Y, self.u_train, self.f_train, self.raw_data = self.get_data_set_3d(
+                filename, n_training_points, noise)
+            self.targets = np.concatenate([self.u_train, self.f_train])
+    
         self.filename = filename
         self.noise = noise
         pass
@@ -115,6 +122,10 @@ class PhysicsInformedGP_regressor():
             mll = self.log_marginal_likelohood(hyperparams)
             return mll
         return function_to_optimize
+    
+    def grad_log_marginal_likelihood(self):
+        return grad(self.log_marginal_likelihood_to_optimize())
+
 
     def train(self, method: str, n_restarts: int, n_threads: int, opt_dictionary: dict) -> None:
         """optimizes the hyperparameters of the kernel"""
@@ -206,7 +217,7 @@ class PhysicsInformedGP_regressor():
         results = Parallel(n_jobs=n_threads)(
             delayed(single_optimization_run)() for _ in tqdm(range(n_restarts)))
         # all positive parameters
-        results = [res for res in results if np.all(res.x > 0) and res.success]
+        results = [res for res in results if np.all(res.x > 0) ]
         self.results_list = results
         best_result = min(results, key=lambda x: x.fun)
         print("Theta: ", best_result.x, "\n","Log marginal likelihood: ", best_result.fun)
@@ -687,9 +698,7 @@ class PhysicsInformedGP_regressor():
         if save_path != None:
             plt.savefig(save_path, bbox_inches='tight')
 
-    def grad_log_marginal_likelihood(self):
-        return grad(self.log_marginal_likelihood_to_optimize())
-
+    
     def plot_raw_data(self, Training_points=False, heat_map=False):
         if self.timedependence:
             x_star, t_star = self.raw_data[0].reshape(
@@ -926,15 +935,47 @@ class PhysicsInformedGP_regressor():
 
 
     @staticmethod
-    def get_data_set_3d(filename, n_training_points, noise: list):
-        df = pd.read_csv(filename)
-        dataset = df.values   # shape (n, t_max) n = meshgrid size (101x101)=10201
+    def get_data_set_3d(filename, n_training_points, noise: list,t_max = 4):
+        data = pd.read_csv('u_matrix_with_time_columns.csv', delimiter=',')
+        meshdata = pd.read_csv('spatial_grid.csv', delimiter=',')
+        fdata = pd.read_csv('f_matrix.csv', delimiter=',')
+
+        grid = meshdata.values
+        u_matrix = data.values
+        u_matrix = np.insert(u_matrix, 0, 0, axis=0)
+            
+        f_matrix = fdata.values
+        f_matrix = np.insert(f_matrix, 0, 0, axis=0)
         
-        #I hardcode the meshgrid here
         x = np.linspace(0, 2,101)
         y = np.linspace(0, 2,101)
         X, Y = np.meshgrid(x,y)
-        
+        u_matrix = u_matrix.reshape(101,101,-1)
+        f_matrix = f_matrix.reshape(101,101,-1)
+
+        engine = qmc.Sobol(3, seed=77)
+        sample = engine.random(n_training_points)
+
+        indices = sample * np.array([len(x), len(y), len(u_matrix[0,0,:])])
+        indices = np.floor(indices).astype(int)
+        indices = indices[np.argsort(indices[:, 2])]
+        x_train_u = x[indices[:, 0]].reshape(-1,1)
+        y_train_u = y[indices[:, 1]].reshape(-1,1)
+        t_train_u = np.linspace(0,t_max,len(u_matrix[0,0,:]))[indices[:, 2]].reshape(-1,1)
+        u_train = u_matrix[indices[:, 0], indices[:, 1], indices[:, 2]].reshape(-1,1)
+
+        engine = qmc.Sobol(3, seed=10)
+        sample = engine.random(n_training_points)
+
+        indices = sample * np.array([len(x), len(y), len(f_matrix[0,0,:])])
+        indices = np.floor(indices).astype(int)
+        indices = indices[np.argsort(indices[:, 2])]
+        x_train_f = x[indices[:, 0]].reshape(-1,1)
+        y_train_f = y[indices[:, 1]].reshape(-1,1)
+        t_train_f = np.linspace(0,t_max,len(f_matrix[0,0,:]))[indices[:, 2]].reshape(-1,1)
+        f_train = f_matrix[indices[:, 0], indices[:, 1], indices[:, 2]].reshape(-1,1)
+
+        return np.hstack([x_train_u, y_train_u, t_train_u]), np.hstack([x_train_f, y_train_f, t_train_f]), u_train, f_train, [x, y, u_matrix, f_matrix]
 
     @staticmethod
     def get_validation_set_2d(filename, n_validation_points, noise: list):
@@ -1261,6 +1302,21 @@ class PhysicsInformedGP_regressor():
             if savepath is not None:
                 plt.savefig(savepath,bbox_inches = "tight",dpi = 300)
 
-            
-                 
+    def plot_pictures_3d(self,numberofpics,figsize = (20,5)):
+        fig, ax = plt.subplots(2,10,figsize=(20,5))
+        ax = ax.flatten()
+
+        for i in range(20):
+            ax[i].imshow(self.raw_data[2][:,:,i*5], cmap='viridis',extent=[0,2,0,2])
+            ax[i].set_xlabel('x')
+            ax[i].set_ylabel('y')
+            ax[i].set_title('t = ' + str(i*5))
+        fig, ax = plt.subplots(2,10,figsize=(20,5))
+
+        ax = ax.flatten()
+        for i in range(20):
+            ax[i].imshow(self.raw_data[3][:,:,i*5], cmap='viridis',extent=[0,2,0,2])
+            ax[i].set_xlabel('x')
+            ax[i].set_ylabel('y')
+            ax[i].set_title('t = ' + str(i*5))
 
