@@ -154,7 +154,7 @@ From this joint Gaussian prior we can then calculate the predictive posterior di
 \end{equation}
 We now have obtained the posterior predictive mean $\bm{\mu_*}$ and the posterior covariance $\sigma$ for the new test inputs $\bm{X_*}$.
 
-\subsection{Kernels}
+\subsection{Kernels} \label{subsec: Kernels}
 In~\cite{RasmussenCarlEdward} a kernel is defined as a function
 $k(\bm{x},\bm{x'})$, which maps two input pairs $\bm{x} \in \mathcal{X}$ and
 $\bm{x'} \in \mathcal{X'}$ into $\mathbb{R}$. To be a valid covariance function
@@ -209,10 +209,12 @@ with $k_{uu}(\bm{x},\bm{x'};\bm{\theta})$ being the kernel depending on its hype
 \end{equation}
 with now $k_{ff}$ being the kernel defining the $\mathcal{G}\mathcal{P}$ (on) $f(\bm{x})$. As shown in~\cite{garnett_2023_full},~\cite{Särkkä} and~\cite{RAISSI} $k_{ff}$ is defined by:
 \begin{equation}
+    \label{eq:kff}
     k_{ff}(\bm{x},\bm{x'};\bm{\theta}, \bm{\phi}) = \mathcal{L}_{\bm{x}}^\phi \mathcal{L}_{\bm{x'}}^\phi k_{uu}(\bm{x},\bm{x'};\bm{\theta})
 \end{equation}
 We also need the mixed terms between $u(x)$ and $f(x)$, namely $k_{uf}$ and $k_{fu}$ which are formed by:
 \begin{equation}
+    \label{eq:kuf_kfu}
     \begin{aligned}
         k_{uf}(\bm{x,x'};\bm{\theta,\phi}) & = \mathcal{L}_{\bm{x'}}^\phi k_{uu}(\bm{x},\bm{x'};\bm{\theta}) \\
         k_{fu}(\bm{x,x'};\bm{\theta,\phi}) & = \mathcal{L}_{\bm{x}}^\phi k_{uu}(\bm{x},\bm{x'};\bm{\theta})
@@ -301,6 +303,22 @@ with $\bm{\kappa_u}$ and $\bm{\kappa_f}$ being:
 
 
 \section{Numerical/Computational implementation}
+In this section we will present the computiational implementation in python of the kernel, the log marginal likelihood and of the predictive distribution. For greatly improving the computation time the jax library was used in order to use the vectorization and jit.
+\subsection{Kernel}
+For constructing and deriving the kernel as described in equations \ref{eq:kff} and \ref{eq:kuf_kfu} we used two different computational approaches. The first approach was to analytically calculate the derivatives arrising from the differential operators and the second one was to use automatic differentiation. $\mathcal{L}_{t}^\phi = m\frac{\partial^2 u(t)}{\partial t^2} + \gamma \frac{\partial u(t)}{\partial t} + k u(t) $ $\sigma_f^2  \exp\left({-\frac{0.5}{l^2} {(t-t')}^2}\right)$
+\begin{equation}
+\begin{aligned}
+    k_{ff}(\bm{x},\bm{x'};\bm{\theta}, \bm{\phi}) &= \mathcal{L}_{\bm{x}}^\phi \mathcal{L}_{\bm{x'}}^\phi k_{uu}(\bm{x},\bm{x'};\bm{\theta})\\
+    &= \left[ m\frac{\partial^2 }{\partial t^2} + \gamma \frac{\partial }{\partial t} + k \right] \left[ m\frac{\partial^2 }{\partial t'^2} + \gamma \frac{\partial }{\partial t'} + k \right] k_{uu} \\
+    &= \left[m^2 \frac{\partial^4 }{\partial t^2 \partial t'^2} + m\gamma \frac{\partial^3 }{\partial t^2 \partial t'} + m\gamma \frac{\partial^3 }{\partial t'^2 \partial t} + \gamma^2 \frac{\partial^2 }{\partial t \partial t'} + k\gamma \frac{\partial }{\partial t'} + k\gamma \frac{\partial }{\partial t} +mk \frac{\partial^2 }{\partial t'^2} +mk \frac{\partial^2 }{\partial t^2} + k^2 \right] k_{uu}\\
+    &= \left[m^2 \frac{\partial^4 }{\partial t^2 \partial t'^2}  + \gamma^2 \frac{\partial^2 }{\partial t \partial t'}  +2mk \frac{\partial^2 }{\partial t'^2} + k^2 \right] k_{uu}\\
+\end{aligned}
+\end{equation}
+ with $k_{uu} = \sigma_f^2  \exp\left({-\frac{0.5}{l^2} {(t-t')}^2}\right)$ beeing the general SE kernel introduced in section \ref{subsec: Kernels}. However, this can be done with any other kernel aswell. The analytical computation of the derivatives is very simple for the SE kernel, but can get more complicated for other kernels. 
+\lstinputlisting[firstline=99,lastline=115,caption={Analytical computation of the derivatives},label={code:kernel_analytical}]{../PI_GP_regressor/kernels/kernel_oscillator_3variables.py}
+\lstinputlisting[firstline=17,lastline=33,caption={Computation of the derivatives using autograd},label={code:kernel_autograds}]{../PI_GP_regressor/kernels/kernel_oscillator_3variables.py}
+
+
 
 
 \lstinputlisting[firstline=109,lastline=117,caption={Log marginal likelihood}]{../PI_GP_regressor/main_class.py}

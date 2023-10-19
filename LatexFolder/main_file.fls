@@ -223,9 +223,15 @@ INPUT /usr/local/texlive/2023/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmmib
 INPUT /usr/local/texlive/2023/texmf-dist/fonts/tfm/public/cm/cmbsy10.tfm
 INPUT /usr/local/texlive/2023/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy7.tfm
 INPUT /usr/local/texlive/2023/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy5.tfm
-INPUT ../PI_GP_regressor/main_class.py
-INPUT ../PI_GP_regressor/main_class.py
+INPUT ../PI_GP_regressor/kernels/kernel_oscillator_3variables.py
+INPUT ../PI_GP_regressor/kernels/kernel_oscillator_3variables.py
 INPUT /usr/local/texlive/2023/texmf-dist/fonts/tfm/public/cm/cmtt9.tfm
+INPUT ../PI_GP_regressor/kernels/kernel_oscillator_3variables.py
+INPUT ../PI_GP_regressor/kernels/kernel_oscillator_3variables.py
+INPUT ../PI_GP_regressor/kernels/kernel_oscillator_3variables.py
+INPUT ../PI_GP_regressor/kernels/kernel_oscillator_3variables.py
+INPUT ../PI_GP_regressor/main_class.py
+INPUT ../PI_GP_regressor/main_class.py
 INPUT ../PI_GP_regressor/main_class.py
 INPUT ../PI_GP_regressor/main_class.py
 INPUT ../PI_GP_regressor/main_class.py

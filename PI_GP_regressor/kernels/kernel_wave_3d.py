@@ -88,8 +88,8 @@ def gram_Matrix(X, X_bar, params, noise = [0,0]):
     X_u = jnp.hstack([X,Y,T])
     X_f = jnp.hstack([X_bar,Y_bar,T_bar])
     
-    k_uu_matrix = k_uu(X_u, X_u, params) + noise[0] * jnp.eye(len(X)) #xxtt --- we have to slice xt xt
-    k_uf_matrix = k_uf(X_u, X_f, params)                              #xyts 
+    k_uu_matrix = k_uu(X_u, X_u, params) + noise[0] * jnp.eye(len(X)) 
+    k_uf_matrix = k_uf(X_u, X_f, params)                              
     k_fu_matrix = k_fu(X_f, X_u, params) 
     k_ff_matrix = k_ff(X_f, X_f, params) + noise[1] * jnp.eye(len(Y))
     #combine all the matrices to the full gram matrix
