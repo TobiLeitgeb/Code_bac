@@ -1,9 +1,13 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
 
 \bibitem{bishop}
 Christopher~M. Bishop.
 \newblock {\em Pattern Recognition and Machine Learning}.
 \newblock 2006.
+
+\bibitem{jax2018github}
+James Bradbury, Roy Frostig, Peter Hawkins, Matthew~James Johnson, Chris Leary, Dougal Maclaurin, George Necula, Adam Paszke, Jake Vander{P}las, Skye Wanderman-{M}ilne, and Qiao Zhang.
+\newblock {JAX}: composable transformations of {P}ython+{N}um{P}y programs, 2018.
 
 \bibitem{Duvenaud}
 D.~Duvenaud.

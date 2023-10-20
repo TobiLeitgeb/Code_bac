@@ -182,6 +182,7 @@ For the optimization of the hyperparameters $\theta$ and $\phi$ the negative
 marginal log likelihood ($nmll$)~\cite{RasmussenCarlEdward} is minimized. The
 $nmll$
 \begin{equation}
+    \label{eq:nmll}
     \log p(\bm{y}|\bm{X},\bm{\theta}) = -\frac{1}{2}\bm{y}^\intercal \bm{K_y}^{-1}\bm{y} - \frac{1}{2}\log\left\lvert \bm{K_y}\right\rvert - \frac{n}{2}\log(2\pi)
 \end{equation}
 with $K_y$ = $K_f + \sigma_n^2 \bm{I}$. As described in~\cite{RasmussenCarlEdward}, the $mll$ consists of three parts, which can each be understood separately. The first term $\frac{1}{2}\bm{y}^\intercal \bm{K_y}^{-1}\bm{y}$ is in charge of the data fit, the second term $\log\left\lvert K_y\right\rvert$ is the complexity penalty and the last term is a normalization term.
@@ -265,6 +266,7 @@ in the next chapter.
 \subsection{Optimization/Finding of the hyperparameters}
 Arguably the most important part of the overall framework is the optimization of the hyperparameters. The optimization is done by minimizing the negative marginal log likelihood (mll) of the joint GP with respect to the hyperparameters $\bm{\theta, \phi}$. The mll is defined as:
 \begin{equation}
+    \label{eq:mll}
     \log p(\bm{y}|\bm{X},\bm{\theta},\sigma_{n_u}^2,\sigma_{f_u}^2,\bm{\phi}) =
     -\frac{1}{2}\bm{y}^\intercal \bm{K}^{-1}\bm{y} - \frac{1}{2}\log\left\lvert \bm{K}\right\rvert - \frac{n}{2}\log(2\pi)
 \end{equation}
@@ -303,10 +305,12 @@ with $\bm{\kappa_u}$ and $\bm{\kappa_f}$ being:
 
 
 \section{Numerical/Computational implementation}
-In this section we will present the computiational implementation in python of the kernel, the log marginal likelihood and of the predictive distribution. For greatly improving the computation time the jax library was used in order to use the vectorization and jit.
+In this section we will present the computiational implementation in python of the kernel, the log marginal likelihood and of the predictive distribution. For greatly improving the computation time aswell as the usage of automatic differentiation the jax library~\cite{jax2018github} was used. A general introduction can be found \href{https://jax.readthedocs.io/en/latest/notebooks/quickstart.html}{here}, aswell as a specific introduction to kernel derivatives with jax \href{https://jejjohnson.github.io/research_notebook/content/notes/kernels/kernel_derivatives.html}{here}. Goal of this section is to give a short overview of the computational methods used for the implementation of the Gaussian process regression and the construction of the kernel.\\
+
 \subsection{Kernel}
 For constructing and deriving the kernel as described in equations \ref{eq:kff} and \ref{eq:kuf_kfu} we used two different computational approaches. The first approach was to analytically calculate the derivatives arrising from the differential operators and the second one was to use automatic differentiation. $\mathcal{L}_{t}^\phi = m\frac{\partial^2 u(t)}{\partial t^2} + \gamma \frac{\partial u(t)}{\partial t} + k u(t) $ $\sigma_f^2  \exp\left({-\frac{0.5}{l^2} {(t-t')}^2}\right)$
 \begin{equation}
+    \label{eq:kernel_analytical}
 \begin{aligned}
     k_{ff}(\bm{x},\bm{x'};\bm{\theta}, \bm{\phi}) &= \mathcal{L}_{\bm{x}}^\phi \mathcal{L}_{\bm{x'}}^\phi k_{uu}(\bm{x},\bm{x'};\bm{\theta})\\
     &= \left[ m\frac{\partial^2 }{\partial t^2} + \gamma \frac{\partial }{\partial t} + k \right] \left[ m\frac{\partial^2 }{\partial t'^2} + \gamma \frac{\partial }{\partial t'} + k \right] k_{uu} \\
@@ -314,13 +318,24 @@ For constructing and deriving the kernel as described in equations \ref{eq:kff} 
     &= \left[m^2 \frac{\partial^4 }{\partial t^2 \partial t'^2}  + \gamma^2 \frac{\partial^2 }{\partial t \partial t'}  +2mk \frac{\partial^2 }{\partial t'^2} + k^2 \right] k_{uu}\\
 \end{aligned}
 \end{equation}
- with $k_{uu} = \sigma_f^2  \exp\left({-\frac{0.5}{l^2} {(t-t')}^2}\right)$ beeing the general SE kernel introduced in section \ref{subsec: Kernels}. However, this can be done with any other kernel aswell. The analytical computation of the derivatives is very simple for the SE kernel, but can get more complicated for other kernels. 
-\lstinputlisting[firstline=99,lastline=115,caption={Analytical computation of the derivatives},label={code:kernel_analytical}]{../PI_GP_regressor/kernels/kernel_oscillator_3variables.py}
-\lstinputlisting[firstline=17,lastline=33,caption={Computation of the derivatives using autograd},label={code:kernel_autograds}]{../PI_GP_regressor/kernels/kernel_oscillator_3variables.py}
+ with $k_{uu} = \sigma_f^2  \exp\left({-\frac{0.5}{l^2} {(t-t')}^2}\right)$ beeing the general SE kernel introduced in section \ref{subsec: Kernels}. Note that this can be done with any other kernel aswell. The analytical computation is shown in~\ref{code:kernel_analytical}.\\
+\lstinputlisting[firstline=99,lastline=115,caption={Analytical computation of the derivatives},label={code:kernel_analytical},breaklines = False]{../PI_GP_regressor/kernels/kernel_oscillator_3variables.py}
+For the SE kernel the computations are rather simple and can easily be done analytically. However, if one chooses a complex kernel, the analytical computation can become rather complicated an time consuming. Therefore, we also implemented the the kernel derivatives with help of autograd. Namely, we used the jax library for the automatic differentiation. The code for the autograd computation of the derivatives is shown in \ref{code:kernel_autograds}. The big advantage of this approach is that it is sufficient to do the calculations as done in~\ref{eq:kernel_analytical} and implement it as shown in the code. With this the choice of the general kernel $k_{uu}$ is only restricted within the jax library. This means that the kernel can be any function that is traceable by the jax autograd an jit functions. 
+\lstinputlisting[firstline=17,lastline=33,caption={Computation of the derivatives using autograd},label={code:kernel_autograds},breaklines = False]{../PI_GP_regressor/kernels/kernel_oscillator_3variables.py}
+When comparing the accuracy and the speed of the two approaches there was no notable difference. In particular, the two functions were nearly identical in terms of computation time. For the majority of the examples we used the analytical approach, because it is more transparent and easier to verify.
 
 
-
-
+\subsection{Log marginal likelihood and predictive distribution}
+A general problem of Gaussian processes is the numerical calculation of the inverse of the covariance matrix $\bm{K}$. This problem becomes increasingly apperent with a high number of training points. Especially in the training process the inverse of $\bm{K}$ has to be calculated several times. However, with the vectorized implementation aswell as the use of just in time (jit) compiled function from the jax library the computation time was not a major problem. Additionaly, the number of training points was held at a rather low number (highest number was 400 for the 3d wave equation). Still, the calculation of the inverse can be a source of numerical instabilities. To minimized numerical errors and instabilities the inverse was calculated using the Cholesky decomposition similar to the implementation in~\cite{RasmussenCarlEdward}.\\
+The Cholesky decomposition of a positive definite, symmetric matrix $\bm{A}$ is given by:
+\begin{equation}
+    \bm{K} = \bm{L}\bm{L}^\intercal
+\end{equation}
+with $\bm{L}$ being a lower triangular matrix. With this the the general term involving the inversion of $\bm{K}$ can be written as:
+\begin{equation}
+    \bm{u}^\intercal \bm{K}^{-1}\bm{v} = \bm{u}^\intercal (\bm{LL^{\intercal}})^{-1} \bm{v} = \bm{u}^\intercal \bm{L^{\intercal} \backslash (L\backslash v)}
+\end{equation}
+shown with two general vectors $\bm{u}$ and $\bm{v}$ and $\backslash$ as the left matrix divide operator. This can be solved by first solving the linear system $\bm{L}\bm{v} = \bm{u}$ and then solving the linear system $\bm{L}^\intercal \bm{z} = \bm{y}$. This way of calculating the inverse of $\bm{K}$ is more stable than the direct inversion of $\bm{K}$. The implementation of the log marginal likelihood is shown in~\ref{code:mll}.\\
 \lstinputlisting[firstline=109,lastline=117,caption={Log marginal likelihood}]{../PI_GP_regressor/main_class.py}
 
 For the actual implementation we again used the Cholesky decomposition of $\bm{K}$ to compute the inverse of $\bm{K}$. This is done by first computing the Cholesky decomposition of $\bm{K}$:

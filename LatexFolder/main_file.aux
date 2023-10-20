@@ -42,6 +42,7 @@
 \citation{RAISSI}
 \citation{garnett_2023_full}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Marginal likelihood}{4}{subsection.2.4}\protected@file@percent }
+\newlabel{eq:nmll}{{11}{4}{Marginal likelihood}{equation.2.11}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.5}Linear operators and GPs}{4}{subsection.2.5}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {3}Physics informed framework}{4}{section.3}\protected@file@percent }
 \newlabel{eq:Lu=f}{{12}{4}{Physics informed framework}{equation.3.12}{}}
@@ -52,51 +53,57 @@
 \citation{RAISSI}
 \newlabel{eq:jointGP_observations}{{19}{5}{Physics informed framework}{equation.3.19}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Optimization/Finding of the hyperparameters}{5}{subsection.3.1}\protected@file@percent }
+\newlabel{eq:mll}{{20}{5}{Optimization/Finding of the hyperparameters}{equation.3.20}{}}
+\citation{jax2018github}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Predictions with the Posterior}{6}{subsection.3.2}\protected@file@percent }
 \newlabel{eq:predictive_mean_cov}{{22}{6}{Predictions with the Posterior}{equation.3.22}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {4}Numerical/Computational implementation}{6}{section.4}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Kernel}{6}{subsection.4.1}\protected@file@percent }
+\newlabel{eq:kernel_analytical}{{24}{6}{Kernel}{equation.4.24}{}}
 \newlabel{code:kernel_analytical}{{1}{6}{Analytical computation of the derivatives}{lstlisting.1}{}}
 \@writefile{lol}{\contentsline {lstlisting}{\numberline {1}{\ignorespaces Analytical computation of the derivatives}}{6}{lstlisting.1}\protected@file@percent }
 \citation{RasmussenCarlEdward}
-\citation{RAISSI}
 \newlabel{code:kernel_autograds}{{2}{7}{Computation of the derivatives using autograd}{lstlisting.2}{}}
 \@writefile{lol}{\contentsline {lstlisting}{\numberline {2}{\ignorespaces Computation of the derivatives using autograd}}{7}{lstlisting.2}\protected@file@percent }
-\newlabel{lst:python-example}{{3}{7}{Log marginal likelihood}{lstlisting.3}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {3}{\ignorespaces Log marginal likelihood}}{7}{lstlisting.3}\protected@file@percent }
-\newlabel{lst:python-example}{{4}{7}{Predictive distribution}{lstlisting.4}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {4}{\ignorespaces Predictive distribution}}{7}{lstlisting.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Log marginal likelihood and predictive distribution}{7}{subsection.4.2}\protected@file@percent }
+\citation{RasmussenCarlEdward}
+\citation{RAISSI}
 \citation{gpy2014}
+\newlabel{lst:python-example}{{3}{8}{Log marginal likelihood}{lstlisting.3}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3}{\ignorespaces Log marginal likelihood}}{8}{lstlisting.3}\protected@file@percent }
+\newlabel{lst:python-example}{{4}{8}{Predictive distribution}{lstlisting.4}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {4}{\ignorespaces Predictive distribution}}{8}{lstlisting.4}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {5}Results}{8}{section.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Damped oscillator}{8}{subsection.5.1}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces (a) \& (b) predictive mean $\mu _u$ and $\mu _f$ for the informed model, two $\sigma $ uncertanty band, training and validation points sampled from $\{\bm  {x_u},u(\bm  {y_u})\}$ and $\{\bm  {x_f},u(\bm  {y_f})\}$ respectivly.\ (c) \& (d) predictive mean $\mu _u$ and $\mu _f$ for the vanilla model, two $\sigma $ uncertanty band, training and validation points sampled from $\{\bm  {x_u},u(\bm  {y_u})\}$ and $\{\bm  {x_f},u(\bm  {y_f})\}$ respectivly. The noise $\sigma _{nu}$ and $\sigma _{nf}$ were both set to $10^{-8}$. The MSEs of the informed model are $MSE_u = 1.419 \cdot 10^{-7}$ and $MSE_f = 4.609 \cdot 10^{-3}$. The MSEs for the vanilla model are $MSE_{u,va} = 5.469 \cdot 10^{-4}$ and $MSE_{f,va} = 2.692$.}}{9}{figure.caption.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Damped oscillator}{9}{subsection.5.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces (a) \& (b) predictive mean $\mu _u$ and $\mu _f$ for the informed model, two $\sigma $ uncertanty band, training and validation points sampled from $\{\bm  {x_u},u(\bm  {y_u})\}$ and $\{\bm  {x_f},u(\bm  {y_f})\}$ respectivly.\ (c) \& (d) predictive mean $\mu _u$ and $\mu _f$ for the vanilla model, two $\sigma $ uncertanty band, training and validation points sampled from $\{\bm  {x_u},u(\bm  {y_u})\}$ and $\{\bm  {x_f},u(\bm  {y_f})\}$ respectivly. The noise $\sigma _{nu}$ and $\sigma _{nf}$ were both set to $10^{-8}$. The MSEs of the informed model are $MSE_u = 1.419 \cdot 10^{-7}$ and $MSE_f = 4.609 \cdot 10^{-3}$. The MSEs for the vanilla model are $MSE_{u,va} = 5.469 \cdot 10^{-4}$ and $MSE_{f,va} = 2.692$.}}{10}{figure.caption.1}\protected@file@percent }
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
-\newlabel{fig:damped_oscillator}{{1}{9}{(a) \& (b) predictive mean $\mu _u$ and $\mu _f$ for the informed model, two $\sigma $ uncertanty band, training and validation points sampled from $\{\bm {x_u},u(\bm {y_u})\}$ and $\{\bm {x_f},u(\bm {y_f})\}$ respectivly.\ (c) \& (d) predictive mean $\mu _u$ and $\mu _f$ for the vanilla model, two $\sigma $ uncertanty band, training and validation points sampled from $\{\bm {x_u},u(\bm {y_u})\}$ and $\{\bm {x_f},u(\bm {y_f})\}$ respectivly. The noise $\sigma _{nu}$ and $\sigma _{nf}$ were both set to $10^{-8}$. The MSEs of the informed model are $MSE_u = 1.419 \cdot 10^{-7}$ and $MSE_f = 4.609 \cdot 10^{-3}$. The MSEs for the vanilla model are $MSE_{u,va} = 5.469 \cdot 10^{-4}$ and $MSE_{f,va} = 2.692$}{figure.caption.1}{}}
+\newlabel{fig:damped_oscillator}{{1}{10}{(a) \& (b) predictive mean $\mu _u$ and $\mu _f$ for the informed model, two $\sigma $ uncertanty band, training and validation points sampled from $\{\bm {x_u},u(\bm {y_u})\}$ and $\{\bm {x_f},u(\bm {y_f})\}$ respectivly.\ (c) \& (d) predictive mean $\mu _u$ and $\mu _f$ for the vanilla model, two $\sigma $ uncertanty band, training and validation points sampled from $\{\bm {x_u},u(\bm {y_u})\}$ and $\{\bm {x_f},u(\bm {y_f})\}$ respectivly. The noise $\sigma _{nu}$ and $\sigma _{nf}$ were both set to $10^{-8}$. The MSEs of the informed model are $MSE_u = 1.419 \cdot 10^{-7}$ and $MSE_f = 4.609 \cdot 10^{-3}$. The MSEs for the vanilla model are $MSE_{u,va} = 5.469 \cdot 10^{-4}$ and $MSE_{f,va} = 2.692$}{figure.caption.1}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces MSEs for the informed model with different number of training points $n$. The used noise was $\sigma _{nu} = $ and $\sigma _{nf}$.}}{10}{table.caption.2}\protected@file@percent }
 \newlabel{tab:variing_n_trainingpoints}{{1}{10}{MSEs for the informed model with different number of training points $n$. The used noise was $\sigma _{nu} = $ and $\sigma _{nf}$}{table.caption.2}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Heat Equation}{10}{subsection.5.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Wave Equation}{10}{subsection.5.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}Poisson Equation}{10}{subsection.5.4}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Plots for the informed model. (a) \& (b) predictive mean $\bm  {\mu _u}$ and $\bm  {\mu _f}$ with training points in red. (c) \& (d) predictive standard deviations $\bm  {\sigma _u}$ and $\bm  {\sigma _f}$. (e) \& (f) difference between the predictive mean $\bm  {\mu }$ and the ground truths $u$ and $f$. The MSEs for the informed model are $MSE_u = \cdot 10^{-7}$ and $MSE_f = \cdot 10^{-3}$. The relative $L^2$ errors are $L^2_u = $ and $L^2_f = $.}}{11}{figure.caption.3}\protected@file@percent }
+\newlabel{fig:wave}{{2}{11}{Plots for the informed model. (a) \& (b) predictive mean $\bm {\mu _u}$ and $\bm {\mu _f}$ with training points in red. (c) \& (d) predictive standard deviations $\bm {\sigma _u}$ and $\bm {\sigma _f}$. (e) \& (f) difference between the predictive mean $\bm {\mu }$ and the ground truths $u$ and $f$. The MSEs for the informed model are $MSE_u = \cdot 10^{-7}$ and $MSE_f = \cdot 10^{-3}$. The relative $L^2$ errors are $L^2_u = $ and $L^2_f = $}{figure.caption.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Heat Equation}{11}{subsection.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Wave Equation}{11}{subsection.5.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}Poisson Equation}{11}{subsection.5.4}\protected@file@percent }
 \bibstyle{plain}
 \bibdata{library}
 \bibcite{bishop}{1}
-\bibcite{Duvenaud}{2}
-\bibcite{garnett_2023_full}{3}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Plots for the informed model. (a) \& (b) predictive mean $\bm  {\mu _u}$ and $\bm  {\mu _f}$ with training points in red. (c) \& (d) predictive standard deviations $\bm  {\sigma _u}$ and $\bm  {\sigma _f}$. (e) \& (f) difference between the predictive mean $\bm  {\mu }$ and the ground truths $u$ and $f$. The MSEs for the informed model are $MSE_u = \cdot 10^{-7}$ and $MSE_f = \cdot 10^{-3}$. The relative $L^2$ errors are $L^2_u = $ and $L^2_f = $.}}{11}{figure.caption.3}\protected@file@percent }
-\newlabel{fig:wave}{{2}{11}{Plots for the informed model. (a) \& (b) predictive mean $\bm {\mu _u}$ and $\bm {\mu _f}$ with training points in red. (c) \& (d) predictive standard deviations $\bm {\sigma _u}$ and $\bm {\sigma _f}$. (e) \& (f) difference between the predictive mean $\bm {\mu }$ and the ground truths $u$ and $f$. The MSEs for the informed model are $MSE_u = \cdot 10^{-7}$ and $MSE_f = \cdot 10^{-3}$. The relative $L^2$ errors are $L^2_u = $ and $L^2_f = $}{figure.caption.3}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {6}Conclusion and Outlook}{11}{section.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {7}Appendix}{11}{section.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.1}Numerical implementation of the Kernel}{11}{subsection.7.1}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Plots for the informed model. (a) \& (b) predictive mean $\bm  {\mu _u}$ and $\bm  {\mu _f}$ with training points in red. (c) \& (d) predictive standard deviations $\bm  {\sigma _u}$ and $\bm  {\sigma _f}$. (e) \& (f) difference between the predictive mean $\bm  {\mu }$ and the ground truths $u$ and $f$. The MSEs for the informed model are $MSE_u = \cdot 10^{-7}$ and $MSE_f = \cdot 10^{-3}$. The relative $L^2$ errors are $L^2_u = $ and $L^2_f = $.}}{12}{figure.caption.4}\protected@file@percent }
-\newlabel{fig:poisson}{{3}{12}{Plots for the informed model. (a) \& (b) predictive mean $\bm {\mu _u}$ and $\bm {\mu _f}$ with training points in red. (c) \& (d) predictive standard deviations $\bm {\sigma _u}$ and $\bm {\sigma _f}$. (e) \& (f) difference between the predictive mean $\bm {\mu }$ and the ground truths $u$ and $f$. The MSEs for the informed model are $MSE_u = \cdot 10^{-7}$ and $MSE_f = \cdot 10^{-3}$. The relative $L^2$ errors are $L^2_u = $ and $L^2_f = $}{figure.caption.4}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Plots for the vanilla model. (a) \& (b) predictive mean $\bm  {\mu _u}$ and $\bm  {\mu _f}$}}{13}{figure.caption.5}\protected@file@percent }
-\newlabel{fig:poisson_GPY}{{4}{13}{Plots for the vanilla model. (a) \& (b) predictive mean $\bm {\mu _u}$ and $\bm {\mu _f}$}{figure.caption.5}{}}
-\bibcite{gpy2014}{4}
-\bibcite{görtler2019a}{5}
-\bibcite{RAISSI}{6}
-\bibcite{RasmussenCarlEdward}{7}
-\bibcite{Singer:2009NelderMead}{8}
-\bibcite{Särkkä}{9}
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Plots for the investigation of the domain boundaries}}{14}{figure.caption.6}\protected@file@percent }
-\newlabel{fig:poisson_boundaries}{{5}{14}{Plots for the investigation of the domain boundaries}{figure.caption.6}{}}
-\gdef \@abspage@last{14}
+\bibcite{jax2018github}{2}
+\bibcite{Duvenaud}{3}
+\bibcite{garnett_2023_full}{4}
+\bibcite{gpy2014}{5}
+\bibcite{görtler2019a}{6}
+\bibcite{RAISSI}{7}
+\bibcite{RasmussenCarlEdward}{8}
+\bibcite{Singer:2009NelderMead}{9}
+\bibcite{Särkkä}{10}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Conclusion and Outlook}{12}{section.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {7}Appendix}{12}{section.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.1}Numerical implementation of the Kernel}{12}{subsection.7.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Plots for the informed model. (a) \& (b) predictive mean $\bm  {\mu _u}$ and $\bm  {\mu _f}$ with training points in red. (c) \& (d) predictive standard deviations $\bm  {\sigma _u}$ and $\bm  {\sigma _f}$. (e) \& (f) difference between the predictive mean $\bm  {\mu }$ and the ground truths $u$ and $f$. The MSEs for the informed model are $MSE_u = \cdot 10^{-7}$ and $MSE_f = \cdot 10^{-3}$. The relative $L^2$ errors are $L^2_u = $ and $L^2_f = $.}}{13}{figure.caption.4}\protected@file@percent }
+\newlabel{fig:poisson}{{3}{13}{Plots for the informed model. (a) \& (b) predictive mean $\bm {\mu _u}$ and $\bm {\mu _f}$ with training points in red. (c) \& (d) predictive standard deviations $\bm {\sigma _u}$ and $\bm {\sigma _f}$. (e) \& (f) difference between the predictive mean $\bm {\mu }$ and the ground truths $u$ and $f$. The MSEs for the informed model are $MSE_u = \cdot 10^{-7}$ and $MSE_f = \cdot 10^{-3}$. The relative $L^2$ errors are $L^2_u = $ and $L^2_f = $}{figure.caption.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Plots for the vanilla model. (a) \& (b) predictive mean $\bm  {\mu _u}$ and $\bm  {\mu _f}$}}{14}{figure.caption.5}\protected@file@percent }
+\newlabel{fig:poisson_GPY}{{4}{14}{Plots for the vanilla model. (a) \& (b) predictive mean $\bm {\mu _u}$ and $\bm {\mu _f}$}{figure.caption.5}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Plots for the investigation of the domain boundaries}}{15}{figure.caption.6}\protected@file@percent }
+\newlabel{fig:poisson_boundaries}{{5}{15}{Plots for the investigation of the domain boundaries}{figure.caption.6}{}}
+\gdef \@abspage@last{15}
