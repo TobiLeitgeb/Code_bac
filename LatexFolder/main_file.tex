@@ -25,7 +25,6 @@
 % Define colors using xcolor
 \definecolor{mygray}{rgb}{0.5,0.5,0.5}
 \definecolor{mypurple}{HTML}{800080}
-
 \lstset{
     language=Python,
     basicstyle=\small\ttfamily,
@@ -67,7 +66,7 @@ the $u$ and $f$. However, we do not have knowledge of the ODE parameters
 $\phi$. This is a typical situation in for example lab work, where we have
 measurements and want to determine an underlying physical parameter or
 interpolate the data. This is often done with typical linear regression
-techniques.\\ very easy to implement a better working kernel. one would always be able to build a better kernel for a specific problem. However this would require a lot of time and effort. with this framework we have a clear way of implementing a kernel that is based on the underlying physics. We do not need to analytically compute a kernel for a specific problem. We can just take the differential equation and a kernel and apply the differential operator to the kernel. This way we can easily implement a kernel for a specific problem. The next interesting thing is that we also use the knowledge of the forcing term for our prediction and for the calculation of the ODE hyperparameters $\phi$. and we can predict the forcing term aswell. When comparing this to a inverse problem using a neural network we can see that the implementation is also a lot harder.\\
+techniques.\\ very easy to implement a better working kernel. one would always be able to build a better kernel for a specific problem. However this would require a lot of time and effort. with this framework we have a clear way of implementing a kernel that is based on the underlying physics. We do not need to analytically compute a kernel for a specific problem. We can just take the differential equation and a kernel and apply the differential operator to the kernel. This way we can easily implement a kernel for a specific problem. The next interesting thing is that we also use the knowledge of the forcing term for our prediction and for the calculation of the ODE hyperparameters $\phi$. and we can predict the forcing term aswell. When comparing this to an inverse problem using a neural network we can see that the implementation is also a lot harder.\\
 We start with a general introduction to Gaussian Processes, Regression with Gaussian Processes and kernels. We
 then introduce the physics informed framework and the optimization process. In the end we will look at several example problems and discuss the results and the performance of the framework.\\
 
@@ -274,7 +273,7 @@ with $\bm{K}$ being the covariance matrix of the joint GP in equation~\ref{eq:jo
 \\
 A common problem in the optimization process of non-convex funtion is the problem of converging to a local minimum. To avoid this problem we started the optimization process for different initial values of the hperparameters. The initial values were sampled from uniform distributions, only the length scale hyperparameter $l$ was sampled from a log uniform distribution because of it beeing a scale parameter. Because of the random initialization, and the presumably high number of local minima in the optimization landscape, the results for the hyperparameters varied. However, for a sufficient number of optimization runs the results normally reached a similar accuracy and similar hyperparamter values.\\
 \\
-To conclude, the optimization process is the key part of the framework, because we can directly make predictions with the optimized hyperparameters, but also obtain the parameters $\phi$ of the underlying differential equation. A key step for improving the overall framework would be to improve the optimization process. However, this would be very time consuming and the obtained results are sufficently accurate, aswell as the computation time beeing reasonably short, for the scope of this work.\\
+To conclude, the optimization process is the key part of the framework, because we can directly make predictions with the optimized hyperparameters, but also obtain the parameters $\phi$ of the underlying differential equation. A key step for improving the overall framework would be to improve the optimization process. However, this would be very time-consuming and the obtained results are sufficently accurate, aswell as the computation time beeing reasonably short, for the scope of this work.\\
 \subsection{Predictions with the Posterior}
 With the obtained hyperparameters $\bm{\theta_*}$ and $\bm{\phi_*}$ we can make
 new predictions at a test location $\bm{x_*}$. Similar to the construction in
@@ -308,49 +307,40 @@ with $\bm{\kappa_u}$ and $\bm{\kappa_f}$ being:
 In this section we will present the computiational implementation in python of the kernel, the log marginal likelihood and of the predictive distribution. For greatly improving the computation time aswell as the usage of automatic differentiation the jax library~\cite{jax2018github} was used. A general introduction can be found \href{https://jax.readthedocs.io/en/latest/notebooks/quickstart.html}{here}, aswell as a specific introduction to kernel derivatives with jax \href{https://jejjohnson.github.io/research_notebook/content/notes/kernels/kernel_derivatives.html}{here}. Goal of this section is to give a short overview of the computational methods used for the implementation of the Gaussian process regression and the construction of the kernel.\\
 
 \subsection{Kernel}
-For constructing and deriving the kernel as described in equations \ref{eq:kff} and \ref{eq:kuf_kfu} we used two different computational approaches. The first approach was to analytically calculate the derivatives arrising from the differential operators and the second one was to use automatic differentiation. $\mathcal{L}_{t}^\phi = m\frac{\partial^2 u(t)}{\partial t^2} + \gamma \frac{\partial u(t)}{\partial t} + k u(t) $ $\sigma_f^2  \exp\left({-\frac{0.5}{l^2} {(t-t')}^2}\right)$
+For constructing and deriving the kernel as described in equations \ref{eq:kff} and \ref{eq:kuf_kfu} we used two different computational approaches. The first approach was to analytically calculate the derivatives arrising from the differential operators and the second one was to use automatic differentiation. For a general overview the process is shown with the specific example ODE $\mathcal{L}_{t}^\phi = m\frac{\partial^2 u(t)}{\partial t^2} + \gamma \frac{\partial u(t)}{\partial t} + k u(t) $ $\sigma_f^2$.\\
+
 \begin{equation}
-    \label{eq:kernel_analytical}
 \begin{aligned}
     k_{ff}(\bm{x},\bm{x'};\bm{\theta}, \bm{\phi}) &= \mathcal{L}_{\bm{x}}^\phi \mathcal{L}_{\bm{x'}}^\phi k_{uu}(\bm{x},\bm{x'};\bm{\theta})\\
     &= \left[ m\frac{\partial^2 }{\partial t^2} + \gamma \frac{\partial }{\partial t} + k \right] \left[ m\frac{\partial^2 }{\partial t'^2} + \gamma \frac{\partial }{\partial t'} + k \right] k_{uu} \\
     &= \left[m^2 \frac{\partial^4 }{\partial t^2 \partial t'^2} + m\gamma \frac{\partial^3 }{\partial t^2 \partial t'} + m\gamma \frac{\partial^3 }{\partial t'^2 \partial t} + \gamma^2 \frac{\partial^2 }{\partial t \partial t'} + k\gamma \frac{\partial }{\partial t'} + k\gamma \frac{\partial }{\partial t} +mk \frac{\partial^2 }{\partial t'^2} +mk \frac{\partial^2 }{\partial t^2} + k^2 \right] k_{uu}\\
     &= \left[m^2 \frac{\partial^4 }{\partial t^2 \partial t'^2}  + \gamma^2 \frac{\partial^2 }{\partial t \partial t'}  +2mk \frac{\partial^2 }{\partial t'^2} + k^2 \right] k_{uu}\\
 \end{aligned}
+\label{eq:kernel_analytical}
 \end{equation}
  with $k_{uu} = \sigma_f^2  \exp\left({-\frac{0.5}{l^2} {(t-t')}^2}\right)$ beeing the general SE kernel introduced in section \ref{subsec: Kernels}. Note that this can be done with any other kernel aswell. The analytical computation is shown in~\ref{code:kernel_analytical}.\\
-\lstinputlisting[firstline=99,lastline=115,caption={Analytical computation of the derivatives},label={code:kernel_analytical},breaklines = False]{../PI_GP_regressor/kernels/kernel_oscillator_3variables.py}
-For the SE kernel the computations are rather simple and can easily be done analytically. However, if one chooses a complex kernel, the analytical computation can become rather complicated an time consuming. Therefore, we also implemented the the kernel derivatives with help of autograd. Namely, we used the jax library for the automatic differentiation. The code for the autograd computation of the derivatives is shown in \ref{code:kernel_autograds}. The big advantage of this approach is that it is sufficient to do the calculations as done in~\ref{eq:kernel_analytical} and implement it as shown in the code. With this the choice of the general kernel $k_{uu}$ is only restricted within the jax library. This means that the kernel can be any function that is traceable by the jax autograd an jit functions. 
-\lstinputlisting[firstline=17,lastline=33,caption={Computation of the derivatives using autograd},label={code:kernel_autograds},breaklines = False]{../PI_GP_regressor/kernels/kernel_oscillator_3variables.py}
+\lstinputlisting[firstline=99,lastline=115,caption={Analytical computation of the derivatives}, label={code:kernel_analytical}, breaklines = False]{../PI_GP_regressor/kernels/kernel_oscillator_3variables.py}
+For the SE kernel the computations are rather simple and can easily be done analytically. However, if one chooses a complex kernel, the analytical computation can become rather complicated and time-consuming. Therefore, we also implemented the kernel derivatives with help of autograd. Namely, we used the jax library for the automatic differentiation. The code for the autograd computation of the derivatives is shown in \ref{code:kernel_autograds}. The big advantage of this approach is that it is sufficient to do the calculations as done in~\ref{eq:kernel_analytical} and implement it as shown in the code. With this the choice of the general kernel $k_{uu}$ is only restricted within the jax library. This means that the kernel can be any function that is traceable by the jax autograd and jit functions. 
+\lstinputlisting[firstline=17,lastline=33,caption={Computation of the derivatives using autograd}, label={code:kernel_autograds}, breaklines = False]{../PI_GP_regressor/kernels/kernel_oscillator_3variables.py}
 When comparing the accuracy and the speed of the two approaches there was no notable difference. In particular, the two functions were nearly identical in terms of computation time. For the majority of the examples we used the analytical approach, because it is more transparent and easier to verify.
 
 
 \subsection{Log marginal likelihood and predictive distribution}
-A general problem of Gaussian processes is the numerical calculation of the inverse of the covariance matrix $\bm{K}$. This problem becomes increasingly apperent with a high number of training points. Especially in the training process the inverse of $\bm{K}$ has to be calculated several times. However, with the vectorized implementation aswell as the use of just in time (jit) compiled function from the jax library the computation time was not a major problem. Additionaly, the number of training points was held at a rather low number (highest number was 400 for the 3d wave equation). Still, the calculation of the inverse can be a source of numerical instabilities. To minimized numerical errors and instabilities the inverse was calculated using the Cholesky decomposition similar to the implementation in~\cite{RasmussenCarlEdward}.\\
+A general problem of Gaussian processes is the numerical calculation of the inverse of the covariance matrix $\bm{K}$. This problem becomes increasingly apparent with a high number of training points. Especially in the training process the inverse of $\bm{K}$ has to be calculated several times. However, with the vectorized implementation, aswell as the use of just in time (jit) compiled functions from the jax library the computation time was not a major problem. Additionaly, the number of training points was held at a rather low number (highest number was 400 for the 3d wave equation). Still, the calculation of the inverse can be a source of numerical instabilities. To minimize numerical errors and to avoid a direct inversion of $\bm{K}$ the calculations involving the inverse were rewritten using the Cholesky decomposition. \\
 The Cholesky decomposition of a positive definite, symmetric matrix $\bm{A}$ is given by:
 \begin{equation}
     \bm{K} = \bm{L}\bm{L}^\intercal
 \end{equation}
-with $\bm{L}$ being a lower triangular matrix. With this the the general term involving the inversion of $\bm{K}$ can be written as:
+with $\bm{L}$ being a lower triangular matrix \cite{RasmussenCarlEdward}. With this the general term involving the inversion of $\bm{K}$ can be written as:
 \begin{equation}
+    \label{eq:inv_K}
     \bm{u}^\intercal \bm{K}^{-1}\bm{v} = \bm{u}^\intercal (\bm{LL^{\intercal}})^{-1} \bm{v} = \bm{u}^\intercal \bm{L^{\intercal} \backslash (L\backslash v)}
 \end{equation}
-shown with two general vectors $\bm{u}$ and $\bm{v}$ and $\backslash$ as the left matrix divide operator. This can be solved by first solving the linear system $\bm{L}\bm{v} = \bm{u}$ and then solving the linear system $\bm{L}^\intercal \bm{z} = \bm{y}$. This way of calculating the inverse of $\bm{K}$ is more stable than the direct inversion of $\bm{K}$. The implementation of the log marginal likelihood is shown in~\ref{code:mll}.\\
-\lstinputlisting[firstline=109,lastline=117,caption={Log marginal likelihood}]{../PI_GP_regressor/main_class.py}
+shown with two general vectors $\bm{u}$ and $\bm{v}$ and $\backslash$ as the left matrix divide operator. For this we used that we can rewrite $(\bm{LL^{\intercal}})^{-1} \bm{v}$ as a solution $\bm{x}$ of a linear system of the form $\bm{LL^{\intercal}} \bm{x}=\bm{v}$, which we now solve for $\bm{x}$. This is a very stabel and efficient way of calculating the equation. The implementation of the log marginal likelihood is shown in~\ref{code:mll}.\\
+\lstinputlisting[firstline=109,lastline=117,caption={Log marginal likelihood}, label={code:mll}]{../PI_GP_regressor/main_class.py}
 
-For the actual implementation we again used the Cholesky decomposition of $\bm{K}$ to compute the inverse of $\bm{K}$. This is done by first computing the Cholesky decomposition of $\bm{K}$:
-\begin{equation}
-    \bm{K} = \bm{L}\bm{L}^\intercal
-\end{equation}
-with $\bm{L}$ being a lower triangular matrix. We can then write equation \ref{eq:predictive_mean_cov} as:
-\begin{equation}
-    \begin{aligned}
-        \mu_i = \bm{\kappa_i} \bm{L^{\intercal} \backslash (L\backslash y)}, \; \Sigma_i = k_{ii}(\bm{x_*,x_*}) - \bm{\kappa_i} \bm{L^{\intercal} \backslash (L\backslash \kappa_i^{\intercal})}
-    \end{aligned}
-\end{equation}
-with $\backslash$ as the left matrix divide operator. This is a stable way of computing the inverse of $\bm{K}$. This way of calculating the predictive mean and covariance is also used in \cite{RasmussenCarlEdward} and \cite{RAISSI}.
-
-\lstinputlisting[firstline=247,lastline=263,caption={Predictive distribution}]{../PI_GP_regressor/main_class.py}
+For the predictive distribution we again rewrote equation \ref{eq:predictive_mean_cov} as described in equation \ref{eq:inv_K}. The implementation of the predictive distribution is shown in~\ref{code:predictive_distribution}.\\
+\lstinputlisting[firstline=247,lastline=263,caption={Predictive distribution}, label={code:predictive_distribution}]{../PI_GP_regressor/main_class.py}
 
 \section{Results}
 In the following we will call the physics informed model, which is used here, the
@@ -435,7 +425,7 @@ with $\alpha$ as the thermal diffusivity.
 
 
 \subsection{Wave Equation}
-For the second example we will look at the two dimensional time dependent wave equation. The wave equation is a hyperbolic partial differential equation that describes the propagation of waves of various types. In our case we can think of the wave equation as a string that is fixed at both ends. The wave equation is given by:
+For the second example we will look at the two-dimensional time dependent wave equation. The wave equation is a hyperbolic partial differential equation that describes the propagation of waves of various types. In our case we can think of the wave equation as a string that is fixed at both ends. The wave equation is given by:
 \begin{equation}
     \begin{aligned}
         \frac{1}{c^2} \frac{\partial^2 u(x,y,t)}{\partial t^2} - (\frac{\partial^2}{\partial x^2} +\frac{\partial^2}{\partial y^2})u(x,y,t) = f(x,y,t) \\ u[0,x] =\\ u(t,0) = ; u(t,L) =

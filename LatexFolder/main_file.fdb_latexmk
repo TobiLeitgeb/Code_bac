@@ -1,13 +1,13 @@
 # Fdb version 4
-["bibtex main_file"] 0 "main_file.aux" "main_file.bbl" "main_file" 1697822252 -1
+["bibtex main_file"] 1697906732 "main_file.aux" "main_file.bbl" "main_file" 1697906736 0
   "./library.bib" 1697819447 3775 cf3403c6813db20b7c2fa5ab82a9c76e ""
   "/usr/local/texlive/2023/texmf-dist/bibtex/bst/base/plain.bst" 1292289607 20613 bd3fbfa9f64872b81ac57a0dd2ed855f ""
-  "main_file.aux" 1697822252 11025 539af4d8e4c91fc4f24d60a050aad522 "pdflatex"
+  "main_file.aux" 1697906735 11074 8ba570980595e9eb97302c5fdab2ccb8 "pdflatex"
   (generated)
   "main_file.bbl"
   "main_file.blg"
   (rewritten before read)
-["pdflatex"] 1697822248 "/Users/tobileitgeb/Code/Code_bac/LatexFolder/main_file.tex" "main_file.pdf" "main_file" 1697822252 0
+["pdflatex"] 1697906732 "/Users/tobileitgeb/Code/Code_bac/LatexFolder/main_file.tex" "main_file.pdf" "main_file" 1697906736 0
   "../PI_GP_regressor/kernels/kernel_oscillator_3variables.py" 1697750346 3855 a965f1c19741a9cae14e7362919bb2bb ""
   "../PI_GP_regressor/main_class.py" 1697238194 65702 cd7313e961d61c74737e617c3821bfd6 ""
   "../final_examples/oscillator/merged_1d_plots.png" 1694724070 713450 f24935bf786da8eaeb3e01c31201f893 ""
@@ -15,7 +15,7 @@
   "../final_examples/poisson/boundaries.png" 1696460390 441406 cc191310c73bd618dd4442f6a8416639 ""
   "../final_examples/poisson/merged_2d_plots.png" 1694895859 987362 108091ef19406c547f2681feb693de7f ""
   "../final_examples/wave_equation/predictive_mean.png" 1694898249 625085 c30b8686fbb96f33569b979559d66233 ""
-  "/Users/tobileitgeb/Code/Code_bac/LatexFolder/main_file.tex" 1697822249 41021 0d22beed3a085e0ace049cce4924fb16 ""
+  "/Users/tobileitgeb/Code/Code_bac/LatexFolder/main_file.tex" 1697906728 40523 dff7504c57b5597f8142070b4d8a571c ""
   "/usr/local/texlive/2023/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy5.tfm" 1246382020 1120 1e8878807317373affa7f7bba4cf2f6a ""
   "/usr/local/texlive/2023/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy6.tfm" 1246382020 1124 14ccf5552bc7f77ca02a8a402bea8bfb ""
@@ -170,10 +170,10 @@
   "/usr/local/texlive/2023/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1696519942 4687548 bcc2f26ea5e805a924003a36b1b540c5 ""
   "/usr/local/texlive/2023/texmf-var/web2c/pdftex/pdflatex.fmt" 1696519999 8183249 544ea0ac410e04b2d9a32a791d032d79 ""
   "/usr/local/texlive/2023/texmf.cnf" 1678822455 577 1b2b1af17af2508fb20dd85783af4050 ""
-  "main_file.aux" 1697822252 11025 539af4d8e4c91fc4f24d60a050aad522 "pdflatex"
-  "main_file.bbl" 1697821755 1832 ca3f89b67865c2979b75f0442f567d9b "bibtex main_file"
-  "main_file.out" 1697822252 3338 37ca98baac143415b8aec42de672437d "pdflatex"
-  "main_file.tex" 1697822249 41021 0d22beed3a085e0ace049cce4924fb16 ""
+  "main_file.aux" 1697906735 11074 8ba570980595e9eb97302c5fdab2ccb8 "pdflatex"
+  "main_file.bbl" 1697906732 1832 ca3f89b67865c2979b75f0442f567d9b "bibtex main_file"
+  "main_file.out" 1697906735 3338 37ca98baac143415b8aec42de672437d "pdflatex"
+  "main_file.tex" 1697906728 40523 dff7504c57b5597f8142070b4d8a571c ""
   (generated)
   "main_file.aux"
   "main_file.log"
