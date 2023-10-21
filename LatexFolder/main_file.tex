@@ -304,10 +304,10 @@ with $\bm{\kappa_u}$ and $\bm{\kappa_f}$ being:
 
 
 \section{Numerical/Computational implementation}
-In this section we will present the computiational implementation in python of the kernel, the log marginal likelihood and of the predictive distribution. For greatly improving the computation time aswell as the usage of automatic differentiation the jax library~\cite{jax2018github} was used. A general introduction can be found \href{https://jax.readthedocs.io/en/latest/notebooks/quickstart.html}{here}, aswell as a specific introduction to kernel derivatives with jax \href{https://jejjohnson.github.io/research_notebook/content/notes/kernels/kernel_derivatives.html}{here}. Goal of this section is to give a short overview of the computational methods used for the implementation of the Gaussian process regression and the construction of the kernel.\\
+In this section we will present the computational implementation in python of the kernel, the log marginal likelihood and of the predictive distribution. For greatly improving the computation time as well as the usage of automatic differentiation the jax library~\cite{jax2018github} was used. A general introduction can be found \href{https://jax.readthedocs.io/en/latest/notebooks/quickstart.html}{here}, as well as a specific introduction to kernel derivatives with jax \href{https://jejjohnson.github.io/research_notebook/content/notes/kernels/kernel_derivatives.html}{here}. Goal of this section is to give a short overview of the computational methods used for the implementation of the Gaussian process regression and the construction of the kernel.\\
 
 \subsection{Kernel}
-For constructing and deriving the kernel as described in equations \ref{eq:kff} and \ref{eq:kuf_kfu} we used two different computational approaches. The first approach was to analytically calculate the derivatives arrising from the differential operators and the second one was to use automatic differentiation. For a general overview the process is shown with the specific example ODE $\mathcal{L}_{t}^\phi = m\frac{\partial^2 u(t)}{\partial t^2} + \gamma \frac{\partial u(t)}{\partial t} + k u(t) $ $\sigma_f^2$.\\
+For constructing and deriving the kernel as described in equations \ref{eq:kff} and \ref{eq:kuf_kfu} we used two different computational approaches. The first approach was to analytically calculate the derivatives arising from the differential operators and the second one was to use automatic differentiation. For a general overview the process is shown with the specific example ODE of a damped oscillator with the differential operator $\mathcal{L}_{t}^\phi = m\frac{\partial^2 u(t)}{\partial t^2} + \gamma \frac{\partial u(t)}{\partial t} + k u(t) $ $\sigma_f^2$.\\
 
 \begin{equation}
 \begin{aligned}
@@ -318,7 +318,7 @@ For constructing and deriving the kernel as described in equations \ref{eq:kff} 
 \end{aligned}
 \label{eq:kernel_analytical}
 \end{equation}
- with $k_{uu} = \sigma_f^2  \exp\left({-\frac{0.5}{l^2} {(t-t')}^2}\right)$ beeing the general SE kernel introduced in section \ref{subsec: Kernels}. Note that this can be done with any other kernel aswell. The analytical computation is shown in~\ref{code:kernel_analytical}.\\
+ with $k_{uu} = \sigma_f^2  \exp\left({-\frac{0.5}{l^2} {(t-t')}^2}\right)$ beeing the general SE kernel introduced in section \ref{subsec: Kernels}. Note that this can be done with any other kernel as well. The analytical computation is shown in~\ref{code:kernel_analytical}.\\
 \lstinputlisting[firstline=99,lastline=115,caption={Analytical computation of the derivatives}, label={code:kernel_analytical}, breaklines = False]{../PI_GP_regressor/kernels/kernel_oscillator_3variables.py}
 For the SE kernel the computations are rather simple and can easily be done analytically. However, if one chooses a complex kernel, the analytical computation can become rather complicated and time-consuming. Therefore, we also implemented the kernel derivatives with help of autograd. Namely, we used the jax library for the automatic differentiation. The code for the autograd computation of the derivatives is shown in \ref{code:kernel_autograds}. The big advantage of this approach is that it is sufficient to do the calculations as done in~\ref{eq:kernel_analytical} and implement it as shown in the code. With this the choice of the general kernel $k_{uu}$ is only restricted within the jax library. This means that the kernel can be any function that is traceable by the jax autograd and jit functions. 
 \lstinputlisting[firstline=17,lastline=33,caption={Computation of the derivatives using autograd}, label={code:kernel_autograds}, breaklines = False]{../PI_GP_regressor/kernels/kernel_oscillator_3variables.py}
@@ -326,8 +326,8 @@ When comparing the accuracy and the speed of the two approaches there was no not
 
 
 \subsection{Log marginal likelihood and predictive distribution}
-A general problem of Gaussian processes is the numerical calculation of the inverse of the covariance matrix $\bm{K}$. This problem becomes increasingly apparent with a high number of training points. Especially in the training process the inverse of $\bm{K}$ has to be calculated several times. However, with the vectorized implementation, aswell as the use of just in time (jit) compiled functions from the jax library the computation time was not a major problem. Additionaly, the number of training points was held at a rather low number (highest number was 400 for the 3d wave equation). Still, the calculation of the inverse can be a source of numerical instabilities. To minimize numerical errors and to avoid a direct inversion of $\bm{K}$ the calculations involving the inverse were rewritten using the Cholesky decomposition. \\
-The Cholesky decomposition of a positive definite, symmetric matrix $\bm{A}$ is given by:
+A general problem of Gaussian processes is the numerical calculation of the inverse of the covariance matrix $\bm{K}$. This problem becomes increasingly apparent with a high number of training points. Especially in the training process the inverse of $\bm{K}$ has to be calculated several times. However, with the vectorized implementation, as well as the use of just in time (jit) compiled functions from the jax library the computation time was not a major problem. Additionally, the number of training points was held at a rather low number (highest number was 400 for the 3d wave equation). Still, the calculation of the inverse can be a source of numerical instabilities. To minimize numerical errors and to avoid a direct inversion of $\bm{K}$ the calculations involving the inverse were rewritten using the cholesky decomposition. \\
+The cholesky decomposition of a positive definite, symmetric matrix $\bm{A}$ is given by:
 \begin{equation}
     \bm{K} = \bm{L}\bm{L}^\intercal
 \end{equation}
@@ -336,7 +336,7 @@ with $\bm{L}$ being a lower triangular matrix \cite{RasmussenCarlEdward}. With t
     \label{eq:inv_K}
     \bm{u}^\intercal \bm{K}^{-1}\bm{v} = \bm{u}^\intercal (\bm{LL^{\intercal}})^{-1} \bm{v} = \bm{u}^\intercal \bm{L^{\intercal} \backslash (L\backslash v)}
 \end{equation}
-shown with two general vectors $\bm{u}$ and $\bm{v}$ and $\backslash$ as the left matrix divide operator. For this we used that we can rewrite $(\bm{LL^{\intercal}})^{-1} \bm{v}$ as a solution $\bm{x}$ of a linear system of the form $\bm{LL^{\intercal}} \bm{x}=\bm{v}$, which we now solve for $\bm{x}$. This is a very stabel and efficient way of calculating the equation. The implementation of the log marginal likelihood is shown in~\ref{code:mll}.\\
+shown with two general vectors $\bm{u}$ and $\bm{v}$ and $\backslash$ as the left matrix divide operator. For this we used that we can rewrite $(\bm{LL^{\intercal}})^{-1} \bm{v}$ as a solution $\bm{x}$ of a linear system of the form $\bm{LL^{\intercal}} \bm{x}=\bm{v}$, which we now solve for $\bm{x}$. This is a very stable and efficient way of calculating the equation. The implementation of the log marginal likelihood is shown in~\ref{code:mll}.\\
 \lstinputlisting[firstline=109,lastline=117,caption={Log marginal likelihood}, label={code:mll}]{../PI_GP_regressor/main_class.py}
 
 For the predictive distribution we again rewrote equation \ref{eq:predictive_mean_cov} as described in equation \ref{eq:inv_K}. The implementation of the predictive distribution is shown in~\ref{code:predictive_distribution}.\\
@@ -354,8 +354,8 @@ or NSolve (analytical solution) to compute the solution
 $\{(\bm{x});u(\bm{x}),f(\bm{x})\}$. The obtained solutions will be used as the ground truth.
 The training and validation points will be sampled from the solution domain $[\bm{x}_{\min}, \bm{x}_{\max}]$ using a sobol
 sequence[cite]. We will add some noise to the samples for the training and
-validation points, to analyse the impact onto the results and to simulate real
-world data. Furthermore, often the incoporation of a small noise improves stability in
+validation points, to analyze the impact onto the results and to simulate real
+world data. Furthermore, often the incorporation of a small noise improves stability in
 the optimization and prediction process. This will be done by creating two data
 sets $\{(\bm{x_u});\bm{y_u}\}$ and $\{(\bm{x_f});\bm{y_f}\}$ with $\bm{y_i} =
     u(\bm{x_i}) + \mathcal{N}(\bm{0}|\sigma_{ni}^2 I) ; \; i = u,f$. The
@@ -370,12 +370,12 @@ way of looking at the performance of the informed model we will compare it to a
 vanilla model with a general SE kernel, as described in~\ref{sec:Regression}.
 For this we will use the GPy library~\cite{gpy2014}. However, it is important
 to acknowledge that the vanilla model with the simple SE kernel only has two/three (for cases with time as a second dimension) hyperparameters, namely the length scale $l$ and the variance $\sigma_f^2$.
-Additionaly, the informed model takes advantage of the joint GP. This means
+Additionally, the informed model takes advantage of the joint GP. This means
 that the informed model has more parameters to optimize and additional
 information from the joint GP, and therefore it is not a fair comparison.
 However, it is still interesting to see how the informed model performs
 compared to the vanilla model and to have a general benchmark. To further
-investiage this we will give one exmaple with the same amount of
+investigate this we will give one example with the same amount of
 hyperparameters, namely the Poisson equation and compare the results of the two
 models.\\
 \subsection{Damped oscillator}
