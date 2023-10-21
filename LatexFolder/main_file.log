@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.10.5)  21 OCT 2023 18:45
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.10.5)  21 OCT 2023 19:01
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -531,12 +531,12 @@ Overfull \hbox (10.02016pt too wide) in paragraph at lines 28--29
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
-)
+) [7]
 Underfull \hbox (badness 10000) in paragraph at lines 338--340
 
  []
 
-[7] (../PI_GP_regressor/main_class.py)
+(../PI_GP_regressor/main_class.py)
 Underfull \hbox (badness 10000) in paragraph at lines 342--343
 
  []
@@ -558,7 +558,7 @@ File: ../final_examples/oscillator/merged_1d_plots.png Graphic file (type png)
 Package pdftex.def Info: ../final_examples/oscillator/merged_1d_plots.png  used on input line 393.
 (pdftex.def)             Requested size: 443.57848pt x 403.04488pt.
  [9] [10 <../final_examples/oscillator/merged_1d_plots.png>]
-<../final_examples/wave_equation/predictive_mean.png, id=311, 671.82191pt x 313.07364pt>
+<../final_examples/wave_equation/predictive_mean.png, id=310, 671.82191pt x 313.07364pt>
 File: ../final_examples/wave_equation/predictive_mean.png Graphic file (type png)
 <use ../final_examples/wave_equation/predictive_mean.png>
 Package pdftex.def Info: ../final_examples/wave_equation/predictive_mean.png  used on input line 437.
@@ -568,17 +568,18 @@ Underfull \hbox (badness 10000) in paragraph at lines 442--446
 
  []
 
-<../final_examples/poisson/merged_2d_plots.png, id=314, 662.9568pt x 786.0567pt>
+[11 <../final_examples/wave_equation/predictive_mean.png>]
+<../final_examples/poisson/merged_2d_plots.png, id=321, 662.9568pt x 786.0567pt>
 File: ../final_examples/poisson/merged_2d_plots.png Graphic file (type png)
 <use ../final_examples/poisson/merged_2d_plots.png>
 Package pdftex.def Info: ../final_examples/poisson/merged_2d_plots.png  used on input line 455.
 (pdftex.def)             Requested size: 443.57848pt x 525.9476pt.
-<../final_examples/poisson/GPy_mean_diff.png, id=315, 718.1229pt x 631.6398pt>
+<../final_examples/poisson/GPy_mean_diff.png, id=322, 718.1229pt x 631.6398pt>
 File: ../final_examples/poisson/GPy_mean_diff.png Graphic file (type png)
 <use ../final_examples/poisson/GPy_mean_diff.png>
 Package pdftex.def Info: ../final_examples/poisson/GPy_mean_diff.png  used on input line 461.
 (pdftex.def)             Requested size: 443.57848pt x 390.16693pt.
-<../final_examples/poisson/boundaries.png, id=317, 931.5603pt x 569.4876pt>
+<../final_examples/poisson/boundaries.png, id=324, 931.5603pt x 569.4876pt>
 File: ../final_examples/poisson/boundaries.png Graphic file (type png)
 <use ../final_examples/poisson/boundaries.png>
 Package pdftex.def Info: ../final_examples/poisson/boundaries.png  used on input line 468.
@@ -593,7 +594,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 450--473
 
  []
 
-[11 <../final_examples/wave_equation/predictive_mean.png>] (./main_file.bbl) [12] [13 <../final_examples/poisson/merged_2d_plots.png>] [14 <../final_examples/poisson/GPy_mean_diff.png>] [15 <../final_examples/poisson/boundaries.png>] (./main_file.aux)
+(./main_file.bbl [12] [13 <../final_examples/poisson/merged_2d_plots.png>] [14 <../final_examples/poisson/GPy_mean_diff.png>]) [15 <../final_examples/poisson/boundaries.png>] (./main_file.aux)
  ***********
 LaTeX2e <2023-06-01> patch level 1
 L3 programming layer <2023-08-29>
@@ -610,7 +611,7 @@ Here is how much of TeX's memory you used:
  1141 hyphenation exceptions out of 8191
  75i,14n,79p,1886b,2159s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbsy10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmbsy5.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmbsy7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib6.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib9.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/symbols/msam7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on main_file.pdf (15 pages, 3901749 bytes).
+Output written on main_file.pdf (15 pages, 3901911 bytes).
 PDF statistics:
  519 PDF objects out of 1000 (max. 8388607)
  423 compressed objects within 5 object streams
