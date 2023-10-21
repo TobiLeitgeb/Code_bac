@@ -57,20 +57,13 @@ def gram_Matrix(XT, YS, params, noise = [0,0]):
     X, T = XT[:,0].reshape(-1,1), XT[:,1].reshape(-1,1)
     Y, S = YS[:,0].reshape(-1,1), YS[:,1].reshape(-1,1)
 
-    #unfortunately we have to stack the data in a certain way to make the kernel work...
-    XX = jnp.hstack([X,T])
-    TT = jnp.hstack([X,T])
-    XY = jnp.hstack([X,T])
-    TS = jnp.hstack([Y,S])
-    YX = jnp.hstack([Y,S])
-    ST = jnp.hstack([X,T])
-    YY = jnp.hstack([Y,S])
-    SS = jnp.hstack([Y,S])
+    X_u = jnp.hstack([X,T])
+    X_f = jnp.hstack([Y,S])
     
-    k_uu_matrix = k_uu(XX, TT, params) + noise[0] * jnp.eye(len(X)) #xxtt --- we have to slice xt xt
-    k_uf_matrix = k_uf(XY, TS, params)                              #xyts 
-    k_fu_matrix = k_fu(YX, ST, params) 
-    k_ff_matrix = k_ff(YY, SS, params) + noise[1] * jnp.eye(len(Y))
+    k_uu_matrix = k_uu(X_u, X_u, params) + noise[0] * jnp.eye(len(X)) 
+    k_uf_matrix = k_uf(X_u, X_f, params)                              
+    k_fu_matrix = k_fu(X_f, X_u, params) 
+    k_ff_matrix = k_ff(X_f, X_f, params) + noise[1] * jnp.eye(len(Y))
     #combine all the matrices to the full gram matrix
     K = jnp.block([[k_uu_matrix, k_uf_matrix], [k_fu_matrix, k_ff_matrix]])
     return K

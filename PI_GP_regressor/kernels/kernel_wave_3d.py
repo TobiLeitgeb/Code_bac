@@ -84,7 +84,6 @@ def gram_Matrix(X, X_bar, params, noise = [0,0]):
     X, Y, T = X[:,0].reshape(-1,1), X[:,1].reshape(-1,1), X[:,2].reshape(-1,1)
     X_bar, Y_bar, T_bar = X_bar[:,0].reshape(-1,1), X_bar[:,1].reshape(-1,1), X_bar[:,2].reshape(-1,1)
 
-    #unfortunately we have to stack the data in a certain way to make the kernel work...
     X_u = jnp.hstack([X,Y,T])
     X_f = jnp.hstack([X_bar,Y_bar,T_bar])
     
