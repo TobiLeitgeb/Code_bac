@@ -418,20 +418,34 @@ To benchmark the performance further we looked at cases with different number of
 The one dimensional time dependent heat equation with a forcing term is:
 \begin{equation}
     \begin{aligned}
-        \frac{\partial u(x,t)}{\partial t} - \alpha \frac{\partial^2 u(x,t)}{\partial x^2} = f(x,t) \\ u[0,x] =\\ u(t,0) = ; u(t,L) =
+        \frac{\partial u(x,t)}{\partial t} - \alpha \frac{\partial^2 u(x,t)}{\partial x^2} = f(x,t) \\ u[0,x] =\\ u(t,0) = 0; u(t,L) = 0
     \end{aligned}
 \end{equation}
 with $\alpha$ as the thermal diffusivity.
-
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{../final_examples/wave_equation/training_points.png}
+    \caption{Plot of the positions of the training points in the 3d domain of the wave equation example, with $n_t$ = 400. }
+    ~\label{fig:training_points_wave}
+\end{figure}
 
 \subsection{Wave Equation}
 For the third example we will look at the two-dimensional time dependent wave equation. The wave equation is a hyperbolic partial differential equation that describes the propagation of waves of various types. In our case we can think of a membrane that is fixed at all ends of a square. The wave equation is given by:
 \begin{equation}
     \begin{aligned}
-        \frac{1}{c^2} \frac{\partial^2 u(x,y,t)}{\partial t^2} - (\frac{\partial^2}{\partial x^2} +\frac{\partial^2}{\partial y^2})u(x,y,t) = f(x,y,t) \\ u[0,x] =\\ u(t,0) = ; u(t,L) =
+        \frac{1}{c^2} \frac{\partial^2 u(x,y,t)}{\partial t^2} - (\frac{\partial^2}{\partial x^2} +\frac{\partial^2}{\partial y^2})u(x,y,t) = f(x,y,t) \\ u[0,x] =\\ u(t,0) = 0; u(t,L) = 0
     \end{aligned}
 \end{equation}
-with $c$ as the wave speed. The ground truth was calculated with $c = 3$ and with $f(x,t) = $. With the increase in dimension we also need significantly more training points to account for the bigger domain. Especially with functions that change a lot over time    We used 20 training points for both $u$ and $f$. The training data was sampled from the domain $x \in [0,2]$ and $t \in [0,4]$. The noise was set to $\sigma_{nu} = 10^{-4}$ and $\sigma_{nf} = 10^{-4}$, which can be considered as nearly noise free. The hyperparameters ($l_x$, $l_t$,$\sigma_f$, $c$) were optimized to be $(1,1,1)$. 
+with $c$ as the wave speed. With the increase in dimensions we also need significantly more training points to account for the bigger domain. Especially with functions that change a lot over time. Before in the 2d case, 20 training points were sufficient to achieve good predictions. However, in for this example between 300 - 400 training points were needed to get reasonable predictions. This makes sense, because when we use 20 points for a 2d domain and we want the same number for a 3rd domain we need $20\cdot 20$ points. 
+The ground truth was calculated with $c = 3$ and with $f(x,t) = $.    We used 20 training points for both $u$ and $f$. The training data was sampled from the domain $x \in [0,2]$ and $t \in [0,4]$. The noise was set to $\sigma_{nu} = 10^{-4}$ and $\sigma_{nf} = 10^{-4}$, which can be considered as nearly noise free. The hyperparameters ($l_x$,$\sigma_f$,$l_t$, $c$) were optimized to be $(1,1,1)$. 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{../final_examples/wave_equation/training_points.png}
+    \caption{Plot of the positions of the training points in the 3d domain of the wave equation example, with $n_t$ = 400. }
+    ~\label{fig:training_points_wave}
+\end{figure}
+
 \begin{figure}
     \centering
     \includegraphics[width=1\textwidth]{../final_examples/wave_equation/predictive_mean.png}
