@@ -527,7 +527,7 @@ class PhysicsInformedGP_regressor():
             ax[0].plot(x_star, self.mean_u, 'b', label='Prediction')
             ax[0].fill_between(x_star.flatten(), self.mean_u.flatten() + 2 * np.sqrt(self.var_u.flatten()),
                                self.mean_u.flatten() - 2 * np.sqrt(self.var_u.flatten()), alpha=0.2, color='blue', label="95% confidence interval")
-            ax[0].plot(self.raw_data[0], self.raw_data[1],"--", label="Analytical solution")
+            ax[0].plot(self.raw_data[0], self.raw_data[1],"--", label="Analytical solution",color="black")
             ax[0].legend(loc='upper right', fontsize=10)
             ax[0].set_xlabel("t")
             ax[0].set_ylabel("u(t)")
@@ -541,7 +541,7 @@ class PhysicsInformedGP_regressor():
             ax[1].plot(x_star, self.mean_f, 'b', label='Prediction')
             ax[1].fill_between(x_star.flatten(), self.mean_f.flatten() - 2 * np.sqrt(self.var_f.flatten()),
                                self.mean_f.flatten() + 2 * np.sqrt(self.var_f.flatten()), alpha=0.2, color='blue', label="95% confidence interval")
-            ax[1].plot(self.raw_data[0], self.raw_data[2],"--", label="Analytical solution")
+            ax[1].plot(self.raw_data[0], self.raw_data[2],"--", label="Analytical solution",color ="black")
             ax[1].legend(loc='upper right', fontsize=10)
             ax[1].set_xlabel("t")
             ax[1].set_ylabel("f(t)")
