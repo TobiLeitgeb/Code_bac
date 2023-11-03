@@ -191,7 +191,7 @@ A useful property of Gaussian Processes is that their linear transformation is
 still a Gaussian Process. This main
 
 \section{Physics informed framework}
-We choose our problem setup similar/eual to the one proposed in~\cite{RAISSI}. At the top we 
+We choose our problem setup similar/equal to the one proposed in~\cite{RAISSI}. At the top we 
 have some sort of linear differential equation of a physical model:
 \begin{equation}
     \label{eq:Lu=f}
@@ -269,7 +269,7 @@ Arguably the most important part of the overall framework is the optimization of
     \log p(\bm{y}|\bm{X},\bm{\theta},\sigma_{n_u}^2,\sigma_{f_u}^2,\bm{\phi}) =
     -\frac{1}{2}\bm{y}^\intercal \bm{K}^{-1}\bm{y} - \frac{1}{2}\log\left\lvert \bm{K}\right\rvert - \frac{n}{2}\log(2\pi)
 \end{equation}
-with $\bm{K}$ being the covariance matrix of the joint GP in equation~\ref{eq:jointGP_observations}. For the optimization we tried different gradient based optimizers, as well as a heuristic search method, namely the Nelder-Mead method. All the optimizers used came from the scipy.optimize.minimize function from the scipy library. We tried several gradient based optimizers like the limited memory Broyden-Fletcher-Goldfarb-Shanno (L-BFGS-B) algorithm, the conjugate gradient (CG) algorithm and the truncated Newton (TNC) algorithm. The best results were however obtained by using the Nelder-Mead~\cite{Singer:2009NelderMead}. From the gradient based methods the TNC performed the best and was most of the time nearly as good as the Nelder-Mead. However, the TNC was significantly slower and needed more restarts than the Nelder-Mead. Especially with an increasing number of training points the gradient based optimizers failed completly and the Nelder-Mead method was the only one that still worked. This could be because the Nelder Mead algorithm does not use any gradient information and that for more training points the calculation of the gradients of the mll gets unstable. Generally, it is important to add some jitter to the diagonal of $\bm{K}$ to minimize the risk of numerical instabilities when calculating the Cholesky decomposition of $\bm{K}$. Also, without jitter a significant part of the optimization landscape is not defined, because of the  gram matrix $\bm{K}$ not beeing positive definite for some hyperparameter values. The best results were obtained when using a jitter in the range of $10^{-6} to 10^{-7}$. More about the specific implementation will be talked about in the next chapter.\\
+with $\bm{K}$ being the covariance matrix of the joint GP in equation~\ref{eq:jointGP_observations}. For the optimization we tried different gradient based optimizers, as well as a heuristic search method, namely the Nelder-Mead method. All the optimizers used came from the scipy.optimize.minimize function from the scipy library. We tried several gradient based optimizers like the limited memory Broyden-Fletcher-Goldfarb-Shanno (L-BFGS-B) algorithm, the conjugate gradient (CG) algorithm and the truncated Newton (TNC) algorithm. The best results were however obtained by using the Nelder-Mead~\cite{Singer:2009NelderMead}. From the gradient based methods the TNC performed the best and was most of the time nearly as good as the Nelder-Mead. However, the TNC was significantly slower and needed more restarts than the Nelder-Mead. Especially with an increasing number of training points the gradient based optimizers failed completly and the Nelder-Mead method was the only one that still worked. This could be because the Nelder Mead algorithm does not use any gradient information and that for more training points the calculation of the gradients of the mll gets unstable. Generally, it is important to add some jitter to the diagonal of $\bm{K}$ to minimize the risk of numerical instabilities when calculating the Cholesky decomposition of $\bm{K}$. Also, without jitter a significant part of the optimization landscape is not defined, because of the  gram matrix $\bm{K}$ not being positive definite for some hyperparameter values. The best results were obtained when using a jitter in the range of $10^{-6} to 10^{-7}$. More about the specific implementation will be talked about in the next chapter.\\
 \\
 A common problem in the optimization process of non-convex function is the problem of converging to a local minimum. To avoid this problem we started the optimization process for different initial values of the hperparameters. The initial values were sampled from uniform distributions, only the length scale hyperparameters $l$ were sampled from a log uniform distribution because of it being a scale parameter. Because of the random initialization, and the presumably high number of local minima in the optimization landscape, the results for the hyperparameters varied. However, for a sufficient number of optimization runs the results normally reached a similar accuracy and similar hyperparamter values.\\
 \\
@@ -318,7 +318,7 @@ For constructing and deriving the kernel as described in equations \ref{eq:kff} 
 \end{aligned}
 \label{eq:kernel_analytical}
 \end{equation}
- with $k_{uu} = \sigma_f^2  \exp\left({-\frac{0.5}{l^2} {(t-t')}^2}\right)$ beeing the general SE kernel introduced in section \ref{subsec: Kernels}. Note that this can be done with any other kernel as well. The analytical computation is shown in~\ref{code:kernel_analytical}.\\
+ with $k_{uu} = \sigma_f^2  \exp\left({-\frac{0.5}{l^2} {(t-t')}^2}\right)$ being the general SE kernel introduced in section \ref{subsec: Kernels}. Note that this can be done with any other kernel as well. The analytical computation is shown in~\ref{code:kernel_analytical}.\\
 \lstinputlisting[firstline=99,lastline=115,caption={Analytical computation of the derivatives}, label={code:kernel_analytical}, breaklines = False]{../PI_GP_regressor/kernels/kernel_oscillator_3variables.py}
 For the SE kernel the computations are rather simple and can easily be done analytically. However, if one chooses a complex kernel, the analytical computation can become rather complicated and time-consuming. Therefore, we also implemented the kernel derivatives with help of autograd. Namely, we used the jax library for the automatic differentiation. The code for the autograd computation of the derivatives is shown in \ref{code:kernel_autograds}. The big advantage of this approach is that it is sufficient to do the calculations as done in~\ref{eq:kernel_analytical} and implement it as shown in the code. With this the choice of the general kernel $k_{uu}$ is only restricted within the jax library. This means that the kernel can be any function that is traceable by the jax autograd and jit functions. 
 \lstinputlisting[firstline=17,lastline=33,caption={Computation of the derivatives using autograd}, label={code:kernel_autograds}, breaklines = False]{../PI_GP_regressor/kernels/kernel_oscillator_3variables.py}
@@ -424,8 +424,8 @@ The one dimensional time dependent heat equation with a forcing term is:
 with $\alpha$ as the thermal diffusivity.
 \begin{figure}
     \centering
-    \includegraphics[width=0.7\textwidth]{../final_examples/wave_equation/training_points.png}
-    \caption{Plot of the positions of the training points in the 3d domain of the wave equation example, with $n_t$ = 400. }
+    \includegraphics[width=0.7\textwidth]{../final_examples/heat_equation/merged_plots.png}
+    \caption{}
     ~\label{fig:training_points_wave}
 \end{figure}
 
