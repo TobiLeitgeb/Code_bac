@@ -9,6 +9,7 @@ from joblib import Parallel, delayed
 from scipy.optimize import minimize
 import pandas as pd
 from scipy.stats import qmc
+from jax import scipy as jsp
 jax.config.update('jax_platform_name', 'cpu')
 
 
@@ -31,6 +32,7 @@ class PhysicsInformedGP_regressor():
         self.ARD = ARD
         self.jitter = 1e-7
         self.D = Dimensions
+        
 
     def __str__(self) -> str:
         string = "-----------------------------------------------\n"
@@ -59,7 +61,7 @@ class PhysicsInformedGP_regressor():
         """sets the training data and the raw data"""
         if self.timedependence and self.D == 2:
             x_u, x_f, t_u, t_f, u_train, f_train, self.raw_data = self.get_data_set_2d(
-                filename, n_training_points, noise)
+                filename, n_training_points, noise, seeds_training)
             self.X = np.hstack([x_u, t_u])
             self.Y = np.hstack([x_f, t_f])
             self.targets = np.concatenate([u_train, f_train])
@@ -110,7 +112,6 @@ class PhysicsInformedGP_regressor():
         """computes the log marginal likelihood of the GP"""
         K = self.gram_matrix(self.X, self.Y, params, self.noise)
         L = jnp.linalg.cholesky(K + self.jitter * jnp.eye(len(K)))
-
         alpha = jnp.linalg.solve(L.T, jnp.linalg.solve(L, self.targets))
         mll = 1/2 * jnp.dot(self.targets.T, alpha) + 0.5*jnp.sum(
             jnp.log(jnp.diagonal(L))) + len(self.X)/2 * jnp.log(2*jnp.pi)
@@ -278,7 +279,7 @@ class PhysicsInformedGP_regressor():
 
         K = self.gram_matrix(self.X, self.Y, params, self.noise)
         L = jnp.linalg.cholesky(K + jnp.eye(len(K)) * self.jitter)
-
+        
         q_1 = self.k_fu(X_star, self.X, params)
         q_2 = self.k_ff(X_star, self.Y, params) 
         kappa = jnp.hstack((q_1, q_2))
@@ -887,7 +888,7 @@ class PhysicsInformedGP_regressor():
         return [t_val_u, u_val_u, t_val_f, f_val_f]
 
     @staticmethod
-    def get_data_set_2d(filename, n_training_points, noise: list):
+    def get_data_set_2d(filename, n_training_points, noise: list,seeds):
         # load data from mathematica calculation
         try:
             df = pd.read_csv(filename)
@@ -909,7 +910,7 @@ class PhysicsInformedGP_regressor():
 
         d = 2  # number of dimensions in your Sobol sequence. You have a 2D grid, so d=2
         # training data for u(t,x)
-        engine = qmc.Sobol(d, seed=77)
+        engine = qmc.Sobol(d, seed=seeds[0])
         sample = engine.random(n_training_points)
         # sample is in [0,1]^d, so we need to scale it to the range of x and t
         indices = sample * np.array([len(x_axis), len(t_axis)])
@@ -921,7 +922,7 @@ class PhysicsInformedGP_regressor():
                 0, np.sqrt(noise[0]), u_grid[indices[:, 1], indices[:, 0]].shape)
 
         # same thing for f(t,x)
-        engine = qmc.Sobol(d, seed=10)
+        engine = qmc.Sobol(d, seed=seeds[1])
         sample = engine.random(n_training_points)
         indices = sample * np.array([len(x_axis), len(t_axis)])
         indices = np.floor(indices).astype(int)
