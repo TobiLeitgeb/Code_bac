@@ -120,10 +120,10 @@ def gram_Matrix(X, Y, params, noise = [0,0]):
     params = [l_x, sigma_f_sq, l_t, alpha]
     noise = [noise_u, noise_f]
     """
-    k_uu_matrix = k_uu(X, X, params) + noise[0]**2 * jnp.eye(len(X))
+    k_uu_matrix = k_uu(X, X, params) + noise[0] * jnp.eye(len(X))
     k_uf_matrix = k_uf(X, Y, params)
     k_fu_matrix = k_uf_matrix.T
-    k_ff_matrix = k_ff(Y, Y, params) + noise[1]**2 * jnp.eye(len(Y))
+    k_ff_matrix = k_ff(Y, Y, params) + noise[1] * jnp.eye(len(Y))
     #combine all the matrices to the full gram matrix
     K = jnp.block([[k_uu_matrix, k_uf_matrix], [k_fu_matrix, k_ff_matrix]])
     return K
