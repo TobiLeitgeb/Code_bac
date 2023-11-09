@@ -186,6 +186,8 @@ $nmll$
 \end{equation}
 with $K_y$ = $K_f + \sigma_n^2 \bm{I}$. As described in~\cite{RasmussenCarlEdward}, the $mll$ consists of three parts, which can each be understood separately. The first term $\frac{1}{2}\bm{y}^\intercal \bm{K_y}^{-1}\bm{y}$ is in charge of the data fit, the second term $\log\left\lvert K_y\right\rvert$ is the complexity penalty and the last term is a normalization term.
 
+\subsection{Joint GPs}
+
 \subsection{Linear operators and GPs}
 A useful property of Gaussian Processes is that their linear transformation is
 still a Gaussian Process. This main
@@ -197,7 +199,12 @@ have some sort of linear differential equation of a physical model:
     \label{eq:Lu=f}
     \mathcal{L}_{\bm{x}}^\phi u(\bm{x}) = f(\bm{x})
 \end{equation}
-which can be written as a linear operator $\mathcal{L}_{\bm{x}}^\phi$ acting on the function $u(\bm{x})$. $\mathcal{L}_{\bm{x}}^\phi$ is a differential operator that resembles the differential equation with $\phi$ being a list containing the a-priori unknown parameters which also define the differential equation. The function $f(\bm{x})$ acts as the forcing term and $u(\bm{x})$ is the solution of the differential equation.  \\
+which can be written as a linear operator $\mathcal{L}_{\bm{x}}^\phi$ acting on the function $u(\bm{x})$. $\mathcal{L}_{\bm{x}}^\phi$ is a differential operator that resembles the differential equation with $\phi$ being a list containing the a-priori unknown parameters which also define the differential equation. In this work we restrict ourselves to $\mathcal{L}_{\bm{x}}^\phi$ in a form:
+\begin{align}
+\mathcal{L}_{\bm{x}}^\phi = \sum_{i,j} \alpha_{i,j} \frac{\partial^2 }{\partial x_i \partial x_j} + \sum_{i} \beta_i \frac{\partial}{\partial x_i} + \gamma u(\bm{x})
+\end{align}
+
+The function $f(\bm{x})$ acts as the forcing term and $u(\bm{x})$ is the solution of the differential equation.  \\
 \\
 We now start by assuming that the solution of the differential equation $u(\bm{x})$ is a Gaussian Process of the form:
 \begin{equation}
@@ -319,7 +326,7 @@ For constructing and deriving the kernel as described in equations \ref{eq:kff} 
 \label{eq:kernel_analytical}
 \end{equation}
  with $k_{uu} = \sigma_f^2  \exp\left({-\frac{0.5}{l^2} {(t-t')}^2}\right)$ being the general SE kernel introduced in section \ref{subsec: Kernels}. Note that this can be done with any other kernel as well. The analytical computation is shown in~\ref{code:kernel_analytical}.\\
-\lstinputlisting[firstline=99,lastline=115,caption={Analytical computation of the derivatives}, label={code:kernel_analytical}, breaklines = False]{../PI_GP_regressor/kernels/kernel_oscillator_3variables.py}
+\lstinputlisting[firstline=97,lastline=113,caption={Analytical computation of the derivatives}, label={code:kernel_analytical}, breaklines = False]{../PI_GP_regressor/kernels/kernel_oscillator_3variables.py}
 For the SE kernel the computations are rather simple and can easily be done analytically. However, if one chooses a complex kernel, the analytical computation can become rather complicated and time-consuming. Therefore, we also implemented the kernel derivatives with help of autograd. Namely, we used the jax library for the automatic differentiation. The code for the autograd computation of the derivatives is shown in \ref{code:kernel_autograds}. The big advantage of this approach is that it is sufficient to do the calculations as done in~\ref{eq:kernel_analytical} and implement it as shown in the code. With this the choice of the general kernel $k_{uu}$ is only restricted within the jax library. This means that the kernel can be any function that is traceable by the jax autograd and jit functions. 
 \lstinputlisting[firstline=17,lastline=33,caption={Computation of the derivatives using autograd}, label={code:kernel_autograds}, breaklines = False]{../PI_GP_regressor/kernels/kernel_oscillator_3variables.py}
 When comparing the accuracy and the speed of the two approaches there was no notable difference. In particular, the two functions were nearly identical in terms of computation time. For the majority of the examples we used the analytical approach, because it is more transparent and easier to verify.
@@ -337,10 +344,10 @@ with $\bm{L}$ being a lower triangular matrix \cite{RasmussenCarlEdward}. With t
     \bm{u}^\intercal \bm{K}^{-1}\bm{v} = \bm{u}^\intercal (\bm{LL^{\intercal}})^{-1} \bm{v} = \bm{u}^\intercal \bm{L^{\intercal} \backslash (L\backslash v)}
 \end{equation}
 shown with two general vectors $\bm{u}$ and $\bm{v}$ and $\backslash$ as the left matrix divide operator. For this we used that we can rewrite $(\bm{LL^{\intercal}})^{-1} \bm{v}$ as a solution $\bm{x}$ of a linear system of the form $\bm{LL^{\intercal}} \bm{x}=\bm{v}$, which we now solve for $\bm{x}$. This is a very stable and efficient way of calculating the equation. The implementation of the log marginal likelihood is shown in~\ref{code:mll}.\\
-\lstinputlisting[firstline=109,lastline=117,caption={Log marginal likelihood}, label={code:mll}]{../PI_GP_regressor/main_class.py}
+\lstinputlisting[firstline=111,lastline=119,caption={Log marginal likelihood}, label={code:mll}]{../PI_GP_regressor/main_class.py}
 
 For the predictive distribution we again rewrote equation \ref{eq:predictive_mean_cov} as described in equation \ref{eq:inv_K}. The implementation of the predictive distribution is shown in~\ref{code:predictive_distribution}.\\
-\lstinputlisting[firstline=247,lastline=263,caption={Predictive distribution}, label={code:predictive_distribution}]{../PI_GP_regressor/main_class.py}
+\lstinputlisting[firstline=257,lastline=273,caption={Predictive distribution}, label={code:predictive_distribution}]{../PI_GP_regressor/main_class.py}
 
 \section{Results}
 In the following we will call the physics informed model, which is used here, the
@@ -380,47 +387,55 @@ hyperparameters, namely the Poisson equation and compare the results of the two
 models.\\
 \subsection{Damped oscillator}
 As a first example we will look at a one dimensional differential equation of a
-damped oscillator with mass $m$, damping $\gamma$ and force constant $k$. The
+damped oscillator with mass $m$, damping $\gamma$, force constant $k$ and initial conditions. The
 differential equation is given by:
 \begin{equation}
     \begin{aligned}
         m\frac{\partial^2 u(t)}{\partial t^2} + \gamma \frac{\partial u(t)}{\partial t} + k u(t) = f(t) \\ u(0) = 0, \; \frac{\partial u(t)}{\partial t} = 0
     \end{aligned}
 \end{equation}
-The first data set was generated with $m = 1, \gamma = 2, k = 2$ and a simple sinusoidal forcing term $f(t) = 4 \sin(2\pi t)$. For the added noise we used $\sigma_{nu} = 10^{-4}$ and $\sigma_{nf} = 10^{-4}$ which can be seen as noise free data. We calculated the result in the time interval $t \in [0,3]$ from with we sample the training points. The model learns the hyperparameters $\bm{\theta}$ $(l,\sigma_f,m,\gamma,k)$ to be $(0.4890, 0.5860, 0.9989, 1.9925, 1.9987)$. These results are very accurate considering we are only using 9 training points for a model with 5 hyperparameters. As elaborated before, the exact value of the final values after optimizing varies in a small range. The predictive distribution for the general solution $u(t)$ and the forcing term $f(t)$ can be seen in figure~\ref{fig:damped_oscillator}. Looking at the results for the informed model we can see that the prediction for $u(t)$ and for $f(t)$ are very precise. The posterior mean overlines with the validation points and the uncertanty band is so small that is not even visible. The mean squared error of $u(t)$ and $f(t)$ are $MSE_u = 1.419 \cdot 10^{-7}$ and $MSE_f = 4.609 \cdot 10^{-3}$. The predictive mean of the vanilla model can also be seen in figure~\ref{fig:damped_oscillator}. The MSEs for the vanilla model are $MSE_{u,va} = 5.469 \cdot 10^{-4}$ and $MSE_{f,va} = 2.692$. The MSE for the vanilla model is 3 to 4 orders of magnitude higher than the MSE of the informed model which gets very clear when looking at figure~\ref{fig:damped_oscillator}. The predictions from the vanilla model are not very precise with large uncertainties. This is also reflected in the MSEs. The informed model even manages to accurately predict in areas away from any training points, as well as at the edges of the domain.
+The ground truth was generated with $m = 1, \gamma = 2, k = 2$ and a simple sinusoidal forcing term $f(t) = 4 \sin(2\pi t)$. For the added noise we used $\sigma_{nu} = 10^{-8}$ and $\sigma_{nf} = 10^{-8}$ which can be seen as noise free data. We calculated the result in the time interval $t \in [0,3]$ from witch we sample the training points. The model learns the hyperparameters $\bm{\theta}$ $(l,\sigma_f,m,\gamma,k)$ to be $(0.4890, 0.5860, 0.9989, 1.9925, 1.9987)$. These results are very accurate considering we are only using 9 training points for a model with 5 hyperparameters. As elaborated before, the exact value of the final values after optimizing varies in a small range. The predictive distribution for the general solution $u(t)$ and the forcing term $f(t)$ can be seen in figure~\ref{fig:damped_oscillator}. Looking at the results for the informed model we can see that the prediction for $u(t)$ and for $f(t)$ are very precise. The posterior mean overlines with the validation points and the uncertainty band is so small that is not even visible. The relative $L^2$ errors of $u(t)$ and $f(t)$ are $L^2_u = 1.419 \cdot 10^{-7}$ and $L^2_f = 4.609 \cdot 10^{-3}$. The predictive mean of the vanilla model can also be seen in figure~\ref{fig:damped_oscillator}. The MSEs for the vanilla model are $L^2_{u,va} = 5.469 \cdot 10^{-4}$ and $L^2_{f,va} = 2.692$. The $L^2$ for the vanilla model is 3 to 4 orders of magnitude higher than the error of the informed model which gets very clear when looking at figure~\ref{fig:damped_oscillator}. The predictions from the vanilla model are not very precise with large uncertainties. %The informed model even manages to accurately predict in areas away from any training points, as well as at the edges of the domain.
 \begin{figure}[htbp!]
     \centering
     \includegraphics[width=1\textwidth]{../final_examples/oscillator/merged_1d_plots.png}
-    \caption{(a) \& (b) predictive mean $\mu_u$ and $\mu_f$ for the informed model, two $\sigma$ uncertanty band, training and validation points sampled from $\{\bm{x_u},u(\bm{y_u})\}$ and $\{\bm{x_f},u(\bm{y_f})\}$ respectivly.\ (c) \& (d) predictive mean $\mu_u$ and $\mu_f$ for the vanilla model, two $\sigma$ uncertanty band, training and validation points sampled from $\{\bm{x_u},u(\bm{y_u})\}$ and $\{\bm{x_f},u(\bm{y_f})\}$ respectivly. The noise $\sigma_{nu}$ and $\sigma_{nf}$ were both set to $10^{-8}$. The MSEs of the informed model are $MSE_u = 1.419 \cdot 10^{-7}$ and $MSE_f = 4.609 \cdot 10^{-3}$. The MSEs for the vanilla model are $MSE_{u,va} = 5.469 \cdot 10^{-4}$ and $MSE_{f,va} = 2.692$.}
+    \caption{(a) \& (b) predictive mean $\mu_u$ and $\mu_f$ for the informed model, two $\sigma$ uncertainty band, training and validation points sampled from $\{\bm{x_u},u(\bm{y_u})\}$ and $\{\bm{x_f},u(\bm{y_f})\}$ respectively.\ (c) \& (d) predictive mean $\mu_u$ and $\mu_f$ for the vanilla model, two $\sigma$ uncertainty band, training and validation points sampled from $\{\bm{x_u},u(\bm{y_u})\}$ and $\{\bm{x_f},u(\bm{y_f})\}$ respectively. The noise $\sigma_{nu}$ and $\sigma_{nf}$ were both set to $10^{-8}$. The errors of the informed model are $L^2_u = $ and $L^2_f =$ and of the vanilla model $L^2_{u,va} = $ and $L^2_{f,va} =$.}
     ~\label{fig:damped_oscillator}
 \end{figure}
 \\
-To investiagete the impact of noise we will look at the same example as before, but with added noise. We will use $\sigma_{nu} = $ and $\sigma_{nf}$. This is a significant amount of noise, but the model still manages to predict the hyperparameters reasonably well as $(0.980,1.713,0.959)$. The predictive mean for both $u(t)$ and $f(t)$ are shown in figure \ref
+To investigate the impact of noise we will look at the same example as before, but with added noise. We will use $\sigma_{nu} = 0.0001$ and $\sigma_{nf} = 0.1$. This is a notable amount of noise, but the model still manages to predict the hyperparameters reasonably well as $(0.980,1.713,0.959)$. The predictive mean for both $u(t)$ and $f(t)$ are shown in figure \ref{fig:damped_oscillator_with_noise}.
 
 \begin{figure}[htbp!]
     \centering
-    \includegraphics[width=1\textwidth]{../final_examples/oscillator/oscillator}
-    \caption{(a) \& (b) predictive mean $\mu_u$ and $\mu_f$ for the informed model, two $\sigma$ uncertanty band, training and validation points sampled from $\{\bm{x_u},u(\bm{y_u})\}$ and $\{\bm{x_f},u(\bm{y_f})\}$ respectivly.\ (c) \& (d) predictive mean $\mu_u$ and $\mu_f$ for the vanilla model, two $\sigma$ uncertanty band, training and validation points sampled from $\{\bm{x_u},u(\bm{y_u})\}$ and $\{\bm{x_f},u(\bm{y_f})\}$ respectivly. The noise $\sigma_{nu}$ and $\sigma_{nf}$ were both set to $10^{-8}$. The MSEs of the informed model are $MSE_u = 1.419 \cdot 10^{-7}$ and $MSE_f = 4.609 \cdot 10^{-3}$. The MSEs for the vanilla model are $MSE_{u,va} = 5.469 \cdot 10^{-4}$ and $MSE_{f,va} = 2.692$.}
-    ~\label{fig:damped_oscillator}
+    \includegraphics[width=1\textwidth]{../final_examples/oscillator/oscillator_noise.png}
+    \caption{(a) \& (b) predictive mean $\mu_u$ and $\mu_f$ for the informed model, two $\sigma$ uncertainty band, training and validation points sampled from $\{\bm{x_u},u(\bm{y_u})\}$ and $\{\bm{x_f},u(\bm{y_f})\}$ respectively.\ The noise was set to $\sigma_{nu}^2 = 0.0001$  $\sigma_{nf}^2 = 0.1$. The errors of the predictions are $L^2_u = 0.0785 $ and $L^2_f = $}
+    ~\label{fig:damped_oscillator_with_noise}
 \end{figure}
-To benchmark the performance further we looked at cases with different number of training points. The results can be seen in table~\ref{tab:variing_n_trainingpoints}.
-\begin{table}[htbp!]
-    \caption{MSEs for the informed model with different number of training points $n$. The used noise was $\sigma_{nu} = $ and $\sigma_{nf}$.}
+To benchmark the performance further we compared the accuracy of the prediction and of the parameters for several different amounts of training points. We looked at $n_{train}$ = $\left[3,4,5,6,7,8,10,15\right]$, with again $\sigma^2_u = \sigma^2_f = 10^{-8}$ and compared the $L^2$ error and the values of the PDE hyperparameters. 
+\begin{figure}[htbp!]
     \centering
-    \begin{tabular}{ccccc}
-        \toprule
-        $n$     & 5 & 10 & 20 & 50 \\
-        \midrule
-        $mll$ &   3.722&  -10.049  &   -53.227 &  -32.808 \\
-        $L^2_u$& & & & \\
-        $L^2_f$ & & & & \\
-        $MSE_u$ & 5.583 $\cdot 10^{-3}$  &  1.070 $\cdot 10^{-7}$  &  2.463 $\cdot 10^{-8}$  &   4.022 $\cdot 10^{-8}$ \\
-        $MSE_f$ &  4.974 & 2.347 $\cdot 10^{-3}$  & 1.076 $\cdot 10^{-3}$ &  0.105 \\
-        \bottomrule
-    \end{tabular}
+    \includegraphics[width=1\textwidth]{../final_examples/oscillator/oscillator_noise.png}
+    \caption{}
+    ~\label{fig:damped_oscillator_with_noise}
+\end{figure}
+% To benchmark the performance further we looked at cases with different number of training points. The results can be seen in table~\ref{tab:variing_n_trainingpoints}.
+% \begin{table}[htbp!]
+%     \caption{MSEs for the informed model with different number of training points $n$. The used noise was $\sigma_{nu} = $ and $\sigma_{nf}$.}
+%     \centering
+%     \begin{tabular}{ccccc}
+%         \toprule
+%         $n$     & 5 & 10 & 20 & 50 \\
+%         \midrule
+%         $mll$ &   3.722&  -10.049  &   -53.227 &  -32.808 \\
+%         $L^2_u$& & & & \\
+%         $L^2_f$ & & & & \\
+%         $MSE_u$ & 5.583 $\cdot 10^{-3}$  &  1.070 $\cdot 10^{-7}$  &  2.463 $\cdot 10^{-8}$  &   4.022 $\cdot 10^{-8}$ \\
+%         $MSE_f$ &  4.974 & 2.347 $\cdot 10^{-3}$  & 1.076 $\cdot 10^{-3}$ &  0.105 \\
+%         \bottomrule
+%     \end{tabular}
     
-    \label{tab:variing_n_trainingpoints}
-\end{table}
+%     \label{tab:variing_n_trainingpoints}
+% \end{table}
+
 \subsection{Heat Equation}
 The one dimensional time dependent heat equation with a forcing term is:
 \begin{equation}
