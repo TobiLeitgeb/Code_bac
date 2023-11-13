@@ -337,7 +337,7 @@ class PhysicsInformedGP_regressor():
             # MSE error
             t_val, u_val = self.validation_set[0], self.validation_set[1]
             mean, var = model_GPy.predict(t_val.reshape(-1, 1))
-            MSE_u = np.mean((mean.ravel() - u_val.ravel())**2).item()
+            L2_u = self.relative_l2_error(u_val.ravel(), mean.ravel())
             self.rel_l2_error["u"] = self.relative_l2_error(
                 u_val.ravel(), mean.ravel())
             fig, ax = plt.subplots(1, 2, figsize=(12, 6))
@@ -363,7 +363,7 @@ class PhysicsInformedGP_regressor():
             t_val, f_val = self.validation_set[2], self.validation_set[3]
             mean,var = model_GPy2.predict(t_val.reshape(-1,1))
             y_data, var = model_GPy2.predict(X_star)
-            MSE_f = np.mean((mean.ravel() - f_val.ravel())**2).item()
+            L2_f = self.relative_l2_error(f_val.ravel(), mean.ravel())
             self.rel_l2_error["f"] = self.relative_l2_error(
                 f_val.ravel(), mean.ravel())
             ax[1].plot(X_star, y_data, label="GP prediction", color="blue")
@@ -381,8 +381,8 @@ class PhysicsInformedGP_regressor():
             if save_path != None:
                 plt.savefig(save_path)
             print("---------GPY--------")
-            print("MSE u: ", MSE_u)
-            print("MSE f: ", MSE_f)
+            print("MSE u: ", L2_u)
+            print("MSE f: ", L2_f)
             self.GPy_models = [model_GPy, model_GPy2]
         else:
             kernel_1 = GPy.kern.RBF(
@@ -1062,10 +1062,10 @@ class PhysicsInformedGP_regressor():
         model_GPy.Gaussian_noise.variance.fix(self.noise[0])
         model_GPy.optimize_restarts(num_restarts=20, verbose=False)
 
-        # MSE error
+        # L_sq error
         t_val, u_val = self.validation_set[0], self.validation_set[1]
         mean, var = model_GPy.predict(t_val.reshape(-1, 1))
-        MSE_u = np.mean((mean.ravel() - u_val.ravel())**2).item()
+        L_sq_u = self.relative_l2_error(u_val, mean)
         y_data, var = model_GPy.predict(X_star)
 
         ax[2].plot(X_star, y_data, label="$\\mu_u$", color="blue")
@@ -1086,11 +1086,11 @@ class PhysicsInformedGP_regressor():
         model_GPy2 = GPy.models.GPRegression(self.Y, self.f_train, kernel2)
         model_GPy2.Gaussian_noise.variance.fix(self.noise[1])
         model_GPy2.optimize_restarts(num_restarts=20, verbose=False)
-        # MSE error
+        # L_sq error
         t_val, f_val = self.validation_set[2], self.validation_set[3]
         mean,var = model_GPy2.predict(t_val.reshape(-1,1))
         y_data, var = model_GPy2.predict(X_star)
-        MSE_f = np.mean((mean.ravel() - f_val.ravel())**2).item()
+        L_sq_f = self.relative_l2_error(f_val, mean)
 
         ax[3].plot(X_star, y_data, label="$\\mu_f$", color="blue")
         ax[3].fill_between(X_star.ravel(), y_data.ravel() - 2*np.sqrt(var.ravel()),
@@ -1107,8 +1107,8 @@ class PhysicsInformedGP_regressor():
         ax[3].set_title("(d) ", fontsize=font_size)
         plt.tight_layout()
         print("---------GPY--------")
-        print("MSE u: ", MSE_u)
-        print("MSE f: ", MSE_f)
+        print("L_sq u: ", L_sq_u)
+        print("L_sq f: ", L_sq_f)
         self.GPy_models = [model_GPy, model_GPy2]
         if path != None:
             plt.savefig(path, bbox_inches='tight', dpi=300)
