@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.10.5)  21 OCT 2023 19:01
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.10.5)  15 NOV 2023 16:48
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -376,7 +376,14 @@ File: lstlang1.sty 2023/02/27 1.9 listings language file
 File: l3backend-pdftex.def 2023-04-19 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count304
 \l__pdf_internal_box=\box59
-) (./main_file.aux)
+) (./main_file.aux
+
+LaTeX Warning: Label `fig:damped_oscillator_with_noise' multiply defined.
+
+
+LaTeX Warning: Label `fig:training_points_wave' multiply defined.
+
+)
 \openout1 = `main_file.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 55.
@@ -481,47 +488,47 @@ Underfull \hbox (badness 10000) in paragraph at lines 176--178
  []
 
 [3]
-Underfull \hbox (badness 10000) in paragraph at lines 199--203
+Underfull \hbox (badness 10000) in paragraph at lines 207--210
 
  []
 
 [4]
-Underfull \hbox (badness 10000) in paragraph at lines 271--277
+Underfull \hbox (badness 10000) in paragraph at lines 278--284
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 271--277
+Underfull \hbox (badness 10000) in paragraph at lines 278--284
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 271--277
+Underfull \hbox (badness 10000) in paragraph at lines 278--284
 
  []
 
 [5]
-Underfull \hbox (badness 10000) in paragraph at lines 307--308
+Underfull \hbox (badness 10000) in paragraph at lines 314--315
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 310--311
+Underfull \hbox (badness 10000) in paragraph at lines 317--318
 
  []
 
 
-Overfull \hbox (49.34422pt too wide) detected at line 320
+Overfull \hbox (49.34422pt too wide) detected at line 327
 [][][][][]
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 320--322
+Underfull \hbox (badness 10000) in paragraph at lines 327--329
 
  []
 
-Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on input line 322.
-(../PI_GP_regressor/kernels/kernel_oscillator_3variables.py [6]
+Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on input line 329.
+[6] (../PI_GP_regressor/kernels/kernel_oscillator_3variables.py
 Overfull \hbox (151.76973pt too wide) in paragraph at lines 111--113
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
@@ -532,89 +539,114 @@ Overfull \hbox (10.02016pt too wide) in paragraph at lines 28--29
  []
 
 ) [7]
-Underfull \hbox (badness 10000) in paragraph at lines 338--340
+Underfull \hbox (badness 10000) in paragraph at lines 345--347
 
  []
 
 (../PI_GP_regressor/main_class.py)
-Underfull \hbox (badness 10000) in paragraph at lines 342--343
+Underfull \hbox (badness 10000) in paragraph at lines 349--350
 
  []
 
 (../PI_GP_regressor/main_class.py)
-Underfull \hbox (badness 10000) in paragraph at lines 346--381
+Underfull \hbox (badness 10000) in paragraph at lines 353--388
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 346--381
+Underfull \hbox (badness 10000) in paragraph at lines 353--388
 
  []
 
 [8]
-<../final_examples/oscillator/merged_1d_plots.png, id=287, 788.2248pt x 716.1957pt>
+<../final_examples/oscillator/merged_1d_plots.png, id=293, 788.2248pt x 716.1957pt>
 File: ../final_examples/oscillator/merged_1d_plots.png Graphic file (type png)
 <use ../final_examples/oscillator/merged_1d_plots.png>
-Package pdftex.def Info: ../final_examples/oscillator/merged_1d_plots.png  used on input line 393.
+Package pdftex.def Info: ../final_examples/oscillator/merged_1d_plots.png  used on input line 400.
 (pdftex.def)             Requested size: 443.57848pt x 403.04488pt.
+<../final_examples/oscillator/oscillator_noise.png, id=296, 714.7503pt x 354.123pt>
+File: ../final_examples/oscillator/oscillator_noise.png Graphic file (type png)
+<use ../final_examples/oscillator/oscillator_noise.png>
+Package pdftex.def Info: ../final_examples/oscillator/oscillator_noise.png  used on input line 409.
+(pdftex.def)             Requested size: 443.57848pt x 219.77551pt.
+<../final_examples/oscillator/l2_error.png, id=297, 1011.78pt x 433.62pt>
+File: ../final_examples/oscillator/l2_error.png Graphic file (type png)
+<use ../final_examples/oscillator/l2_error.png>
+Package pdftex.def Info: ../final_examples/oscillator/l2_error.png  used on input line 416.
+(pdftex.def)             Requested size: 443.57848pt x 190.10527pt.
  [9] [10 <../final_examples/oscillator/merged_1d_plots.png>]
-<../final_examples/wave_equation/predictive_mean.png, id=310, 671.82191pt x 313.07364pt>
+<../final_examples/heat_equation/merged_plots.png, id=318, 935.4147pt x 1073.6913pt>
+File: ../final_examples/heat_equation/merged_plots.png Graphic file (type png)
+<use ../final_examples/heat_equation/merged_plots.png>
+Package pdftex.def Info: ../final_examples/heat_equation/merged_plots.png  used on input line 449.
+(pdftex.def)             Requested size: 310.50357pt x 356.39989pt.
+ [11 <../final_examples/oscillator/oscillator_noise.png> <../final_examples/oscillator/l2_error.png>]
+<../final_examples/wave_equation/training_points.png, id=327, 309.3156pt x 287.6346pt>
+File: ../final_examples/wave_equation/training_points.png Graphic file (type png)
+<use ../final_examples/wave_equation/training_points.png>
+Package pdftex.def Info: ../final_examples/wave_equation/training_points.png  used on input line 466.
+(pdftex.def)             Requested size: 310.50357pt x 288.73988pt.
+<../final_examples/wave_equation/predictive_mean.png, id=328, 671.82191pt x 313.07364pt>
 File: ../final_examples/wave_equation/predictive_mean.png Graphic file (type png)
 <use ../final_examples/wave_equation/predictive_mean.png>
-Package pdftex.def Info: ../final_examples/wave_equation/predictive_mean.png  used on input line 437.
+Package pdftex.def Info: ../final_examples/wave_equation/predictive_mean.png  used on input line 473.
 (pdftex.def)             Requested size: 443.57848pt x 206.71043pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 442--446
+Underfull \hbox (badness 10000) in paragraph at lines 478--482
 
  []
 
-[11 <../final_examples/wave_equation/predictive_mean.png>]
-<../final_examples/poisson/merged_2d_plots.png, id=321, 662.9568pt x 786.0567pt>
+[12 <../final_examples/heat_equation/merged_plots.png>] [13 <../final_examples/wave_equation/training_points.png> <../final_examples/wave_equation/predictive_mean.png>]
+<../final_examples/poisson/merged_2d_plots.png, id=347, 667.5339pt x 786.5385pt>
 File: ../final_examples/poisson/merged_2d_plots.png Graphic file (type png)
 <use ../final_examples/poisson/merged_2d_plots.png>
-Package pdftex.def Info: ../final_examples/poisson/merged_2d_plots.png  used on input line 455.
-(pdftex.def)             Requested size: 443.57848pt x 525.9476pt.
-<../final_examples/poisson/GPy_mean_diff.png, id=322, 718.1229pt x 631.6398pt>
+Package pdftex.def Info: ../final_examples/poisson/merged_2d_plots.png  used on input line 491.
+(pdftex.def)             Requested size: 443.57848pt x 522.65749pt.
+<../final_examples/poisson/GPy_mean_diff.png, id=348, 718.1229pt x 631.6398pt>
 File: ../final_examples/poisson/GPy_mean_diff.png Graphic file (type png)
 <use ../final_examples/poisson/GPy_mean_diff.png>
-Package pdftex.def Info: ../final_examples/poisson/GPy_mean_diff.png  used on input line 461.
+Package pdftex.def Info: ../final_examples/poisson/GPy_mean_diff.png  used on input line 497.
 (pdftex.def)             Requested size: 443.57848pt x 390.16693pt.
-<../final_examples/poisson/boundaries.png, id=324, 931.5603pt x 569.4876pt>
+<../final_examples/poisson/boundaries.png, id=350, 931.5603pt x 569.4876pt>
 File: ../final_examples/poisson/boundaries.png Graphic file (type png)
 <use ../final_examples/poisson/boundaries.png>
-Package pdftex.def Info: ../final_examples/poisson/boundaries.png  used on input line 468.
+Package pdftex.def Info: ../final_examples/poisson/boundaries.png  used on input line 504.
 (pdftex.def)             Requested size: 443.57848pt x 271.17853pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 450--473
+Underfull \hbox (badness 10000) in paragraph at lines 486--509
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 450--473
+Underfull \hbox (badness 10000) in paragraph at lines 486--509
 
  []
 
-(./main_file.bbl [12] [13 <../final_examples/poisson/merged_2d_plots.png>] [14 <../final_examples/poisson/GPy_mean_diff.png>]) [15 <../final_examples/poisson/boundaries.png>] (./main_file.aux)
+(./main_file.bbl [14] [15 <../final_examples/poisson/merged_2d_plots.png>] [16 <../final_examples/poisson/GPy_mean_diff.png>]) [17 <../final_examples/poisson/boundaries.png>] (./main_file.aux)
  ***********
 LaTeX2e <2023-06-01> patch level 1
 L3 programming layer <2023-08-29>
  ***********
+
+
+LaTeX Warning: There were multiply-defined labels.
+
 Package rerunfilecheck Info: File `main_file.out' has not changed.
-(rerunfilecheck)             Checksum: 37CA98BAAC143415B8AEC42DE672437D;3338.
+(rerunfilecheck)             Checksum: 108B426044E76E0847F8ECD5D7A38795;3444.
  ) 
 Here is how much of TeX's memory you used:
- 15429 strings out of 474934
- 238824 string characters out of 5759811
- 2020791 words of memory out of 5000000
- 36615 multiletter control sequences out of 15000+600000
+ 15464 strings out of 474934
+ 240453 string characters out of 5759811
+ 2032791 words of memory out of 5000000
+ 36642 multiletter control sequences out of 15000+600000
  573990 words of font info for 95 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,14n,79p,1886b,2159s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,14n,79p,1856b,1338s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbsy10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmbsy5.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmbsy7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib6.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib9.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/symbols/msam7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on main_file.pdf (15 pages, 3901911 bytes).
+Output written on main_file.pdf (17 pages, 5505230 bytes).
 PDF statistics:
- 519 PDF objects out of 1000 (max. 8388607)
- 423 compressed objects within 5 object streams
- 146 named destinations out of 1000 (max. 500000)
- 194 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 545 PDF objects out of 1000 (max. 8388607)
+ 439 compressed objects within 5 object streams
+ 154 named destinations out of 1000 (max. 500000)
+ 222 words of extra memory for PDF output out of 10000 (max. 10000000)
 
