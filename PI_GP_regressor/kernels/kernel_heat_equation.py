@@ -130,19 +130,13 @@ def gram_Matrix_jax(XT, YS, params, noise = [0,0]):
     Y, S = YS[:,0].reshape(-1,1), YS[:,1].reshape(-1,1)
 
     #unfortunately we have to stack the data in a certain way to make the kernel work...
-    XX = jnp.hstack([X,T])
-    TT = jnp.hstack([X,T])
-    XY = jnp.hstack([X,T])
-    TS = jnp.hstack([Y,S])
-    YX = jnp.hstack([Y,S])
-    ST = jnp.hstack([X,T])
-    YY = jnp.hstack([Y,S])
-    SS = jnp.hstack([Y,S])
+    X_u = jnp.hstack([X,T])
+    X_f = jnp.hstack([Y,S])
     
-    k_uu_matrix = k_uu_jax(XX, TT, params) + noise[0] * jnp.eye(len(X)) #xxtt --- we have to slice xt xt
-    k_uf_matrix = k_uf_jax(XY, TS, params)                              #xyts 
-    k_fu_matrix = k_fu_jax(YX, ST, params) 
-    k_ff_matrix = k_ff_jax(YY, SS, params) + noise[1] * jnp.eye(len(Y))
+    k_uu_matrix = k_uu_jax(X_u, X_u, params) + noise[0]**2 * jnp.eye(len(X)) #xxtt --- we have to slice xt xt
+    k_uf_matrix = k_uf_jax(X_u, X_f, params)                              #xyts 
+    k_fu_matrix = k_fu_jax(X_f, X_u, params) 
+    k_ff_matrix = k_ff_jax(X_f, X_f, params) + noise[1]**2 * jnp.eye(len(Y))
     #combine all the matrices to the full gram matrix
     K = jnp.block([[k_uu_matrix, k_uf_matrix], [k_fu_matrix, k_ff_matrix]])
     return K
