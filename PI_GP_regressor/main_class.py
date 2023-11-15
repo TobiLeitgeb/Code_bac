@@ -1117,39 +1117,47 @@ class PhysicsInformedGP_regressor():
         x_star, t_star = X_star[:,0].reshape(-1, 1), X_star[:, 1].reshape(-1, 1)
         original_size = (int(np.sqrt(len(x_star))),
                             int(np.sqrt(len(x_star))))
-        font_size = 10
+        font_size = 12.5
         fig = plt.figure(figsize=figsize)
         ax = [fig.add_subplot(3,2,1,projection="3d"), fig.add_subplot(3,2,2,projection="3d"), 
               fig.add_subplot(3,2,3), fig.add_subplot(3,2,4), 
               fig.add_subplot(3,2,5), fig.add_subplot(3,2,6)]
         #mean u 3d
         ax[0].plot_surface(x_star.reshape(original_size), t_star.reshape(original_size), self.mean_u.reshape(original_size), cmap='viridis', alpha=0.8, edgecolor='none')
-        ax[0].set_title('(a) $\\mu_u$')
+        ax[0].set_title('(a) $\\mu_u$', fontsize=font_size)
         ax[0].set_xlabel(self.xlabel, fontsize=font_size)
         ax[0].set_ylabel(self.ylabel, fontsize=font_size)
-        ax[0].scatter(self.X[:, 0], self.X[:, 1], self.u_train, c='r', marker='o')
+        ax[0].scatter(self.X[:, 0], self.X[:, 1], self.u_train, c='r', marker='o',label= 'Training points')
         ax[0].set_zlabel("u(t,x)", fontsize=font_size)
+        ax[0].legend()
         #mean u 3d
         ax[1].plot_surface(x_star.reshape(original_size), t_star.reshape(original_size), self.mean_f.reshape(original_size), cmap="viridis", alpha=0.8)
-        ax[1].set_title('(b) $\\mu_f$')
+        ax[1].set_title('(b) $\\mu_f$', fontsize=font_size)
         ax[1].set_xlabel(self.xlabel, fontsize=font_size)
         ax[1].set_ylabel(self.ylabel, fontsize=font_size)
-        ax[1].scatter(self.Y[:, 0], self.Y[:, 1], self.f_train, c='r', marker='o')
+        ax[1].scatter(self.Y[:, 0], self.Y[:, 1], self.f_train, c='r',label='Training points', marker='o')
         ax[1].set_zlabel("f(t,x)", fontsize=font_size)
-        #variance 2d
-        
-        
-        cont = ax[2].imshow(np.sqrt(self.var_u.reshape(original_size)), cmap='viridis', alpha=1, extent=[0, 1, 0, 1], origin='lower')
-        ax[2].set_title('(c) $\\sigma_u$')
+        ax[1].legend()
+
+        #variance 2d set to 0 if negative(only valid if negative is very small)
+        var_u = np.array(self.var_u.copy())
+        var_u[var_u < 0] = 0
+        var_u = var_u.reshape(original_size)
+        cont = ax[2].imshow(np.sqrt(var_u), cmap='viridis', alpha=1, extent=[0, 1, 0, 1], origin='lower')
+        ax[2].set_title('(c) $\\sigma_u$', fontsize=font_size)
         ax[2].set_xlabel(self.xlabel, fontsize=font_size)
         ax[2].set_ylabel(self.ylabel, fontsize=font_size)
         
         ax[2].scatter(self.X[:, 0], self.X[:, 1], c='r', marker='o')
         fig.colorbar(cont, ax=ax[2])
-        #variance 2d
-        
-        cont2 = ax[3].imshow(np.sqrt(self.var_f.reshape(original_size)), cmap='viridis', alpha=1, extent=[0, 1, 0, 1], origin='lower')
-        ax[3].set_title('(d) $\\sigma_f$')
+
+        #variance 2d set to 0 if negative(only if negative is very small)
+        var_f = np.array(self.var_f.copy())
+        var_f[var_f < 0] = 0
+        var_f = var_f.reshape(original_size)
+
+        cont2 = ax[3].imshow(np.sqrt(var_f), cmap='viridis', alpha=1, extent=[0, 1, 0, 1], origin='lower')
+        ax[3].set_title('(d) $\\sigma_f$', fontsize=font_size)
         ax[3].set_xlabel(self.xlabel, fontsize=font_size)
         ax[3].set_ylabel(self.ylabel, fontsize=font_size)
         #ax[3].tick_params(axis='both', which='major', labelsize=font_size)
@@ -1169,22 +1177,18 @@ class PhysicsInformedGP_regressor():
         diff_u = np.abs(u_grid - mean_u)
         diff_f = np.abs(f_grid - mean_f)
         cont3 = ax[4].imshow(diff_u, cmap='viridis', alpha=1, extent=[0, 1, 0, 1], origin='lower')
-        ax[4].set_title('(e) $|u_{true} - \\mu_u|$')
+        ax[4].set_title('(e) $|u_{true} - \\mu_u|$', fontsize=font_size)
         ax[4].set_xlabel(self.xlabel, fontsize=font_size)
         ax[4].set_ylabel(self.ylabel, fontsize=font_size)
         ax[4].scatter(self.X[:, 0], self.X[:, 1], c='r', marker='o')
         fig.colorbar(cont3, ax=ax[4])
         #difference f
         cont4 = ax[5].imshow(diff_f, cmap='viridis', alpha=1, extent=[0, 1, 0, 1], origin='lower')
-        ax[5].set_title('(f) $|f_{true} - \\mu_f|$')
+        ax[5].set_title('(f) $|f_{true} - \\mu_f|$', fontsize=font_size)
         ax[5].set_xlabel(self.xlabel, fontsize=font_size)
         ax[5].set_ylabel(self.ylabel, fontsize=font_size)
         ax[5].scatter(self.Y[:, 0], self.Y[:, 1], c='r', marker='o')
         fig.colorbar(cont4, ax=ax[5])
-
-
-        
-
         plt.tight_layout()
         if path != None:
             plt.savefig(path, bbox_inches='tight', dpi=300)
