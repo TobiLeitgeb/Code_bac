@@ -410,47 +410,35 @@ To investigate the impact of noise we will look at the same example as before, b
     \caption{(a) \& (b) predictive mean $\mu_u$ and $\mu_f$ for the informed model, two $\sigma$ uncertainty band, training and validation points sampled from $\{\bm{x_u},u(\bm{y_u})\}$ and $\{\bm{x_f},u(\bm{y_f})\}$ respectively.\ The noise was set to $\sigma_{nu}^2 = 0.0001$  $\sigma_{nf}^2 = 0.1$. The errors of the predictions are $L^2_u = 0.0784 $ and $L^2_f = 0.1390$}
     ~\label{fig:damped_oscillator_with_noise}
 \end{figure}
-To benchmark the performance further we compared the accuracy of the prediction and of the parameters for several different amounts of training points. We looked at $n_{train}$ = $\left[3,4,5,6,7,8,10,15\right]$, with again $\sigma^2_u = \sigma^2_f = 10^{-8}$ and compared the $L^2$ error and the values of the PDE hyperparameters. 
+To benchmark the performance further we compared the accuracy of the prediction and of the parameters for several different amounts of training points. We looked at $n_{train}$ = $\left[4,5,6,7,8,10,12,15\right]$, with again $\sigma^2_u = \sigma^2_f = 10^{-8}$ and compared the $L^2$ error of the prediction of $u(t)$ and the values of the PDE hyperparameters. In figure \ref{fig:damped_oscillator_L2} the relative $L^2$ error, as well as the parameter values are plotted against the number of training points $n_{train}$. We can observe that the prediction accuracy rapidly improves with an increasing number of training points. The error of the prediction of $f(t)$ behaves similarly as the depicted one here. From ten training points onward the prediction becomes extremely exact with an neglectable error. It is interesting to see that at this point the hyperparameters also reach a value close to their true value. 
 \begin{figure}[htbp!]
     \centering
     \includegraphics[width=1\textwidth]{../final_examples/oscillator/l2_error.png}
-    \caption{(a) Relative $L^2$ errors dependent on the number of training points $n_{train}$ (b) Values of the hyperparameters $m,\gamma, k$ dependent on the number of training points $n_{train}$}
-    ~\label{fig:damped_oscillator_with_noise}
+    \caption{(a) Relative $L^2$ error of the prediction for $u(t)$ dependent on the number of training points $n_{train}$ (b) Values of the hyperparameters $m,\gamma, k$ dependent on the number of training points $n_{train}$.}
+    ~\label{fig:damped_oscillator_L2}
 \end{figure}
-% To benchmark the performance further we looked at cases with different number of training points. The results can be seen in table~\ref{tab:variing_n_trainingpoints}.
-% \begin{table}[htbp!]
-%     \caption{MSEs for the informed model with different number of training points $n$. The used noise was $\sigma_{nu} = $ and $\sigma_{nf}$.}
-%     \centering
-%     \begin{tabular}{ccccc}
-%         \toprule
-%         $n$     & 5 & 10 & 20 & 50 \\
-%         \midrule
-%         $mll$ &   3.722&  -10.049  &   -53.227 &  -32.808 \\
-%         $L^2_u$& & & & \\
-%         $L^2_f$ & & & & \\
-%         $MSE_u$ & 5.583 $\cdot 10^{-3}$  &  1.070 $\cdot 10^{-7}$  &  2.463 $\cdot 10^{-8}$  &   4.022 $\cdot 10^{-8}$ \\
-%         $MSE_f$ &  4.974 & 2.347 $\cdot 10^{-3}$  & 1.076 $\cdot 10^{-3}$ &  0.105 \\
-%         \bottomrule
-%     \end{tabular}
-    
-%     \label{tab:variing_n_trainingpoints}
-% \end{table}
 
 \subsection{Heat Equation}
+As a second example we will look at the heat equation.
 The one dimensional time dependent heat equation with a forcing term is:
 \begin{equation}
     \begin{aligned}
-        \frac{\partial u(x,t)}{\partial t} - \alpha \frac{\partial^2 u(x,t)}{\partial x^2} = f(x,t) \\ u[0,x] =\\ u(t,0) = 0; u(t,L) = 0
+         \frac{\partial u(x,t)}{\partial t} - \alpha \frac{\partial^2 u(x,t)}{\partial x^2} = f(x,t) 
+        \\ u[0,x] = \sin{(2\pi x)}
+        \\ u(t,0) = 0; u(t,L) = 0
     \end{aligned}
 \end{equation}
-with $\alpha$ as the thermal diffusivity.
+with $\alpha$ as the thermal diffusivity. Here we use the same forcing term $f(x,t) = e^{-t}(4\pi^2-1)\sin{(2\pi x)}$, parameter $\alpha = 1$ and boundary conditions as were used in \cite{RAISSI} in order to compare the accuracy of our implementation. As described before, the overall implementation is basically the same, so we should expect similar results. Jitter 1e-6 -- otherwise the predictive variance would be smaller than zero(numerical errors) with higher jitter a smother optimization landscape (maybe in optimization chapter)
 \begin{figure}
     \centering
     \includegraphics[width=0.7\textwidth]{../final_examples/heat_equation/merged_plots.png}
-    \caption{}
+    \caption{(a) \& (b) Calculated predictive mean $\mu_u$ and $\mu_f$.\\ 
+    (c) \& (d) Calculated standard deviation $\sigma_{u}$ and $\sigma_f$.\\
+    (e) \& (f) Absolute difference between calculated predictive mean and ground truth $|u_{true}-\mu_u|$ and $|f_{true}-\mu_f|$\\
+    The training and validation points were sampled from $\{\bm{x_u},u(\bm{y_u})\}$ and $\{\bm{x_f},u(\bm{y_f})\}$ respectively. The noise was set to $\sigma_{n_u}^2 = \sigma_{n_f}^2 = 10^{-8}$ and the jitter to $10^-6$}
     ~\label{fig:training_points_wave}
 \end{figure}
-
+We now want to explore more about how the extra parameter introduced by the partial differential equation, represented as $\alpha$ in this example, affects the results. Especially its impact on the value of the negative mll. For this the results of an optimization run were recorded. The starting value for $\alpha$ was sampled from an uniform distribution in the interval $\left[0,10\right]$. The successful runs were
 \subsection{Wave Equation}
 For the third example we will look at the two-dimensional time dependent wave equation. The wave equation is a hyperbolic partial differential equation that describes the propagation of waves of various types. In our case we can think of a membrane that is fixed at all ends of a square. The wave equation is given by:
 \begin{equation}
