@@ -381,8 +381,9 @@ class PhysicsInformedGP_regressor():
             if save_path != None:
                 plt.savefig(save_path)
             print("---------GPY--------")
-            print("MSE u: ", L2_u)
-            print("MSE f: ", L2_f)
+            print("L2 u: ", L2_u)
+            print("L2 f: ", L2_f)
+            return L2_u, L2_f
             self.GPy_models = [model_GPy, model_GPy2]
         else:
             kernel_1 = GPy.kern.RBF(
