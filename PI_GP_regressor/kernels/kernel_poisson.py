@@ -40,11 +40,13 @@ def k_ff(x, x_bar, params):
     x,y = x[0], x[1]
     x_bar, y_bar = x_bar[0], x_bar[1]
     gamma = 1/(2*params[0]**2)
-    #consist of 3 terms
-    term1 = 4*gamma**2*(4*gamma*(x-x_bar)**2 *(gamma*(x-x_bar)**2 - 3)+3)
-    term2 = 4*gamma**2*(4*gamma*(y-y_bar)**2 *(gamma*(y-y_bar)**2 - 3)+3)
-    term3 = 4*gamma**2*(2*(x-x_bar)**2*gamma - 1)*(2*(y-y_bar)**2*gamma - 1)
-    return (term1 + term2 + 2*term3)* k_uu_data
+    #lap lap' k_uu
+    #consist of 3 terms d_xxxx = d^2/dx^2 d^2/dx'^2 k_uu, d_yyyy = d^2/dy^2 d^2/dy'^2 , d_xxyy = d^2/dx^2 d^2/dy'^2 
+    
+    d_xxxx = 4*gamma**2*(4*gamma*(x-x_bar)**2 *(gamma*(x-x_bar)**2 - 3)+3)
+    d_yyyy = 4*gamma**2*(4*gamma*(y-y_bar)**2 *(gamma*(y-y_bar)**2 - 3)+3)
+    d_xxyy = 4*gamma**2*(2*(x-x_bar)**2*gamma - 1)*(2*(y-y_bar)**2*gamma - 1)
+    return (d_xxxx + d_yyyy + d_xxyy)*k_uu_data
 
 k_ff = jit(vmap(vmap(k_ff,(None,0,None)), (0,None,None)))
 
