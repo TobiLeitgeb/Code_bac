@@ -71,7 +71,7 @@ def k_ff(x, x_bar, params):
     term2 = 4*gamma_space**2*(4*gamma_space*(y-y_bar)**2 *(gamma_space*(y-y_bar)**2 - 3)+3)
     term3 = 4*gamma_space**2*(2*(x-x_bar)**2*gamma_space - 1)*(2*(y-y_bar)**2*gamma_space - 1)
     laplap = (term1 + term2 + 2*term3)
-    return (dttdtt - 2*c**2* lapdtt + c**4*laplap)* k_uu_data
+    return (dttdtt - 2*c**2* lapdtt +c**4* laplap)* k_uu_data
 
 k_ff = jit(vmap(vmap(k_ff,(None,0,None)), (0,None,None)))
 
