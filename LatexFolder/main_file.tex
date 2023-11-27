@@ -174,7 +174,7 @@ For a two-dimensional case with time being the second dimension, two independent
 \begin{equation}
     k(\bm{x_p}, \bm{x_q}) = \sigma_f^2  \exp\left({-\frac{0.5}{l_x^2} {(x_p-x_q)}^2}\right) \exp\left({-\frac{0.5}{l_t^2} {(t_p-t_q)}^2}\right)
 \end{equation}
-There are many kernels one can choose from. A good overview over some kernel functions, as well as how they can be modified, can be found in~\cite{Duvenaud} as well as in~\cite{görtler2019a}. Later we will modify the SE kernels with linear operators, more specifically with differential operators. For this the SE kernel is a good choice, because it is infinitely differentiable with rather simple and smooth derivatives. This is important for the overall numerical stabililty when calculating the gradients of the modified kernel in the optimization process.\\ 
+There are many kernels one can choose from. A good overview over some kernel functions, as well as how they can be modified, can be found in~\cite{Duvenaud} as well as in~\cite{görtler2019a}. Later we will modify the SE kernels with linear operators, more specifically with differential operators. For this the SE kernel is a good choice, because it is infinitely differentiable with rather simple and smooth derivatives. This is important for the overall numerical stability when calculating the gradients of the modified kernel in the optimization process.\\ 
 \subsection{Marginal likelihood}
 
 For the optimization of the hyperparameters $\theta$ and $\phi$ the negative
@@ -372,7 +372,7 @@ Through the optimization of the mll, we will obtain the parameters of the
 underlying equation $\phi$, as well as the hyperparameters $\theta$ of the
 kernel. With these parameters we will then calculate the predictive mean and
 covariance and then compare the ground truth with the computed mean function.
-To quantify/benchmark the performance we will look at the marginal log likelihood, the mean squared error (MSE) and the relative L2 error of the validation set(ground truth). As another
+To quantify/benchmark the performance we will look at the marginal log likelihood, the mean squared error (MSE) and the relative $L^2$ error of the validation set(ground truth). As another
 way of looking at the performance of the informed model we will compare it to a
 vanilla model with a general SE kernel, as described in~\ref{sec:Regression}.
 For this we will use the GPy library~\cite{gpy2014}. However, it is important
@@ -428,7 +428,7 @@ The one dimensional time dependent heat equation with a forcing term is:
         \\ u(t,0) = 0; u(t,L) = 0
     \end{aligned}
 \end{equation}
-with $\alpha$ as the thermal diffusivity. Here we use the same forcing term $f(x,t) = e^{-t}(4\pi^2-1)\sin{(2\pi x)}$, parameter $\alpha = 1$ and boundary conditions as were used in \cite{RAISSI} in order to compare the accuracy of our implementation. As described before, the overall implementation is basically the same, so we should expect similar results. Jitter 1e-6 -- otherwise the predictive variance would be smaller than zero(numerical errors) with higher jitter a smother optimization landscape (maybe in optimization chapter)
+with $\alpha$ as the thermal diffusivity. Here we use the same forcing term $f(x,t) = e^{-t}(4\pi^2-1)\sin{(2\pi x)}$, parameter $\alpha = 1$ and boundary conditions as were used in \cite{RAISSI} in order to compare the accuracy of our implementation. As described before, the overall implementation is basically the same, so we should expect similar results. The ground truth was calculated for a grid of size 100x100. The results can be seen in figure \ref{fig:results_heatequation}. The model managed to predict the ground truth very accurately with relative $L^2$ errors of $L^2_u = 0.00381 $ and $L^2_f = 0.00804$. The predictions only have small errors on the domain edges and are nearly error free in the central part of the grid. The jitter applied to the diagonal elements of the gram matrix $K$ was set to $10^{-6}$. With a jitter value in the range of $10^{-7}$, smaller optimization minimas could be found with slightly smaller $L_2$ errors. However, the predictive variance would be smaller than zero (numerical errors) in some central regions and the optimization landscape would get increasingly rough.
 \begin{figure}
     \centering
     \includegraphics[width=0.7\textwidth]{../final_examples/heat_equation/merged_plots.png}
@@ -436,23 +436,38 @@ with $\alpha$ as the thermal diffusivity. Here we use the same forcing term $f(x
     (c) \& (d) Calculated standard deviation $\sigma_{u}$ and $\sigma_f$.\\
     (e) \& (f) Absolute difference between calculated predictive mean and ground truth $|u_{true}-\mu_u|$ and $|f_{true}-\mu_f|$\\
     The training and validation points were sampled from $\{\bm{x_u},u(\bm{y_u})\}$ and $\{\bm{x_f},u(\bm{y_f})\}$ respectively. The noise was set to $\sigma_{n_u}^2 = \sigma_{n_f}^2 = 10^{-8}$ and the jitter to $10^-6$}
-    ~\label{fig:training_points_wave}
+    ~\label{fig:results_heatequation}
 \end{figure}
-We now want to explore more about how the extra parameter introduced by the partial differential equation, represented as $\alpha$ in this example, affects the results. Especially its impact on the value of the negative mll. For this the results of an optimization run were recorded. The starting value for $\alpha$ was sampled from an uniform distribution in the interval $\left[0,10\right]$. The successful runs were
+We now want to explore more about how the extra parameter introduced by the partial differential equation, represented as $\alpha$ in this example, affects the results. Especially its impact on the value of the negative mll in the optimization process. In order to do this, the results of an optimization run were recorded. The starting value for $\alpha$ was sampled from an uniform distribution in the interval $\left[0,10\right]$. The successful runs were recorded. While holding the values of the other hyperparameters fixed, the value of the mll was plotted against $\alpha$. In figure \ref{fig:results_optrun} the results are shown. The big influence of $\alha$ gets very clear. The value of the mll explodes when away from $\alpha = 1$. To accommodate the wide range of values, the y-axis was plotted on a logarithmic scale.
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{../final_examples/heat_equation/merged_plots.png}
+    \caption{Results of an optimization run with $n_{restarts}$ = 1000}
+    ~\label{fig:results_optrun}
+\end{figure}
+
 \subsection{Wave Equation}
-For the third example we will look at the two-dimensional time dependent wave equation. The wave equation is a hyperbolic partial differential equation that describes the propagation of waves of various types. In our case we can think of a membrane that is fixed at all ends of a square. The wave equation is given by:
+For the third example we will look at the two-dimensional time dependent wave equation. The wave equation is a hyperbolic partial differential equation that describes the propagation of waves of various types. In our case we define the wave equation on a square domain [0,L]×[0,L]. The wave equation is then given by:
 \begin{equation}
     \begin{aligned}
-        \frac{1}{c^2} \frac{\partial^2 u(x,y,t)}{\partial t^2} - (\frac{\partial^2}{\partial x^2} +\frac{\partial^2}{\partial y^2})u(x,y,t) = f(x,y,t) \\ u[0,x] =\\ u(t,0) = 0; u(t,L) = 0
+    \frac{\partial^2 u(x,y,t)}{\partial t^2} - c^2\left(\frac{\partial^2}{\partial x^2} +\frac{\partial^2}{\partial y^2}\right)u(x,y,t) = f(x,y,t) \\ 
+    u(0,x,y) = 0\\ 
+    u(0,y,t)=u(L_x,y,t)=0 \; \mathrm{for} \;0 \leq y \leq L_y\\
+    u(x,0,t)=u(x,L_y,t)=0 \; \mathrm{for}\; 0 \leq x \leq L_x
     \end{aligned}
 \end{equation}
-with $c$ as the wave speed. With the increase in dimensions we also need significantly more training points to account for the bigger domain. Especially with functions that change a lot over time. Before in the 2d case, 20 training points were sufficient to achieve good predictions. However, in for this example between 300 - 400 training points were needed to get reasonable predictions. This makes sense, because when we use 20 points for a 2d domain and we want the same number for a 3rd domain we need $20\cdot 20$ points. 
-The ground truth was calculated with $c = 3$ and with $f(x,t) = $.    We used 20 training points for both $u$ and $f$. The training data was sampled from the domain $x \in [0,2]$ and $t \in [0,4]$. The noise was set to $\sigma_{nu} = 10^{-4}$ and $\sigma_{nf} = 10^{-4}$, which can be considered as nearly noise free. The hyperparameters ($l_x$,$\sigma_f$,$l_t$, $c$) were optimized to be $(1,1,1)$. 
+with $c$ as the wave speed. The ground truth was calculated with $c = 1$, $L_x = L_y = 2$ and with the forcing term:
+\begin{align}
+  f(x,y,t) = 5\Sin(t\pi)*e^{(-5((x - 1/2)^2 + (y - 1/2)^2)/\sigma^2]}  
+\end{align}
+with $\sigma^2 = 1$. The training points were sampled from the domain [0,2]×[0,2]×[0,4]. With the increase in dimensions we also need significantly more training points to account for the bigger domain. Especially if the function varies a lot over time. Before, in the 2d case, 20 training points were sufficient to achieve good predictions. For this example around $n_{train} = 400$ training points, for both $u$ and $f$, were needed to get good predictions.
+The relative $L^2$ error for the prediction of $u(x,y,t)$ was 0.0163 and $c$ was optimized to $c = 1.0081$. To further increase the accuracy we added extra training points for $u$ on the boundary of the domain. In figure \ref{fig:training_points_wave} the distribution of the training points is shown. This is a very straight forward way of increasing the accuracy. Specifically for boundary value problems, data on the domain edges can be easily accessible. For example, one could look at the example above as a membrane, which is fixed on a square. Therefore, the edges would be clamped down and the amplitude would be zero. With the incorporation of 320 training points on the boundary of $u$, the relative error of the predictive mean would decrease to a value of $L^2_u = 0.00355$. The hyperparameter $c$ was optimized to $c = 0.9974$. We can observe, that the accuracy of the hyperparameter did not increase . However, the overall accuracy of the prediction was improved.
 
+%0.016 400 data points no boundary points
 \begin{figure}
     \centering
     \includegraphics[width=0.7\textwidth]{../final_examples/wave_equation/training_points.png}
-    \caption{Plot of the positions of the training points in the 3d domain of the wave equation example, with $n_t$ = 400. }
+    \caption{Plot of the positions of the training points in the 3d domain of the wave equation example, with $n_{train}$ = 400 and with 320 extra training points on the boundary.}
     ~\label{fig:training_points_wave}
 \end{figure}
 
