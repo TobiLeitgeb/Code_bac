@@ -1,3 +1,5 @@
+# author: Tobias Leitgeb
+
 import GPy
 from jax import numpy as jnp
 from jax import jit, grad, vmap, jacfwd
@@ -62,24 +64,24 @@ class PhysicsInformedGP_regressor():
         if self.timedependence and self.D == 2:
             x_u, x_f, t_u, t_f, u_train, f_train, self.raw_data = self.get_data_set_2d(
                 filename, n_training_points, noise, seeds_training)
-            self.X = np.hstack([x_u, t_u])
-            self.Y = np.hstack([x_f, t_f])
+            self.X_u = np.hstack([x_u, t_u])
+            self.X_f = np.hstack([x_f, t_f])
             self.targets = np.concatenate([u_train, f_train])
             self.u_train = u_train
             self.f_train = f_train
-            assert self.X.shape[1] == 2, "Please provide a valid training data set"
+            assert self.X_u.shape[1] == 2, "Please provide a valid training data set"
 
         elif not self.timedependence:
             x_u, u_train, x_f, f_train, self.raw_data = self.get_data_set_1d(
                 filename, n_training_points, noise, seeds_training)
-            self.X = x_u
-            self.Y = x_f
+            self.X_u = x_u
+            self.X_f = x_f
             self.targets = np.concatenate([u_train, f_train])
             self.u_train = u_train
             self.f_train = f_train
 
         elif self.D == 3:
-            self.X, self.Y, self.u_train, self.f_train, self.raw_data = self.get_data_set_3d(
+            self.X_u, self.X_f, self.u_train, self.f_train, self.raw_data = self.get_data_set_3d(
                 filename, n_training_points, noise)
             self.targets = np.concatenate([self.u_train, self.f_train])
     
@@ -89,7 +91,7 @@ class PhysicsInformedGP_regressor():
 
     def set_validation_data(self, n_validation_points):
         """sets the validation set"""
-        assert self.X is not None, "Please set the training data first"
+        assert self.X_u is not None, "Please set the training data first"
         if self.timedependence:
             self.validation_set = self.get_validation_set_2d(
                 self.filename, n_validation_points, self.noise)
@@ -110,11 +112,11 @@ class PhysicsInformedGP_regressor():
 
     def log_marginal_likelohood(self, params):
         """computes the log marginal likelihood of the GP"""
-        K = self.gram_matrix(self.X, self.Y, params, self.noise)
+        K = self.gram_matrix(self.X_u, self.X_f, params, self.noise)
         L = jnp.linalg.cholesky(K + self.jitter * jnp.eye(len(K)))
         alpha = jnp.linalg.solve(L.T, jnp.linalg.solve(L, self.targets))
         mll = 1/2 * jnp.dot(self.targets.T, alpha) + 0.5*jnp.sum(
-            jnp.log(jnp.diagonal(L))) + len(self.X)/2 * jnp.log(2*jnp.pi)
+            jnp.log(jnp.diagonal(L))) + len(self.X_u)/2 * jnp.log(2*jnp.pi)
         return jnp.squeeze(mll)
 
     def log_marginal_likelihood_to_optimize(self):
@@ -130,7 +132,7 @@ class PhysicsInformedGP_regressor():
 
     def train(self, method: str, n_restarts: int, n_threads: int, opt_dictionary: dict) -> None:
         """optimizes the hyperparameters of the kernel"""
-        assert self.X is not None, "Please set the training data first"
+        assert self.X_u is not None, "Please set the training data first"
         assert method in ['L-BFGS-B', 'TNC',
                           "CG", "Nelder-Mead"], "Please choose a valid optimization method"
         assert n_restarts > 0, "Please choose a valid number of restarts"
@@ -258,11 +260,11 @@ class PhysicsInformedGP_regressor():
         """calculates the mean and variance of the GP at the points X_star"""
         params = self.get_params()
 
-        K = self.gram_matrix(self.X, self.Y, params, self.noise) 
+        K = self.gram_matrix(self.X_u, self.X_f, params, self.noise) 
         L = jnp.linalg.cholesky(K+ jnp.eye(len(K)) * self.jitter)
         
-        q_1 = self.k_uu(X_star, self.X, params) 
-        q_2 = self.k_uf(X_star, self.Y, params)
+        q_1 = self.k_uu(X_star, self.X_u, params) 
+        q_2 = self.k_uf(X_star, self.X_f, params)
         kappa = jnp.hstack((q_1, q_2))
         #predictive mean
         alpha = jnp.linalg.solve(L.T, jnp.linalg.solve(L, self.targets))
@@ -277,11 +279,11 @@ class PhysicsInformedGP_regressor():
         """predicts the mean and variance of the GP at the points X_star"""
         params = self.get_params()
 
-        K = self.gram_matrix(self.X, self.Y, params, self.noise)
+        K = self.gram_matrix(self.X_u, self.X_f, params, self.noise)
         L = jnp.linalg.cholesky(K + jnp.eye(len(K)) * self.jitter)
         
-        q_1 = self.k_fu(X_star, self.X, params)
-        q_2 = self.k_ff(X_star, self.Y, params) 
+        q_1 = self.k_fu(X_star, self.X_u, params)
+        q_2 = self.k_ff(X_star, self.X_f, params) 
         kappa = jnp.hstack((q_1, q_2))
         #predictive mean
         alpha = jnp.linalg.solve(L.T, jnp.linalg.solve(L, self.targets))
@@ -330,7 +332,7 @@ class PhysicsInformedGP_regressor():
         """uses the GPy library to compute the GP"""
         if not self.timedependence:
             kernel = GPy.kern.RBF(input_dim=1, variance=1., lengthscale=1.)
-            model_GPy = GPy.models.GPRegression(self.X, self.u_train, kernel)
+            model_GPy = GPy.models.GPRegression(self.X_u, self.u_train, kernel)
             model_GPy.Gaussian_noise.variance.fix(self.noise[0])
             model_GPy.optimize_restarts(num_restarts=20, verbose=False)
 
@@ -348,7 +350,7 @@ class PhysicsInformedGP_regressor():
             ) + 2*np.sqrt(var.ravel()), color="blue", alpha=0.2, label="95% confidence interval")
             ax[0].scatter(self.validation_set[0], self.validation_set[1],
                           label="validation set", color="orange", marker="x", s=15)
-            ax[0].scatter(self.X, self.u_train,
+            ax[0].scatter(self.X_u, self.u_train,
                           label="training points", color="red", marker="o", s=15)
             ax[0].set_xlim(0, max(X_star))
             ax[0].set_title("u(t) prediction")
@@ -356,7 +358,7 @@ class PhysicsInformedGP_regressor():
             ax[0].legend()
 
             kernel2 = GPy.kern.RBF(input_dim=1, variance=1., lengthscale=1.)
-            model_GPy2 = GPy.models.GPRegression(self.Y, self.f_train, kernel2)
+            model_GPy2 = GPy.models.GPRegression(self.X_f, self.f_train, kernel2)
             model_GPy2.Gaussian_noise.variance.fix(self.noise[1])
             model_GPy2.optimize_restarts(num_restarts=20, verbose=False)
             # MSE error
@@ -371,7 +373,7 @@ class PhysicsInformedGP_regressor():
             ) + 2*np.sqrt(var.ravel()), alpha=0.2, color="blue", label="95% confidence interval")
             ax[1].scatter(self.validation_set[2], self.validation_set[3],
                           label="validation set", color="orange", marker="x", s=15)
-            ax[1].scatter(self.Y, self.f_train, label="training points",
+            ax[1].scatter(self.X_f, self.f_train, label="training points",
                           color="blue", marker="o", s=15)
             ax[1].set_xlim(0, max(X_star))
             ax[1].set_title("f(t) prediction")
@@ -388,14 +390,14 @@ class PhysicsInformedGP_regressor():
         else:
             kernel_1 = GPy.kern.RBF(
                 input_dim=2, variance=1., lengthscale=1., ARD=self.ARD)
-            model_GPy = GPy.models.GPRegression(self.X, self.u_train, kernel_1)
+            model_GPy = GPy.models.GPRegression(self.X_u, self.u_train, kernel_1)
             model_GPy.Gaussian_noise.variance.fix(self.noise[0])
             model_GPy.optimize_restarts(num_restarts=20, verbose=False)
 
             kernel_2 = GPy.kern.RBF(
                 input_dim=2, variance=1., lengthscale=1., ARD=self.ARD)
             model_GPy_2 = GPy.models.GPRegression(
-                self.Y, self.f_train, kernel_2)
+                self.X_f, self.f_train, kernel_2)
             model_GPy_2.Gaussian_noise.variance.fix(self.noise[1])
             model_GPy_2.optimize_restarts(num_restarts=20, verbose=False)
             mean, var = model_GPy.predict(X_star)
@@ -412,11 +414,11 @@ class PhysicsInformedGP_regressor():
                 ax[0].set_title('Predictive mean for u(t,x)')
                 ax[0].set_xlabel(self.xlabel)
                 ax[0].set_ylabel(self.ylabel)
-                ax[0].scatter(self.X[:, 0], self.X[:, 1], c='r', marker='o')
+                ax[0].scatter(self.X_u[:, 0], self.X_u[:, 1], c='r', marker='o')
 
                 cont2 = ax[1].imshow(mean2, cmap="viridis", alpha=1, extent=[
                                      0, 1, 0, 1], origin='lower')
-                ax[1].scatter(self.Y[:, 0], self.Y[:, 1], c='b', marker='o')
+                ax[1].scatter(self.X_f[:, 0], self.X_f[:, 1], c='b', marker='o')
                 ax[1].set_title('Predictive mean for f(t,x)')
                 ax[1].set_xlabel(self.xlabel)
                 ax[1].set_ylabel(self.ylabel)
@@ -434,12 +436,12 @@ class PhysicsInformedGP_regressor():
                 ax[0].set_title('Predictive mean for u(t,x))')
                 ax[0].set_xlabel(self.xlabel)
                 ax[0].set_ylabel(self.ylabel)
-                ax[0].scatter(self.X[:, 0], self.X[:, 1],
+                ax[0].scatter(self.X_u[:, 0], self.X_u[:, 1],
                               self.u_train, c='r', marker='o')
 
                 ax[1].plot_surface(X_star[:, 0].reshape(mean2.shape), X_star[:, 1].reshape(
                     mean2.shape), mean2, cmap="viridis", edgecolor='none', alpha=0.5)
-                ax[1].scatter(self.Y[:, 0], self.Y[:, 1],
+                ax[1].scatter(self.X_f[:, 0], self.X_f[:, 1],
                               self.f_train, c='b', marker='o')
                 ax[1].set_title('Predictive mean for f(t,x)')
                 ax[1].set_xlabel(self.xlabel)
@@ -479,12 +481,12 @@ class PhysicsInformedGP_regressor():
                 ax[0].set_title('(a)')
                 ax[0].set_xlabel(self.xlabel)
                 ax[0].set_ylabel(self.ylabel)
-                ax[0].scatter(self.X[:, 0], self.X[:, 1],
+                ax[0].scatter(self.X_u[:, 0], self.X_u[:, 1],
                               self.u_train, c='r', marker='o')
 
                 ax[1].plot_surface(x_star.reshape(self.mean_f.shape), t_star.reshape(
                     self.mean_f.shape), self.mean_f, cmap="viridis", edgecolor='none', alpha=0.5)
-                ax[1].scatter(self.Y[:, 0], self.Y[:, 1],
+                ax[1].scatter(self.X_f[:, 0], self.X_f[:, 1],
                               self.f_train, c='b', marker='o')
                 ax[1].set_title("(b)")
                 ax[1].set_xlabel(self.xlabel)
@@ -502,11 +504,11 @@ class PhysicsInformedGP_regressor():
                 ax[0].set_title('(a)')
                 ax[0].set_xlabel(self.xlabel)
                 ax[0].set_ylabel(self.ylabel)
-                ax[0].scatter(self.X[:, 0], self.X[:, 1], c='r', marker='o')
+                ax[0].scatter(self.X_u[:, 0], self.X_u[:, 1], c='r', marker='o')
 
                 cont2 = ax[1].imshow(self.mean_f, cmap="viridis", alpha=1, extent=[
                                      0, 1, 0, 1], origin='lower')
-                ax[1].scatter(self.Y[:, 0], self.Y[:, 1], c='b', marker='o')
+                ax[1].scatter(self.X_f[:, 0], self.X_f[:, 1], c='b', marker='o')
                 ax[1].set_title('(b)')
                 ax[1].set_xlabel(self.xlabel)
                 ax[1].set_ylabel(self.ylabel)
@@ -523,7 +525,7 @@ class PhysicsInformedGP_regressor():
             
            # ax[0].scatter(self.validation_set[0], self.validation_set[1],
             #              c='orange', marker='x', label='Validation set', alpha=0.5, s=15)
-            ax[0].plot(self.X, self.u_train, 'r.',
+            ax[0].plot(self.X_u, self.u_train, 'r.',
                        markersize=10, label='Observations')
             ax[0].plot(x_star, self.mean_u, 'b', label='Prediction')
             ax[0].fill_between(x_star.flatten(), self.mean_u.flatten() + 2 * np.sqrt(self.var_u.flatten()),
@@ -537,7 +539,7 @@ class PhysicsInformedGP_regressor():
 
             #ax[1].scatter(self.validation_set[2], self.validation_set[3],
              #             c='orange', marker='x', label='Validation set', alpha=0.5, s=15)
-            ax[1].plot(self.Y, self.f_train, 'r.',
+            ax[1].plot(self.X_f, self.f_train, 'r.',
                        markersize=10, label='Observations')
             ax[1].plot(x_star, self.mean_f, 'b', label='Prediction')
             ax[1].fill_between(x_star.flatten(), self.mean_f.flatten() - 2 * np.sqrt(self.var_f.flatten()),
@@ -573,13 +575,13 @@ class PhysicsInformedGP_regressor():
         ax[0].set_title(' |$f_*$ - u(t,x)|')
         ax[0].set_xlabel(self.xlabel)
         ax[0].set_ylabel(self.ylabel)
-        ax[0].scatter(self.X[:, 0], self.X[:, 1], c='r', marker='o')
+        ax[0].scatter(self.X_u[:, 0], self.X_u[:, 1], c='r', marker='o')
         fig.colorbar(cont, ax=ax[0])
 
         #cont2 = ax[1].contourf(x_star.reshape(mean_f.shape), t_star.reshape(mean_f.shape), np.abs(mean_f - f_grid.reshape(size)), cmap="viridis", alpha=0.8,levels = 100)
         cont2 = ax[1].imshow(np.abs(mean_f - f_grid.reshape(size)),
                              cmap='viridis', alpha=1, extent=[0, 1, 0, 1], origin='lower')
-        ax[1].scatter(self.Y[:, 0], self.Y[:, 1], c='b', marker='o')
+        ax[1].scatter(self.X_f[:, 0], self.X_f[:, 1], c='b', marker='o')
         ax[1].set_title(' |$f_*$ - f(t,x)|')
         ax[1].set_xlabel(self.xlabel)
         ax[1].set_ylabel(self.ylabel)
@@ -607,13 +609,13 @@ class PhysicsInformedGP_regressor():
         ax[0].set_title(' |$f_*$ - u(t,x)|')
         ax[0].set_xlabel(self.xlabel)
         ax[0].set_ylabel(self.ylabel)
-        ax[0].scatter(self.X[:, 0], self.X[:, 1], c='r', marker='o')
+        ax[0].scatter(self.X_u[:, 0], self.X_u[:, 1], c='r', marker='o')
         fig.colorbar(cont, ax=ax[0])
 
         #cont2 = ax[1].contourf(x_star.reshape(mean_f.shape), t_star.reshape(mean_f.shape), np.abs(mean_f - f_grid.reshape(size)), cmap="viridis", alpha=0.8,levels = 100)
         cont2 = ax[1].imshow(np.abs(mean_f - f_grid.reshape(size)),
                              cmap='viridis', alpha=1, extent=[0, 1, 0, 1], origin='lower')
-        ax[1].scatter(self.Y[:, 0], self.Y[:, 1], c='b', marker='o')
+        ax[1].scatter(self.X_f[:, 0], self.X_f[:, 1], c='b', marker='o')
         ax[1].set_title(' |$f_*$ - f(t,x)|')
         ax[1].set_xlabel(self.xlabel)
         ax[1].set_ylabel(self.ylabel)
@@ -651,13 +653,13 @@ class PhysicsInformedGP_regressor():
         ax[0].set_title('Predictive std for u(t,x))')
         ax[0].set_xlabel(self.xlabel)
         ax[0].set_ylabel(self.ylabel)
-        ax[0].scatter(self.X[:, 0], self.X[:, 1], marker='o')
+        ax[0].scatter(self.X_u[:, 0], self.X_u[:, 1], marker='o')
         fig.colorbar(cont_0, ax=ax[0])
 
         #cont_1 = ax[1].contourf(x_star.reshape(self.var_f.shape), t_star.reshape(self.var_f.shape), np.sqrt(self.var_f), cmap="viridis", alpha=0.8)
         cont_1 = ax[1].imshow(np.sqrt(self.var_f), cmap='viridis', alpha=1, extent=[
                               0, 1, 0, 1], origin='lower')
-        ax[1].scatter(self.Y[:, 0], self.Y[:, 1], marker='o')
+        ax[1].scatter(self.X_f[:, 0], self.X_f[:, 1], marker='o')
         ax[1].set_title('Predictive std for f(t,x)')
         ax[1].set_xlabel(self.xlabel)
         ax[1].set_ylabel(self.ylabel)
@@ -685,13 +687,13 @@ class PhysicsInformedGP_regressor():
         ax[0].set_title('GPy std for u(t,x)')
         ax[0].set_xlabel(self.xlabel)
         ax[0].set_ylabel(self.ylabel)
-        ax[0].scatter(self.X[:, 0], self.X[:, 1], c='r', marker='o')
+        ax[0].scatter(self.X_u[:, 0], self.X_u[:, 1], c='r', marker='o')
         fig.colorbar(cont, ax=ax[0])
 
         #cont2 = ax[1].contourf(x_star.reshape(u_grid.shape), t_star.reshape(u_grid.shape), var_f, cmap="viridis", alpha=0.8)
         cont2 = ax[1].imshow(var_f, cmap='viridis', alpha=1, extent=[
                              0, 1, 0, 1], origin='lower')
-        ax[1].scatter(self.Y[:, 0], self.Y[:, 1], c='b', marker='o')
+        ax[1].scatter(self.X_f[:, 0], self.X_f[:, 1], c='b', marker='o')
         ax[1].set_title(' GPy std for f(t,x)')
         ax[1].set_xlabel(self.xlabel)
         ax[1].set_ylabel(self.ylabel)
@@ -725,9 +727,9 @@ class PhysicsInformedGP_regressor():
                 fig.colorbar(cont, ax=ax[0])
                 fig.colorbar(cont2, ax=ax[1])
                 if Training_points:
-                    ax[0].scatter(self.X[:, 0], self.X[:, 1], c='r',
+                    ax[0].scatter(self.X_u[:, 0], self.X_u[:, 1], c='r',
                                   marker='o', label='Training points')
-                    ax[1].scatter(self.Y[:, 0], self.Y[:, 1], c='b',
+                    ax[1].scatter(self.X_f[:, 0], self.X_f[:, 1], c='b',
                                   marker='o', label='Training points')
             else:
                 fig, ax = plt.subplots(1, 2, figsize=(
@@ -745,9 +747,9 @@ class PhysicsInformedGP_regressor():
                 ax[1].set_ylabel(self.ylabel)
 
                 if Training_points:
-                    ax[0].scatter(self.X[:, 0], self.X[:, 1], self.u_train,
+                    ax[0].scatter(self.X_u[:, 0], self.X_u[:, 1], self.u_train,
                                   c='r', marker='o', label='Training points')
-                    ax[1].scatter(self.Y[:, 0], self.Y[:, 1], self.f_train,
+                    ax[1].scatter(self.X_f[:, 0], self.X_f[:, 1], self.f_train,
                                   c='b', marker='o', label='Training points')
             plt.legend()
         else:
@@ -769,9 +771,9 @@ class PhysicsInformedGP_regressor():
             ax[1].legend()
             
             if Training_points:
-                ax[0].scatter(self.X, self.u_train, c='r',
+                ax[0].scatter(self.X_u, self.u_train, c='r',
                               marker='o', label='Training points')
-                ax[1].scatter(self.Y, self.f_train, c='b',
+                ax[1].scatter(self.X_f, self.f_train, c='b',
                               marker='o', label='Training points')
             plt.legend()
 
@@ -1035,7 +1037,7 @@ class PhysicsInformedGP_regressor():
                            self.mean_u.flatten() - 2 * np.sqrt(self.var_u.flatten()), alpha=0.2, color='blue', label="$2\\sigma$")
         #ax[0].scatter(self.validation_set[0], self.validation_set[1],
         #              c='orange', marker='x', label='Validation set', alpha=0.5, s=15)
-        ax[0].plot(self.X, self.u_train, 'r.',
+        ax[0].plot(self.X_u, self.u_train, 'r.',
                    markersize=10, label='training points')
         ax[0].plot(self.raw_data[0], self.raw_data[1],"--", label="Analytical solution",color = "black")
         ax[0].legend(loc='upper right', fontsize=10)
@@ -1049,7 +1051,7 @@ class PhysicsInformedGP_regressor():
                            self.mean_f.flatten() + 2 * np.sqrt(self.var_f.flatten()), alpha=0.2, color='blue', label="$2\\sigma$")
         #ax[1].scatter(self.validation_set[2], self.validation_set[3],
         #              c='orange', marker='x', label='Validation set', alpha=0.5, s=15)
-        ax[1].plot(self.Y, self.f_train, 'r.',
+        ax[1].plot(self.X_f, self.f_train, 'r.',
                    markersize=10, label='training points')
         ax[1].plot(self.raw_data[0], self.raw_data[2],"--", label="Analytical solution",color = "black")
         ax[1].legend(loc='upper right', fontsize=10)
@@ -1059,7 +1061,7 @@ class PhysicsInformedGP_regressor():
         ax[1].grid(alpha=0.7)
 
         kernel = GPy.kern.RBF(input_dim=1, variance=1., lengthscale=1.)
-        model_GPy = GPy.models.GPRegression(self.X, self.u_train, kernel)
+        model_GPy = GPy.models.GPRegression(self.X_u, self.u_train, kernel)
         model_GPy.Gaussian_noise.variance.fix(self.noise[0])
         model_GPy.optimize_restarts(num_restarts=20, verbose=False)
 
@@ -1074,7 +1076,7 @@ class PhysicsInformedGP_regressor():
                            y_data.ravel() + 2*np.sqrt(var.ravel()), color="blue", alpha=0.2, label="$2\\sigma$")
         #ax[2].scatter(self.validation_set[0], self.validation_set[1],
         #              label="validation set", color="orange", marker="x", s=15)
-        ax[2].plot(self.X, self.u_train, 'r.',
+        ax[2].plot(self.X_u, self.u_train, 'r.',
                    markersize=10, label='training points')
         ax[2].plot(self.raw_data[0], self.raw_data[1],"--", label="Analytical solution",color = "black")
         ax[2].set_xlabel("t", fontsize=font_size)
@@ -1084,7 +1086,7 @@ class PhysicsInformedGP_regressor():
         ax[2].set_title("(c)", fontsize=font_size)
 
         kernel2 = GPy.kern.RBF(input_dim=1, variance=1., lengthscale=1.)
-        model_GPy2 = GPy.models.GPRegression(self.Y, self.f_train, kernel2)
+        model_GPy2 = GPy.models.GPRegression(self.X_f, self.f_train, kernel2)
         model_GPy2.Gaussian_noise.variance.fix(self.noise[1])
         model_GPy2.optimize_restarts(num_restarts=20, verbose=False)
         # L_sq error
@@ -1098,7 +1100,7 @@ class PhysicsInformedGP_regressor():
                            y_data.ravel() + 2*np.sqrt(var.ravel()), alpha=0.2, color="blue", label="$2\\sigma$")
         #ax[3].scatter(self.validation_set[2], self.validation_set[3],
         #              label="validation set", color="orange", marker="x", s=15)
-        ax[3].plot(self.Y, self.f_train, 'r.',
+        ax[3].plot(self.X_f, self.f_train, 'r.',
                    markersize=10, label='training points')
         ax[3].plot(self.raw_data[0], self.raw_data[2],"--", label="Analytical solution",color = "black")
         ax[3].set_xlabel("t", fontsize=font_size)
@@ -1128,7 +1130,7 @@ class PhysicsInformedGP_regressor():
         ax[0].set_title('(a) $\\mu_u$', fontsize=font_size)
         ax[0].set_xlabel(self.xlabel, fontsize=font_size)
         ax[0].set_ylabel(self.ylabel, fontsize=font_size)
-        ax[0].scatter(self.X[:, 0], self.X[:, 1], self.u_train, c='r', marker='o',label= 'Training points')
+        ax[0].scatter(self.X_u[:, 0], self.X_u[:, 1], self.u_train, c='r', marker='o',label= 'Training points')
         ax[0].set_zlabel("u(t,x)", fontsize=font_size)
         ax[0].legend()
         #mean u 3d
@@ -1136,7 +1138,7 @@ class PhysicsInformedGP_regressor():
         ax[1].set_title('(b) $\\mu_f$', fontsize=font_size)
         ax[1].set_xlabel(self.xlabel, fontsize=font_size)
         ax[1].set_ylabel(self.ylabel, fontsize=font_size)
-        ax[1].scatter(self.Y[:, 0], self.Y[:, 1], self.f_train, c='r',label='Training points', marker='o')
+        ax[1].scatter(self.X_f[:, 0], self.X_f[:, 1], self.f_train, c='r',label='Training points', marker='o')
         ax[1].set_zlabel("f(t,x)", fontsize=font_size)
         ax[1].legend()
 
@@ -1149,7 +1151,7 @@ class PhysicsInformedGP_regressor():
         ax[2].set_xlabel(self.xlabel, fontsize=font_size)
         ax[2].set_ylabel(self.ylabel, fontsize=font_size)
         
-        ax[2].scatter(self.X[:, 0], self.X[:, 1], c='r', marker='o')
+        ax[2].scatter(self.X_u[:, 0], self.X_u[:, 1], c='r', marker='o')
         fig.colorbar(cont, ax=ax[2])
 
         #variance 2d set to 0 if negative(only if negative is very small)
@@ -1162,7 +1164,7 @@ class PhysicsInformedGP_regressor():
         ax[3].set_xlabel(self.xlabel, fontsize=font_size)
         ax[3].set_ylabel(self.ylabel, fontsize=font_size)
         #ax[3].tick_params(axis='both', which='major', labelsize=font_size)
-        ax[3].scatter(self.Y[:, 0], self.Y[:, 1], c='r', marker='o')
+        ax[3].scatter(self.X_f[:, 0], self.X_f[:, 1], c='r', marker='o')
         fig.colorbar(cont2, ax=ax[3])
         #difference u
         data = self.raw_data
@@ -1181,14 +1183,14 @@ class PhysicsInformedGP_regressor():
         ax[4].set_title('(e) $|u_{true} - \\mu_u|$', fontsize=font_size)
         ax[4].set_xlabel(self.xlabel, fontsize=font_size)
         ax[4].set_ylabel(self.ylabel, fontsize=font_size)
-        ax[4].scatter(self.X[:, 0], self.X[:, 1], c='r', marker='o')
+        ax[4].scatter(self.X_u[:, 0], self.X_u[:, 1], c='r', marker='o')
         fig.colorbar(cont3, ax=ax[4])
         #difference f
         cont4 = ax[5].imshow(diff_f, cmap='viridis', alpha=1, extent=[0, 1, 0, 1], origin='lower')
         ax[5].set_title('(f) $|f_{true} - \\mu_f|$', fontsize=font_size)
         ax[5].set_xlabel(self.xlabel, fontsize=font_size)
         ax[5].set_ylabel(self.ylabel, fontsize=font_size)
-        ax[5].scatter(self.Y[:, 0], self.Y[:, 1], c='r', marker='o')
+        ax[5].scatter(self.X_f[:, 0], self.X_f[:, 1], c='r', marker='o')
         fig.colorbar(cont4, ax=ax[5])
         plt.tight_layout()
         if path != None:
@@ -1210,14 +1212,14 @@ class PhysicsInformedGP_regressor():
         ax[0].set_title('(a) $\\mu_u$')
         ax[0].set_xlabel(self.xlabel, fontsize=font_size)
         ax[0].set_ylabel(self.ylabel, fontsize=font_size)
-        ax[0].scatter(self.X[:, 0], self.X[:, 1], self.u_train, c='r', marker='o')
+        ax[0].scatter(self.X_u[:, 0], self.X_u[:, 1], self.u_train, c='r', marker='o')
         ax[0].set_zlabel("u(t,x)", fontsize=font_size)
         #mean f 3d
         ax[1].plot_surface(X_star[:,0].reshape(original_size), X_star[:,1].reshape(original_size), mean_f.reshape(original_size), cmap="viridis", alpha=0.8)
         ax[1].set_title('(b) $\\mu_f$')
         ax[1].set_xlabel(self.xlabel, fontsize=font_size)
         ax[1].set_ylabel(self.ylabel, fontsize=font_size)
-        ax[1].scatter(self.Y[:, 0], self.Y[:, 1], self.f_train, c='r', marker='o')
+        ax[1].scatter(self.X_f[:, 0], self.X_f[:, 1], self.f_train, c='r', marker='o')
         ax[1].set_zlabel("f(t,x)", fontsize=font_size)
         #difference u
         data = self.raw_data
@@ -1235,14 +1237,14 @@ class PhysicsInformedGP_regressor():
         ax[2].set_title('(c) $|u_{true} - \\mu_u|$')
         ax[2].set_xlabel(self.xlabel, fontsize=font_size)
         ax[2].set_ylabel(self.ylabel, fontsize=font_size)
-        ax[2].scatter(self.X[:, 0], self.X[:, 1], c='r', marker='o')
+        ax[2].scatter(self.X_u[:, 0], self.X_u[:, 1], c='r', marker='o')
         fig.colorbar(cont3, ax=ax[2])
         #difference f
         cont4 = ax[3].imshow(diff_f, cmap='viridis', alpha=1, extent=[0, 1, 0, 1], origin='lower')
         ax[3].set_title('(d) $|f_{true} - \\mu_f|$')
         ax[3].set_xlabel(self.xlabel, fontsize=font_size)
         ax[3].set_ylabel(self.ylabel, fontsize=font_size)
-        ax[3].scatter(self.Y[:, 0], self.Y[:, 1], c='r', marker='o')
+        ax[3].scatter(self.X_f[:, 0], self.X_f[:, 1], c='r', marker='o')
         fig.colorbar(cont4, ax=ax[3])
         plt.tight_layout()
         if savepath != None:
