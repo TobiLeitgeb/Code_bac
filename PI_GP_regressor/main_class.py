@@ -39,7 +39,7 @@ class PhysicsInformedGP_regressor():
     def __str__(self) -> str:
         string = "-----------------------------------------------\n"
         string += "GP with kernel: " + str(self.__class__._name_kernel) + "\n"
-        string += "Training data: " + str(self.X.shape) + "\n"
+        string += "Training data: " + str(self.X_u.shape) + "\n"
         string += "Training targets: " + str(self.targets.shape) + "\n"
         string += "Hyperparameters: " + str(self.params) + "\n"
         string += "Log marginal likelihood: " + str(self.result.fun) + "\n"
