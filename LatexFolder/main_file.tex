@@ -22,7 +22,7 @@
 \usepackage{listings}
 \usepackage{xcolor}
 
-% Define colors using xcolor
+
 \definecolor{mygray}{rgb}{0.5,0.5,0.5}
 \definecolor{mypurple}{HTML}{800080}
 \lstset{
@@ -50,7 +50,7 @@
         {>=}{{\textcolor{red}{>=}}}2
 }
 \title{Your Paper}
-\author{You}
+\author{Tobias Leitgeb}
 
 \begin{document}
 \maketitle
@@ -61,8 +61,7 @@
 \end{abstract}
 
 \section{Introduction}
-Our situation is that we have obtained measurements, potentially noisy, of both
-the $u$ and $f$. However, we do not have knowledge of the ODE parameters
+Our situation is that we have obtained measurements, potentially noisy, of both the $u$ and $f$. However, we do not have knowledge of the ODE parameters
 $\phi$. This is a typical situation in for example lab work, where we have
 measurements and want to determine an underlying physical parameter or
 interpolate the data. This is often done with typical linear regression
@@ -72,13 +71,10 @@ then introduce the physics informed framework and the optimization process. In t
 
 \section{Fundamentals}
 \subsection{Gaussian Process} %~\cite{pml1Book}\cite{RasmussenCarlEdward}
-As defined in~\cite{RasmussenCarlEdward} a Gaussian Process is a collection of
-random variables for which every finite set of variables have a joint
-multivariate Gaussian distribution. For a Regression model we define a function
+As defined in~\cite{RasmussenCarlEdward} a Gaussian Process is a collection of random variables for which every finite set of variables have a joint multivariate Gaussian distribution. For a Regression model we define a function
 $f(\bm{x}): \mathcal{X}\rightarrow \mathbb{R}$ with the input set $\{\bm{X}\}$
 = $\{\bm{x_n} \in \mathcal{X} \}_{n=1}^N$. We now let $f:
-    \mathcal{X}\rightarrow \mathbb{R}$ be our Gaussian Process. To fully define the
-GP we need to specify a mean function $m(\bm{x})$ and a covariance function or
+    \mathcal{X}\rightarrow \mathbb{R}$ be our Gaussian Process. To fully define the GP we need to specify a mean function $m(\bm{x})$ and a covariance function or
 kernel $k(\bm{x}, \bm{x'}): \mathcal{X} \times \mathcal{X} \rightarrow
     \mathbb{R}$ for $f(\bm{x})$:
 \begin{equation}
@@ -110,18 +106,10 @@ with ${[\bm{K}]}_{i,j} = k(\bm{x_{i*}},\bm{x_{j*}})$.
 \subsection{Regression}\label{sec:Regression}
 The goal of regression is given a training dataset $\mathcal{D} =
     \{(\bm{x_i},y_i)|i = 1,\ldots,N\}$ we want to make predictions for new test
-points $\bm{x_*}$ which are not in the training set. There are several methods
-which can be used to tackle this kind of problem. For example the basic linear
-regression using least squares and specific basis functions or a neural network
-that does regression. In this work we make use of the Gaussian process which is
-a non-parametric model. We will start with a Gaussian Process prior and then
-use the rules for Gaussian multivariate distributions to define a posterior
-predictive distribution, which we can then use to make predictions for new test
-points.
+points $\bm{x_*}$ which are not in the training set. There are several methods which can be used to tackle this kind of problem. For example the basic linear regression using least squares and specific basis functions or a neural network
+that does regression. In this work we make use of the Gaussian process which is a non-parametric model. We will start with a Gaussian Process prior and then use the rules for Gaussian multivariate distributions to define a posterior predictive distribution, which we can then use to make predictions for new test points.
 
-The general setup for regression is that we make observations/measurements $y$
-of an underlying function $f(\bm{x})$ at points $\bm{x}$ which are corrupted by
-a zero mean Gaussian noise with variance $\sigma_n^2$:
+The general setup for regression is that we make observations/measurements $y$ of an underlying function $f(\bm{x})$ at points $\bm{x}$ which are corrupted by a zero mean Gaussian noise with variance $\sigma_n^2$:
 \begin{equation}
     \bm{y} = \bm{f}(\bm{X}) + \mathcal{N}(0|\sigma_n^2 \bm{I})
 \end{equation}
@@ -193,8 +181,7 @@ A useful property of Gaussian Processes is that their linear transformation is
 still a Gaussian Process. This main
 
 \section{Physics informed framework}
-We choose our problem setup similar/equal to the one proposed in~\cite{RAISSI}. At the top we 
-have some sort of linear differential equation of a physical model:
+We choose our problem setup similar/equal to the one proposed in~\cite{RAISSI}. At the beginning we  have some sort of linear differential equation describing our physical model:
 \begin{equation}
     \label{eq:Lu=f}
     \mathcal{L}_{\bm{x}}^\phi u(\bm{x}) = f(\bm{x})
@@ -204,13 +191,13 @@ which can be written as a linear operator $\mathcal{L}_{\bm{x}}^\phi$ acting on 
 \mathcal{L}_{\bm{x}}^\phi = \sum_{i,j} \alpha_{i,j} \frac{\partial^2 }{\partial x_i \partial x_j} + \sum_{i} \beta_i \frac{\partial}{\partial x_i} + \gamma 
 \end{align}
 
-The function $f(\bm{x})$ acts as the forcing term and $u(\bm{x})$ is the solution of the differential equation.  \\
+and to parameters which remain constant. The function $f(\bm{x})$ acts as the forcing term and $u(\bm{x})$ is the solution of the differential equation.  \\
 \\
 We now start by assuming that the solution of the differential equation $u(\bm{x})$ is a Gaussian Process of the form:
 \begin{equation}
     u(\bm{x}) \thicksim \mathcal{G}\mathcal{P}(\bm{0},k_{uu}(\bm{x},\bm{x'};\bm{\theta}))
 \end{equation}
-with $k_{uu}(\bm{x},\bm{x'};\bm{\theta})$ being the kernel depending on its hyperparameters $\theta$ for the $\mathcal{G}\mathcal{P}$ (on) $u(\bm{x})$. With the known linear relation between $u$ and $f$ from equation~\ref{eq:Lu=f}, we can now say that $f(\bm{x})$ must also be $\mathcal{G}\mathcal{P}$~\cite{RasmussenCarlEdward} of form:
+with $k_{uu}(\bm{x},\bm{x'};\bm{\theta})$ being the kernel depending on its hyperparameters $\theta$ . With the known linear relation between $u$ and $f$ from equation~\ref{eq:Lu=f}, we can now say that $f(\bm{x})$ must also be $\mathcal{G}\mathcal{P}$~\cite{RasmussenCarlEdward} of form:
 \begin{equation}
     f(\bm{x}) \thicksim \mathcal{G}\mathcal{P}(\bm{0},k_{ff}(\bm{x},\bm{x'};\bm{\theta}))
 \end{equation}
@@ -227,8 +214,8 @@ We also need the mixed terms between $u(x)$ and $f(x)$, namely $k_{uf}$ and $k_{
         k_{fu}(\bm{x,x'};\bm{\theta,\phi}) & = \mathcal{L}_{\bm{x}}^\phi k_{uu}(\bm{x},\bm{x'};\bm{\theta})
     \end{aligned}
 \end{equation}
-To simplify the notation, the dependence on the hyperparameters $\bm{\theta}$ and $\bm{\phi}$ is not written explicitly anymore.
-With this construction we now have two Gaussian Processes. As described in~\cite{garnett_2023_full} we can now create a joint Gaussian process of u and f in the form: (not sure if I understood this correctly)
+To simplify the notation, the dependence on the hyperparameters $\bm{\theta}$ and $\bm{\phi}$ is from now on not written explicitly anymore.
+With this construction we now have two Gaussian Processes, one for the solution $u(\bm{x})$ of the differential equation and one for the forcing term $f(\bm{x}$. As described in~\cite{garnett_2023_full} we can now create a joint Gaussian Process of $u$ and $f$ in the form:
 \begin{equation}
     \label{eq:jointGP}
     \begin{aligned}
@@ -276,16 +263,13 @@ Arguably the most important part of the overall framework is the optimization of
     \log p(\bm{y}|\bm{X},\bm{\theta},\sigma_{n_u}^2,\sigma_{f_u}^2,\bm{\phi}) =
     -\frac{1}{2}\bm{y}^\intercal \bm{K}^{-1}\bm{y} - \frac{1}{2}\log\left\lvert \bm{K}\right\rvert - \frac{n}{2}\log(2\pi)
 \end{equation}
-with $\bm{K}$ being the covariance matrix of the joint GP in equation~\ref{eq:jointGP_observations}. For the optimization we tried different gradient based optimizers, as well as a heuristic search method, namely the Nelder-Mead method. All the optimizers used came from the scipy.optimize.minimize function from the scipy library. We tried several gradient based optimizers like the limited memory Broyden-Fletcher-Goldfarb-Shanno (L-BFGS-B) algorithm, the conjugate gradient (CG) algorithm and the truncated Newton (TNC) algorithm. The best results were however obtained by using the Nelder-Mead~\cite{Singer:2009NelderMead}. From the gradient based methods the TNC performed the best and was most of the time nearly as good as the Nelder-Mead. However, the TNC was significantly slower and needed more restarts than the Nelder-Mead. Especially with an increasing number of training points the gradient based optimizers failed completly and the Nelder-Mead method was the only one that still worked. This could be because the Nelder Mead algorithm does not use any gradient information and that for more training points the calculation of the gradients of the mll gets unstable. Generally, it is important to add some jitter to the diagonal of $\bm{K}$ to minimize the risk of numerical instabilities when calculating the Cholesky decomposition of $\bm{K}$. Also, without jitter a significant part of the optimization landscape is not defined, because of the  gram matrix $\bm{K}$ not being positive definite for some hyperparameter values. The best results were obtained when using a jitter in the range of $10^{-6} to 10^{-7}$. More about the specific implementation will be talked about in the next chapter.\\
+with $\bm{K}$ being the covariance matrix of the joint GP in equation~\ref{eq:jointGP_observations}. For the optimization we tried different gradient based optimizers, a heuristic search algorithm, as well as baysian optimization techniques. All the gradient based optimizers used came from the scipy.optimize.minimize function from the scipy library. We tried several gradient based optimizers like the limited memory Broyden-Fletcher-Goldfarb-Shanno (L-BFGS-B) algorithm, the conjugate gradient (CG) algorithm and the truncated Newton (TNC) algorithm. For the gradient based methods the TNC performed the best and was most of the time nearly as good as the Nelder-Mead. However, the TNC was significantly slower and needed more restarts than the Nelder-Mead. Especially with an increasing number of training points the gradient based optimizers failed completely for some cases. This could be because that for more training points the calculation of the gradients of the mll gets unstable. For more complex models, like the example of the 2d time dependent wave equation, the optimization landscape gets very rough.  Generally, it is important to add some jitter to the diagonal of $\bm{K}$ to minimize the risk of numerical instabilities when calculating the Cholesky decomposition of $\bm{K}$ and to smooth out the otherwise very rough optimization landscape. Also, without jitter a significant part of the optimization landscape is not defined, because of the  gram matrix $\bm{K}$ not being positive definite for some hyperparameter values. The best results were obtained when using a jitter in the range of $10^{-6} to 10^{-7}$. More about the specific implementation will be talked about in the next chapter.\\
 \\
-A common problem in the optimization process of non-convex function is the problem of converging to a local minimum. To avoid this problem we started the optimization process for different initial values of the hperparameters. The initial values were sampled from uniform distributions, only the length scale hyperparameters $l$ were sampled from a log uniform distribution because of it being a scale parameter. Because of the random initialization, and the presumably high number of local minima in the optimization landscape, the results for the hyperparameters varied. However, for a sufficient number of optimization runs the results normally reached a similar accuracy and similar hyperparamter values.\\
+A common problem in the optimization process of non-convex function is the problem of converging to a local minimum. To avoid this problem we started the optimization process for different initial values of the hperparameters. The initial values were sampled from uniform distributions, only the length scale hyperparameters $l$ were sampled from a log uniform distribution because of it being a scale parameter. Because of the random initialization, and the presumably high number of local minima in the optimization landscape, the results for the hyperparameters varied. However, for a sufficient number of optimization runs the results normally reached a similar accuracy and similar hyperparamter values. \\
 \\
-To conclude, the optimization process is the key part of the framework, because we can directly make predictions with the optimized hyperparameters, but also obtain the parameters $\phi$ of the underlying differential equation. A key step for improving the overall framework would be to improve the optimization process. However, this would be very time-consuming and the obtained results are sufficiently accurate, as well as the computation time being reasonably short, for the scope of this work.\\
+To conclude, the optimization process is the key part of the framework, because we can directly make predictions with the optimized hyperparameters, but also obtain the parameters $\phi$ of the underlying differential equation. A key step for improving the overall framework would be to improve the optimization process. However, this would be very time-consuming and the obtained results are sufficiently accurate, as well as the computation time being reasonably short, for the scope of this work. With increasing complexity of the physical model, bigger problems with the optimization could arise.\\
 \subsection{Predictions with the Posterior}
-With the obtained hyperparameters $\bm{\theta_*}$ and $\bm{\phi_*}$ we can make
-new predictions at a test location $\bm{x_*}$. Similar to the construction in
-chapter~\ref{sec:Regression} we can now formulate the predictive posterior
-distribution for $u(\bm{x_*})$ and also for $f(\bm{x_*})$ as done
+With the obtained hyperparameters $\bm{\theta_*}$ and $\bm{\phi_*}$ we can make new predictions at a test location $\bm{x_*}$. Similar to the construction in chapter~\ref{sec:Regression} we can now formulate the predictive posterior distribution for $u(\bm{x_*})$ and also for $f(\bm{x_*})$ as done
 in~\cite{RAISSI}:
 \begin{equation}
     \begin{aligned}
@@ -308,7 +292,6 @@ with $\bm{\kappa_u}$ and $\bm{\kappa_f}$ being:
         \bm{\kappa_f} = [k_{fu}(\bm{x_*},\bm{X_u})k_{ff}(\bm{x_*,\bm{X_f}})]
     \end{aligned}
 \end{equation}
-
 
 \section{Numerical/Computational implementation}
 In this section we will present the computational implementation in python of the kernel, the log marginal likelihood and of the predictive distribution. For greatly improving the computation time as well as the usage of automatic differentiation the jax library~\cite{jax2018github} was used. A general introduction can be found \href{https://jax.readthedocs.io/en/latest/notebooks/quickstart.html}{here}, as well as a specific introduction to kernel derivatives with jax \href{https://jejjohnson.github.io/research_notebook/content/notes/kernels/kernel_derivatives.html}{here}. Goal of this section is to give a short overview of the computational methods used for the implementation of the Gaussian process regression and the construction of the kernel.\\
@@ -428,7 +411,7 @@ The one dimensional time dependent heat equation with a forcing term is:
         \\ u(t,0) = 0; u(t,L) = 0
     \end{aligned}
 \end{equation}
-with $\alpha$ as the thermal diffusivity. Here we use the same forcing term $f(x,t) = e^{-t}(4\pi^2-1)\sin{(2\pi x)}$, parameter $\alpha = 1$ and boundary conditions as were used in \cite{RAISSI} in order to compare the accuracy of our implementation. As described before, the overall implementation is basically the same, so we should expect similar results. The ground truth was calculated for a grid of size 100x100. The results can be seen in figure \ref{fig:results_heatequation}. The model managed to predict the ground truth very accurately with relative $L^2$ errors of $L^2_u = 0.00381 $ and $L^2_f = 0.00804$. The predictions only have small errors on the domain edges and are nearly error free in the central part of the grid. The jitter applied to the diagonal elements of the gram matrix $K$ was set to $10^{-6}$. With a jitter value in the range of $10^{-7}$, smaller optimization minimas could be found with slightly smaller $L_2$ errors. However, the predictive variance would be smaller than zero (numerical errors) in some central regions and the optimization landscape would get increasingly rough.
+with $\alpha$ as the thermal diffusivity. Here we use the same forcing term $f(x,t) = e^{-t}(4\pi^2-1)\sin{(2\pi x)}$, parameter $\alpha = 1$ and boundary conditions as were used in \cite{RAISSI} in order to compare the accuracy of our implementation with their result. The model managed to predict the ground truth very accurately with relative $L^2$ errors of $L^2_u = 0.00370 $ and $L^2_f = 0.0075$. The model learns the hyperparameters to be $(l_x, \sigma_f, l_t, \alhpa) =$ (0.32882, 1.53232, 1.20066, 1.00004). The predictions only have small errors on the domain edges and are nearly error free in the central part of the grid. The results can be seen in figure \ref{fig:results_heatequation}. The jitter applied to the diagonal elements of the gram matrix $K$ was set to $10^{-6}$. With a jitter value in the range of $10^{-7}$, smaller optimization minima could be found with slightly smaller $L_2$ errors. However, the predictive variance would be smaller than zero (numerical errors) in some central regions and the optimization landscape would get increasingly rough.
 \begin{figure}
     \centering
     \includegraphics[width=0.7\textwidth]{../final_examples/heat_equation/merged_plots.png}
@@ -445,7 +428,7 @@ We now want to explore more about how the extra parameter introduced by the part
     \caption{Results of an optimization run with $n_{restarts}$ = 1000}
     ~\label{fig:results_optrun}
 \end{figure}
-
+\newpage 
 \subsection{Wave Equation}
 For the third example we will look at the two-dimensional time dependent wave equation. The wave equation is a hyperbolic partial differential equation that describes the propagation of waves of various types. In our case we define the wave equation on a square domain [0,L]×[0,L]. The wave equation is then given by:
 \begin{equation}
@@ -458,10 +441,10 @@ For the third example we will look at the two-dimensional time dependent wave eq
 \end{equation}
 with $c$ as the wave speed. The ground truth was calculated with $c = 1$, $L_x = L_y = 2$ and with the forcing term:
 \begin{align}
-  f(x,y,t) = 5\Sin(t\pi)*e^{(-5((x - 1/2)^2 + (y - 1/2)^2)/\sigma^2]}  
+  f(x,y,t) = 5\sin(t\pi)*e^{(-5((x - 1/2)^2 + (y - 1/2)^2)/\sigma^2}  
 \end{align}
 with $\sigma^2 = 1$. The training points were sampled from the domain [0,2]×[0,2]×[0,4]. With the increase in dimensions we also need significantly more training points to account for the bigger domain. Especially if the function varies a lot over time. Before, in the 2d case, 20 training points were sufficient to achieve good predictions. For this example around $n_{train} = 400$ training points, for both $u$ and $f$, were needed to get good predictions.
-The relative $L^2$ error for the prediction of $u(x,y,t)$ was 0.0163 and $c$ was optimized to $c = 1.0081$. To further increase the accuracy we added extra training points for $u$ on the boundary of the domain. In figure \ref{fig:training_points_wave} the distribution of the training points is shown. This is a very straight forward way of increasing the accuracy. Specifically for boundary value problems, data on the domain edges can be easily accessible. For example, one could look at the example above as a membrane, which is fixed on a square. Therefore, the edges would be clamped down and the amplitude would be zero. With the incorporation of 320 training points on the boundary of $u$, the relative error of the predictive mean would decrease to a value of $L^2_u = 0.00355$. The hyperparameter $c$ was optimized to $c = 0.9974$. We can observe, that the accuracy of the hyperparameter did not increase . However, the overall accuracy of the prediction was improved.
+The relative $L^2$ error for the prediction of $u(x,y,t)$ was 0.0163 and $c$ was optimized to $c = 1.0081$. To further increase the accuracy we added extra training points for $u$ on the boundary of the domain. In figure \ref{fig:training_points_wave} the distribution of the training points is shown. This is a very straight forward way of increasing the accuracy. Specifically for boundary value problems, data on the domain edges can, in some cases, be easily accessible. For example, one could look at the example above as a membrane, which is fixed on a square. Therefore, the edges would be clamped down and the amplitude would be zero. With the incorporation of 320 training points on the boundary of $u$, the relative error of the predictive mean would decrease to a value of $L^2_u = 0.00355$. The hyperparameter $c$ was optimized to $c = 0.9974$. We can observe, that the accuracy of the hyperparameter did not increase with the additional boundary points. However, the overall accuracy of the prediction was improved notably.
 
 %0.016 400 data points no boundary points
 \begin{figure}
@@ -473,7 +456,7 @@ The relative $L^2$ error for the prediction of $u(x,y,t)$ was 0.0163 and $c$ was
 
 \begin{figure}
     \centering
-    \includegraphics[width=1\textwidth]{../final_examples/wave_equation/predictive_mean.png}
+    \includegraphics[width=1\textwidth]{../final_examples/wave_equation/wave_3d.png}
     \caption{Plots for the informed model. (a) \& (b) predictive mean $\bm{\mu_u}$ and $\bm{\mu_f}$ with training points in red. (c) \& (d) predictive standard deviations $\bm{\sigma_u}$ and $\bm{\sigma_f}$. (e) \& (f) difference between the predictive mean $\bm{\mu}$ and the ground truths $u$ and $f$. The MSEs for the informed model are $MSE_u =  \cdot 10^{-7}$ and $MSE_f =  \cdot 10^{-3}$. The relative $L^2$ errors are $L^2_u = $ and $L^2_f = $.}
     ~\label{fig:wave}
 \end{figure}
