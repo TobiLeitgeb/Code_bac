@@ -54,6 +54,8 @@
 
 \begin{document}
 \maketitle
+\newpage
+\tableofcontents
 
 \newpage
 \begin{abstract}
@@ -74,7 +76,7 @@ then introduce the physics informed framework and the optimization process. In t
 As defined in~\cite{RasmussenCarlEdward} a Gaussian Process is a collection of random variables for which every finite set of variables have a joint multivariate Gaussian distribution. For a Regression model we define a function
 $f(\bm{x}): \mathcal{X}\rightarrow \mathbb{R}$ with the input set $\{\bm{X}\}$
 = $\{\bm{x_n} \in \mathcal{X} \}_{n=1}^N$. We now let $f:
-    \mathcal{X}\rightarrow \mathbb{R}$ be our Gaussian Process. To fully define the GP we need to specify a mean function $m(\bm{x})$ and a covariance function or
+    \mathcal{X}\rightarrow \mathbb{R}$ be our Gaussian Process. To fully define the $\mathcal{GP}$ we need to specify a mean function $m(\bm{x})$ and a covariance function or
 kernel $k(\bm{x}, \bm{x'}): \mathcal{X} \times \mathcal{X} \rightarrow
     \mathbb{R}$ for $f(\bm{x})$:
 \begin{equation}
@@ -83,7 +85,7 @@ kernel $k(\bm{x}, \bm{x'}): \mathcal{X} \times \mathcal{X} \rightarrow
         k(\bm{x},\bm{x'}) & = \mathbb{E}[(f(\bm{x})-m(\bm{x}))(f(\bm{x'})-m(\bm{x'}))]
     \end{aligned}
 \end{equation}
-In this work the mean function $m(\bm{x})$ of the GP is set to zero. This is quite common, mainly for notational reasons~\cite{RasmussenCarlEdward}.\\
+In this work the mean function $m(\bm{x})$ of the $\mathcal{GP}$ is set to zero.\\
 So what we are left with for  $m(\bm{x})$ and $ k(\bm{x},\bm{x'})$ is:
 \begin{equation}
     \begin{aligned}
@@ -91,12 +93,12 @@ So what we are left with for  $m(\bm{x})$ and $ k(\bm{x},\bm{x'})$ is:
         k(\bm{x},\bm{x'}) & = \mathbb{E}[f(\bm{x})f(\bm{x'})]
     \end{aligned}
 \end{equation}
-We now write our Gaussian Process $f(\bm{x})$ as:
+We can now write our Gaussian Process $f(\bm{x})$ as:
 \begin{equation}
     f(\bm{x})\thicksim \mathcal{G} \mathcal{P}(0,k(\bm{x},\bm{x'}))
 \end{equation}
 It is important to note that $ k(\bm{x},\bm{x'})$ has to be positive definite and symmetric in order to be a valid kernel function.
-Because of the definition of the GP we can now generate a joint Gaussian distribution for a finite set of points $\bm{X_*}$:
+Because of the definition of a $\mathcal{GP}$ we can now generate a joint Gaussian distribution for a finite set of points $\bm{X_*}$:
 \begin{equation}
     \label{eq:f_star_random_vector}
     p(\bm{f_*|\bm{X_*}}) = \mathcal{N}(\bm{f_*}|\bm{0},\bm{K_*})
@@ -106,15 +108,14 @@ with ${[\bm{K}]}_{i,j} = k(\bm{x_{i*}},\bm{x_{j*}})$.
 \subsection{Regression}\label{sec:Regression}
 The goal of regression is given a training dataset $\mathcal{D} =
     \{(\bm{x_i},y_i)|i = 1,\ldots,N\}$ we want to make predictions for new test
-points $\bm{x_*}$ which are not in the training set. There are several methods which can be used to tackle this kind of problem. For example the basic linear regression using least squares and specific basis functions or a neural network
-that does regression. In this work we make use of the Gaussian process which is a non-parametric model. We will start with a Gaussian Process prior and then use the rules for Gaussian multivariate distributions to define a posterior predictive distribution, which we can then use to make predictions for new test points.
+points $\bm{x_*}$ which are not in the training set. There are several methods which can be used to tackle this kind of problem. For example the basic linear regression using least squares and specific basis functions or a neural network that does regression. In this work we make use of the Gaussian process which is a non-parametric model. We will start with a Gaussian Process prior and then use the rules for Gaussian multivariate distributions to define a posterior predictive distribution, which we can then use to make predictions for new test points.
 
 The general setup for regression is that we make observations/measurements $y$ of an underlying function $f(\bm{x})$ at points $\bm{x}$ which are corrupted by a zero mean Gaussian noise with variance $\sigma_n^2$:
 \begin{equation}
     \bm{y} = \bm{f}(\bm{X}) + \mathcal{N}(0|\sigma_n^2 \bm{I})
 \end{equation}
-When we set the GP Prior onto the function $f$ we have to add the normally distributed noise. To get the prior for the observations $\bm{y}$ we simply need to change the covariance function to cov($\bm{y_p,y_q}$) = $k(\bm{x_p,x_q}) + \sigma_n^2\delta_{pq}$.\\
-As described before in equation~\ref{eq:f_star_random_vector} we can generate a Gaussian random vector for new test data $\bm{X_*}$. Both $\bm{y}$ and $\bm{f_*}$ are now multivariate Gaussians. We can therefore introduce the joint distribution of the observed data and the values of $f$ at the test points $\bm{X_*}$ as:
+When we set the $\mathcal{GP}$ Prior onto the function $f$ we have to add the normally distributed noise. To get the prior for the observations $\bm{y}$ we simply need to change the covariance function to cov($\bm{y_p,y_q}$) = $k(\bm{x_p,x_q}) + \sigma_n^2\delta_{pq}$.\\
+As described before in equation~\ref{eq:f_star_random_vector} we can generate a Gaussian random vector for new test data $\bm{X_*}$. Both $\bm{y}$ and $\bm{f_*}$ are now multivariate Gaussian distributions. We can therefore introduce the joint distribution of the observed data and the values of $f$ at the test points $\bm{X_*}$ as:
 \begin{equation}
     \label{eq:joint_f,X_*}
     \begin{aligned}
@@ -130,7 +131,7 @@ As described before in equation~\ref{eq:f_star_random_vector} we can generate a 
         \right)
     \end{aligned}
 \end{equation}
-From this joint Gaussian prior we can then calculate the predictive posterior distribution by applying the rules for conditioning Gaussians. A good description for this conditioning can be found in~\cite{bishop} (chapter 2.3.1). The predictive distribution is then given by:
+From this joint Gaussian prior we can then calculate the predictive posterior distribution by applying the rules for conditioning multivariate Gaussian distributions. A good description for this conditioning can be found in~\cite{bishop} (chapter 2.3.1). The predictive distribution is then given by:
 \begin{equation}
     \begin{aligned}
         \label{eq:general_kernel}
@@ -147,7 +148,7 @@ $k(\bm{x},\bm{x'})$, which maps two input pairs $\bm{x} \in \mathcal{X}$ and
 $\bm{x'} \in \mathcal{X'}$ into $\mathbb{R}$. To be a valid covariance function
 the kernel needs to satisfy two main conditions. First it needs to be symmetric
 so that $k(\bm{x,x'}) = k(\bm{x,x'})$ and second it needs to be positive
-semidefinite (PSD) The general covariance function used in this work is the
+semi-definite (PSD) The general covariance function used in this work is the
 squared exponential covariance function (SE) as defined
 in~\cite{RasmussenCarlEdward}:
 \begin{equation}
@@ -174,11 +175,9 @@ $nmll$
 \end{equation}
 with $K_y$ = $K_f + \sigma_n^2 \bm{I}$. As described in~\cite{RasmussenCarlEdward}, the $mll$ consists of three parts, which can each be understood separately. The first term $\frac{1}{2}\bm{y}^\intercal \bm{K_y}^{-1}\bm{y}$ is in charge of the data fit, the second term $\log\left\lvert K_y\right\rvert$ is the complexity penalty and the last term is a normalization term.
 
-\subsection{Joint GPs}
+\subsection{Joint $\mathcal{GP}$s}
 
-\subsection{Linear operators and GPs}
-A useful property of Gaussian Processes is that their linear transformation is
-still a Gaussian Process. This main
+\subsection{Linear operators and $\mathcal{GP}$s}
 
 \section{Physics informed framework}
 We choose our problem setup similar/equal to the one proposed in~\cite{RAISSI}. At the beginning we  have some sort of linear differential equation describing our physical model:
@@ -238,7 +237,7 @@ We now look at noisy observations of both $u$ and $f$,with noise $\sigma_u$ and 
         y_{i,f} = u_i(\bm{x_{i,f}}) + \mathcal{N}(0|\sigma_f^2)
     \end{aligned}
 \end{equation}
-with which we create two data sets $\{\bm{X_u,y_u}\}$ and $\{\bm{X_f,y_f}\}$. Similarly, as we did before for the test points in equation~\ref{eq:joint_f,X_*} we can now write (create) a joint Gaussian distribution of the observations $\bm{y_u}$ and $\bm{y_f}$. We collect $\bm{X_u,X_f}$ in $\bm{X}$ and $\bm{y_u,y_f}$ in $\bm{y}$. With the joint GP at equation~\ref{eq:jointGP}, the joint distribution will take the following form:
+with which we create two data sets $\{\bm{X_u,y_u}\}$ and $\{\bm{X_f,y_f}\}$. Similarly, as we did before for the test points in equation~\ref{eq:joint_f,X_*} we can now write (create) a joint Gaussian distribution of the observations $\bm{y_u}$ and $\bm{y_f}$. We collect $\bm{X_u,X_f}$ in $\bm{X}$ and $\bm{y_u,y_f}$ in $\bm{y}$. With the joint $\mathcal{GP}$ at equation~\ref{eq:jointGP}, the joint distribution will take the following form:
 \begin{equation}
     \label{eq:jointGP_observations}
     \begin{aligned}
@@ -257,7 +256,7 @@ $\bm{\phi_*}$. More information about the optimization process will be provided
 in the next chapter.
 
 \subsection{Optimization/Finding of the hyperparameters}
-Arguably the most important part of the overall framework is the optimization of the hyperparameters. The optimization is done by minimizing the negative marginal log likelihood (mll) of the joint GP with respect to the hyperparameters $\bm{\theta, \phi}$. The mll is defined as:
+Arguably the most important part of the overall framework is the optimization of the hyperparameters. The optimization is done by minimizing the negative marginal log likelihood (mll) of the joint $\mathcal{GP}$ with respect to the hyperparameters $\bm{\theta, \phi}$. The mll is defined as:
 \begin{equation}
     \label{eq:mll}
     \log p(\bm{y}|\bm{X},\bm{\theta},\sigma_{n_u}^2,\sigma_{f_u}^2,\bm{\phi}) =
@@ -268,7 +267,7 @@ with $\bm{K}$ being the covariance matrix of the joint GP in equation~\ref{eq:jo
 A common problem in the optimization process of non-convex function is the problem of converging to a local minimum. To avoid this problem we started the optimization process for different initial values of the hperparameters. The initial values were sampled from uniform distributions, only the length scale hyperparameters $l$ were sampled from a log uniform distribution because of it being a scale parameter. Because of the random initialization, and the presumably high number of local minima in the optimization landscape, the results for the hyperparameters varied. However, for a sufficient number of optimization runs the results normally reached a similar accuracy and similar hyperparamter values. \\
 \\
 To conclude, the optimization process is the key part of the framework, because we can directly make predictions with the optimized hyperparameters, but also obtain the parameters $\phi$ of the underlying differential equation. A key step for improving the overall framework would be to improve the optimization process. However, this would be very time-consuming and the obtained results are sufficiently accurate, as well as the computation time being reasonably short, for the scope of this work. With increasing complexity of the physical model, bigger problems with the optimization could arise.\\
-\subsection{Predictions with the Posterior}
+\subsection{Predictions with the Posterior distribution}
 With the obtained hyperparameters $\bm{\theta_*}$ and $\bm{\phi_*}$ we can make new predictions at a test location $\bm{x_*}$. Similar to the construction in chapter~\ref{sec:Regression} we can now formulate the predictive posterior distribution for $u(\bm{x_*})$ and also for $f(\bm{x_*})$ as done
 in~\cite{RAISSI}:
 \begin{equation}
@@ -293,10 +292,10 @@ with $\bm{\kappa_u}$ and $\bm{\kappa_f}$ being:
     \end{aligned}
 \end{equation}
 
-\section{Numerical/Computational implementation}
+\section{Numerical implementation}
 In this section we will present the computational implementation in python of the kernel, the log marginal likelihood and of the predictive distribution. For greatly improving the computation time as well as the usage of automatic differentiation the jax library~\cite{jax2018github} was used. A general introduction can be found \href{https://jax.readthedocs.io/en/latest/notebooks/quickstart.html}{here}, as well as a specific introduction to kernel derivatives with jax \href{https://jejjohnson.github.io/research_notebook/content/notes/kernels/kernel_derivatives.html}{here}. Goal of this section is to give a short overview of the computational methods used for the implementation of the Gaussian process regression and the construction of the kernel.\\
 
-\subsection{Kernel}
+\subsection{Kernel functions}
 For constructing and deriving the kernel as described in equations \ref{eq:kff} and \ref{eq:kuf_kfu} we used two different computational approaches. The first approach was to analytically calculate the derivatives arising from the differential operators and the second one was to use automatic differentiation. For a general overview the process is shown with the specific example ODE of a damped oscillator with the differential operator $\mathcal{L}_{t}^\phi = m\frac{\partial^2 u(t)}{\partial t^2} + \gamma \frac{\partial u(t)}{\partial t} + k u(t) $.\\
 
 \begin{equation}
@@ -316,8 +315,8 @@ When comparing the accuracy and the speed of the two approaches there was no not
 
 
 \subsection{Log marginal likelihood and predictive distribution}
-A general problem of Gaussian processes is the numerical calculation of the inverse of the covariance matrix $\bm{K}$. This problem becomes increasingly apparent with a high number of training points. Especially in the training process the inverse of $\bm{K}$ has to be calculated several times. However, with the vectorized implementation, as well as the use of just in time (jit) compiled functions from the jax library the computation time was not a major problem. Additionally, the number of training points was held at a rather low number (highest number was 400 for the 3d wave equation). Still, the calculation of the inverse can be a source of numerical instabilities. To minimize numerical errors and to avoid a direct inversion of $\bm{K}$ the calculations involving the inverse were rewritten using the cholesky decomposition. \\
-The cholesky decomposition of a positive definite, symmetric matrix $\bm{A}$ is given by:
+A general problem of Gaussian processes is the numerical calculation of the inverse of the covariance matrix $\bm{K}$. This problem becomes increasingly apparent with a high number of training points. Especially in the training process the inverse of $\bm{K}$ has to be calculated several times. However, with the vectorized implementation, as well as the use of just in time (jit) compiled functions from the jax library the computation time was not a major problem. Additionally, the number of training points was held at a rather low number. The highest number of total training points was 1120 for the 2D time dependent wave equation. For this example the computation time and the memory usage became notable, but still reasonable on a small local machine/laptop. In general, the calculation of the inverse can be a source of numerical instabilities. To minimize numerical errors and to avoid a direct inversion of $\bm{K}$ the calculations involving the inverse were rewritten using the Cholesky decomposition. \\
+The Cholesky decomposition of a positive definite, symmetric matrix $\bm{A}$ is given by:
 \begin{equation}
     \bm{K} = \bm{L}\bm{L}^\intercal
 \end{equation}
@@ -326,45 +325,42 @@ with $\bm{L}$ being a lower triangular matrix \cite{RasmussenCarlEdward}. With t
     \label{eq:inv_K}
     \bm{u}^\intercal \bm{K}^{-1}\bm{v} = \bm{u}^\intercal (\bm{LL^{\intercal}})^{-1} \bm{v} = \bm{u}^\intercal \bm{L^{\intercal} \backslash (L\backslash v)}
 \end{equation}
-shown with two general vectors $\bm{u}$ and $\bm{v}$ and $\backslash$ as the left matrix divide operator. For this we used that we can rewrite $(\bm{LL^{\intercal}})^{-1} \bm{v}$ as a solution $\bm{x}$ of a linear system of the form $\bm{LL^{\intercal}} \bm{x}=\bm{v}$, which we now solve for $\bm{x}$. This is a very stable and efficient way of calculating the equation. The implementation of the log marginal likelihood is shown in~\ref{code:mll}.\\
+shown with two general vectors $\bm{u}$ and $\bm{v}$ and $\backslash$ as the left matrix divide operator. For this we used that we can rewrite $(\bm{LL^{\intercal}})^{-1} \bm{v}$ as a solution $\bm{x}$ of a linear system of the form $\bm{LL^{\intercal}} \bm{x}=\bm{v}$, which we now solve for $\bm{x}$. This is a very stable and efficient way of calculating the equation. In \cite{RasmussenCarlEdward}, this specific numerical implementation utilizing a Cholesky decomposition is also used. The implementation of the log marginal likelihood is shown in~\ref{code:mll}.\\
 \lstinputlisting[firstline=111,lastline=119,caption={Log marginal likelihood}, label={code:mll}]{../PI_GP_regressor/main_class.py}
 
 For the predictive distribution we again rewrote equation \ref{eq:predictive_mean_cov} as described in equation \ref{eq:inv_K}. The implementation of the predictive distribution is shown in~\ref{code:predictive_distribution}.\\
 \lstinputlisting[firstline=257,lastline=273,caption={Predictive distribution}, label={code:predictive_distribution}]{../PI_GP_regressor/main_class.py}
 
 \section{Results}
-In the following we will call the physics informed model, which is used here, the
+In the following we will call the physics informed model, the
 informed model and the vanilla model the model without the physics informed
-framework and only a general SE kernel.\\ \\ For testing the framework we will
-use ODEs and PDEs of physical models. More specifically, we will look at the
-three main types of PDEs, namely the Elliptic, Hyperbolic, and Parabolic type and as a starting example a damped oscillator in one dimension. For obtaining
+framework and only a general SE kernel.\\ 
+\\ For testing the framework we will
+use ODEs and PDEs, which are particularly interesting in basic physical models. More specifically, we will look at the
+three main types of PDEs, namely the elliptic, hyperbolic, and parabolic type and as a starting example a damped oscillator in one dimension. For obtaining
 $u(\bm{x})$, we will fully define the differential equation with its initial-
-and boundary conditions and then use mathematicas NDSolve (numerical solution)
-or NSolve (analytical solution) to compute the solution
-$\{(\bm{x});u(\bm{x}),f(\bm{x})\}$. The obtained solutions will be used as the ground truth.
-The training and validation points will be sampled from the solution domain $[\bm{x}_{\min}, \bm{x}_{\max}]$ using a sobol
-sequence[cite]. We will add some noise to the samples for the training and
-validation points, to analyze the impact onto the results and to simulate real
-world data. Furthermore, often the incorporation of a small noise improves stability in
-the optimization and prediction process. This will be done by creating two data
-sets $\{(\bm{x_u});\bm{y_u}\}$ and $\{(\bm{x_f});\bm{y_f}\}$ with $\bm{y_i} =
-    u(\bm{x_i}) + \mathcal{N}(\bm{0}|\sigma_{ni}^2 I) ; \; i = u,f$. The
-implementation of a sobol sequence helps with evenly spaced training and
-validation points, which is important for the training process of the model.\\
+and boundary conditions and then use mathematicas $NDSolve$ (numerical solution)
+or $NSolve$ (analytical solution) to compute the solution set
+$\{(\bm{x});u(\bm{x}),f(\bm{x})\}$. The obtained solutions will be used as the ground truth and seen as noise free. The training and validation points will then be sampled from the solution domain $[\bm{x}_{\min}, \bm{x}_{\max}]$ using a quasi-random sequence, called Sobol sequence. In comparison to typical pseudo-random number generators, the Sobol sequence generates points that are more evenly distributed over the sample domain. This is very important for the overall performance of the model. Another option would be to place the training points directly, such as in an equidistant manner, or specifically in important areas. A good way of improving performance can be achieved by forcing boundary conditions by specifically adding training points onto the boundary. This case is later shown in the example of the wave equation. Throughout this work, we generally employed the approach involving random locations. \\
+We can add some noise to the training and validation samples to analyze its impact on the results and simulate real-world measurement data. Furthermore, often the incorporation of a small noise improves stability in the optimization and prediction process. This will be done by creating two data sets $\{(\bm{x_u});\bm{y_u}\}$ and $\{(\bm{x_f});\bm{y_f}\}$ with $\bm{y_i} = u(\bm{x_i}) + \mathcal{N}(\bm{0}|\sigma_{ni}^2 I) ; \; i = u,f$. \\
 Through the optimization of the mll, we will obtain the parameters of the
-underlying equation $\phi$, as well as the hyperparameters $\theta$ of the
+underlying equation $\bm{\phi}$, as well as the hyperparameters $\bm{\theta}$ of the
 kernel. With these parameters we will then calculate the predictive mean and
-covariance and then compare the ground truth with the computed mean function.
-To quantify/benchmark the performance we will look at the marginal log likelihood, the mean squared error (MSE) and the relative $L^2$ error of the validation set(ground truth). As another
-way of looking at the performance of the informed model we will compare it to a
+covariance and then compare the ground truth with the computed mean function $\bm{\mu}$.
+To measure the performance we will look at the mean squared error (MSE) and the relative $L^2$ error of the predictive mean. The relative $L^2$ error is computed as:
+\begin{align}
+     rel \; L^2 = \sqrt{\frac{\sum_i (u_i - \mu_i)^2}{\sum_i (u_i)^2}}
+\end{align}
+with $u_i$ being the ground truth at index $i$ and $\mu_i$ the calculated predictive mean at index $i$.
+As another way of bench-marking  the performance of the informed model we will compare it to a
 vanilla model with a general SE kernel, as described in~\ref{sec:Regression}.
 For this we will use the GPy library~\cite{gpy2014}. However, it is important
 to acknowledge that the vanilla model with the simple SE kernel only has two/three (for cases with time as a second dimension) hyperparameters, namely the length scale $l$ and the variance $\sigma_f^2$.
 Additionally, the informed model takes advantage of the joint GP. This means
 that the informed model has more parameters to optimize and additional
-information from the joint GP, and therefore it is not a fair comparison.
+information from the joint $\mathcal{GP}$, and therefore it is not a fair comparison.
 However, it is still interesting to see how the informed model performs
-compared to the vanilla model and to have a general benchmark. To further
+compared to the vanilla model. To further
 investigate this we will give one example with the same amount of
 hyperparameters, namely the Poisson equation and compare the results of the two
 models.\\
@@ -377,23 +373,23 @@ differential equation is given by:
         m\frac{\partial^2 u(t)}{\partial t^2} + \gamma \frac{\partial u(t)}{\partial t} + k u(t) = f(t) \\ u(0) = 0, \; \frac{\partial u(t)}{\partial t} = 0
     \end{aligned}
 \end{equation}
-The ground truth was generated with $m = 1, \gamma = 2, k = 2$ and a simple sinusoidal forcing term $f(t) = 4 \sin(2\pi t)$. For the added noise we used $\sigma_{nu} = 10^{-8}$ and $\sigma_{nf} = 10^{-8}$ which can be seen as noise free data. The jitter was set to $10^{-7}$ We calculated the result in the time interval $t \in [0,3]$ from witch we sample the training points. The model learns the hyperparameters $\bm{\theta}$ $(l,\sigma_f,m,\gamma,k)$ to be $(0.5071, 0.6349, 0.9999, 2.0019, 2.0065)$. These results are very accurate considering we are only using 9 training points for a model with 5 hyperparameters. As elaborated before, the exact value of the final values after optimizing varies in a small range. The predictive distribution for the general solution $u(t)$ and the forcing term $f(t)$ can be seen in figure~\ref{fig:damped_oscillator}. Looking at the results for the informed model we can see that the prediction for $u(t)$ and for $f(t)$ are very precise. The posterior mean overlines with the validation points and the uncertainty band is so small that is not even visible. The relative $L^2$ errors of $u(t)$ and $f(t)$ are $L^2_u = 0.00165$ and $L^2_f = 0.00980$. The predictive mean of the vanilla model can also be seen in figure~\ref{fig:damped_oscillator}. The relative $L^2$ errors for the vanilla model are $L^2_{u,va} = 0.15356$ and $L^2_{f,va} = 0.58116$. The $L^2$ for the vanilla model is notably larger than the error of the informed model which gets very clear when looking at figure~\ref{fig:damped_oscillator}. The predictions from the vanilla model are not very precise with large uncertainties. %The informed model even manages to accurately predict in areas away from any training points, as well as at the edges of the domain.
+The ground truth was generated with $m = 1, \gamma = 2, k = 2$ and a simple sinusoidal forcing term $f(t) = 4 \sin(2\pi t)$. For the added noise we used $\sigma_{nu} = 10^{-8}$ and $\sigma_{nf} = 10^{-8}$ which can be seen as noise free data. The jitter was set to $10^{-7}$. We calculated the result in the time interval $t \in [0,3]$ from which we sample the training points. The model learns the hyperparameters $\bm{\theta}$ $(l,\sigma_f,m,\gamma,k)$ to be $(0.5071, 0.6349, 0.9999, 2.0019, 2.0065)$. These results are very accurate considering we are only using 9 training points for a model with 5 hyperparameters. As elaborated before, the exact value of the final values after optimizing varies in a small range. The predictive distribution for the general solution $u(t)$ and the forcing term $f(t)$ can be seen in figure~\ref{fig:damped_oscillator}. Looking at the results for the informed model we can see that the prediction for $u(t)$ and for $f(t)$ are very precise. The uncertainty band accompanying the posterior mean is extremely small, making it invisible in this example. The relative $L^2$ errors of $u(t)$ and $f(t)$ are $L^2_u = 0.00176$ and $L^2_f = 0.01019$. The predictive mean of the vanilla model can also be seen in figure~\ref{fig:damped_oscillator}. The relative $L^2$ errors for the vanilla model are $L^2_{u,va} = 0.15356$ and $L^2_{f,va} = 0.58116$. The $L^2$ for the vanilla model is notably larger than the error of the informed model which gets very clear when looking at figure~\ref{fig:damped_oscillator}. The predictions from the vanilla model are not very precise with large uncertainties. %The informed model even manages to accurately predict in areas away from any training points, as well as at the edges of the domain.
 \begin{figure}[htbp!]
     \centering
     \includegraphics[width=1\textwidth]{../final_examples/oscillator/merged_1d_plots.png}
-    \caption{(a) \& (b) predictive mean $\mu_u$ and $\mu_f$ for the informed model, two $\sigma$ uncertainty band, training and validation points sampled from $\{\bm{x_u},u(\bm{y_u})\}$ and $\{\bm{x_f},u(\bm{y_f})\}$ respectively.\ (c) \& (d) predictive mean $\mu_u$ and $\mu_f$ for the vanilla model, two $\sigma$ uncertainty band, training and validation points sampled from $\{\bm{x_u},u(\bm{y_u})\}$ and $\{\bm{x_f},u(\bm{y_f})\}$ respectively. The noise $\sigma_{nu}$ and $\sigma_{nf}$ were both set to $10^{-8}$. The errors of the informed model are $L^2_u = 0.00165$ and $L^2_f = 0.00980$ and of the vanilla model $L^2_{u,va} = 0.15356$ and $L^2_{f,va} = 0.58116$.}
+    \caption{(a) \& (b) predictive mean $\mu_u$ and $\mu_f$ for the informed model, two $\sigma$ uncertainty band, training and validation points sampled from $\{\bm{x_u},u(\bm{y_u})\}$ and $\{\bm{x_f},u(\bm{y_f})\}$ respectively.\ (c) \& (d) predictive mean $\mu_u$ and $\mu_f$ for the vanilla model, two $\sigma$ uncertainty band, training and validation points sampled from $\{\bm{x_u},u(\bm{y_u})\}$ and $\{\bm{x_f},u(\bm{y_f})\}$ respectively. The noise $\sigma_{nu}^2$ and $\sigma_{nf}^2$ were both set to $10^{-8}$. The errors of the informed model are $L^2_u = 0.00176$ and $L^2_f = 0.01019$ and of the vanilla model $L^2_{u,va} = 0.15356$ and $L^2_{f,va} = 0.58116$.}
     ~\label{fig:damped_oscillator}
 \end{figure}
 \\
-To investigate the impact of noise we will look at the same example as before, but with added noise. We will use $\sigma_{nu} = 0.0001$ and $\sigma_{nf} = 0.1$. This is a notable amount of noise, but the model still manages to predict the hyperparameters reasonably well as $(0.980,1.713,0.959)$. The predictive mean for both $u(t)$ and $f(t)$ are shown in figure \ref{fig:damped_oscillator_with_noise}.
+To investigate the impact of noise we will look at the same example as before, but with added noise. We will use $\sigma_{nu}^2 = 0.00005$ and $\sigma_{nf}^2 = 0.05$ and increase the number of training points from 9 to 11. This is a notable amount of noise, but the model still manages to predict the hyperparameters reasonably well as $(m,\gamma,k)$ = $(1.0059,2.4202,1.5086)$. Especially the first parameter $m$ is very accurate. For $k$ the model has bigger problems. Even for a bigger number of training points the model did not reach the exact value for $k$, while the other two parameters were close to the expected one. The prediction accuracy decreases in comparison to the noise free case, but it still manages to reach relative $L^2 = 0.0633$ errors of $L^2_u = 0.1505$ and $L^2_f = $. The predictive mean for both $u(t)$ and $f(t)$ are shown in figure \ref{fig:damped_oscillator_with_noise}.
 
 \begin{figure}[htbp!]
     \centering
     \includegraphics[width=1\textwidth]{../final_examples/oscillator/oscillator_noise.png}
-    \caption{(a) \& (b) predictive mean $\mu_u$ and $\mu_f$ for the informed model, two $\sigma$ uncertainty band, training and validation points sampled from $\{\bm{x_u},u(\bm{y_u})\}$ and $\{\bm{x_f},u(\bm{y_f})\}$ respectively.\ The noise was set to $\sigma_{nu}^2 = 0.0001$  $\sigma_{nf}^2 = 0.1$. The errors of the predictions are $L^2_u = 0.0784 $ and $L^2_f = 0.1390$}
+    \caption{(a) \& (b) predictive mean $\mu_u$ and $\mu_f$ for the informed model, two $\sigma$ uncertainty band, training and validation points sampled from $\{\bm{x_u},u(\bm{y_u})\}$ and $\{\bm{x_f},u(\bm{y_f})\}$ respectively.\ The noise was set to $\sigma_{nu}^2 = 0.00005$  $\sigma_{nf}^2 = 0.05$. The errors of the predictions are $L^2_u = 0.0633 $ and $L^2_f = 0.1505$.}
     ~\label{fig:damped_oscillator_with_noise}
 \end{figure}
-To benchmark the performance further we compared the accuracy of the prediction and of the parameters for several different amounts of training points. We looked at $n_{train}$ = $\left[4,5,6,7,8,10,12,15\right]$, with again $\sigma^2_u = \sigma^2_f = 10^{-8}$ and compared the $L^2$ error of the prediction of $u(t)$ and the values of the PDE hyperparameters. In figure \ref{fig:damped_oscillator_L2} the relative $L^2$ error, as well as the parameter values are plotted against the number of training points $n_{train}$. We can observe that the prediction accuracy rapidly improves with an increasing number of training points. The error of the prediction of $f(t)$ behaves similarly as the depicted one here. From ten training points onward the prediction becomes extremely exact with an neglectable error. It is interesting to see that at this point the hyperparameters also reach a value close to their true value. 
+To benchmark the performance further, we compared the accuracy of the prediction and of the parameters for several different amounts of training points. We looked at $n_{train}$ = $\left[4,5,6,7,8,10,12,15\right]$, with again $\sigma^2_u = \sigma^2_f = 10^{-8}$ and compared the $L^2$ error of the prediction of $u(t)$ and the values of the PDE hyperparameters. In figure \ref{fig:damped_oscillator_L2} the relative $L^2$ error, as well as the parameter values are plotted against the number of training points $n_{train}$. We can observe that the prediction accuracy rapidly improves with an increasing number of training points. The error of the prediction of $f(t)$ behaves similarly as the depicted one here. From ten training points onward the prediction becomes extremely exact with an neglectable error. It is interesting to see that at this point the hyperparameters also reach a value close to their true value. 
 \begin{figure}[htbp!]
     \centering
     \includegraphics[width=1\textwidth]{../final_examples/oscillator/l2_error.png}
@@ -406,71 +402,85 @@ As a second example we will look at the heat equation.
 The one dimensional time dependent heat equation with a forcing term is:
 \begin{equation}
     \begin{aligned}
+        {\displaystyle {\begin{cases} 
          \frac{\partial u(x,t)}{\partial t} - \alpha \frac{\partial^2 u(x,t)}{\partial x^2} = f(x,t) 
         \\ u[0,x] = \sin{(2\pi x)}
         \\ u(t,0) = 0; u(t,L) = 0
+        \end{cases}}}
     \end{aligned}
 \end{equation}
-with $\alpha$ as the thermal diffusivity. Here we use the same forcing term $f(x,t) = e^{-t}(4\pi^2-1)\sin{(2\pi x)}$, parameter $\alpha = 1$ and boundary conditions as were used in \cite{RAISSI} in order to compare the accuracy of our implementation with their result. The model managed to predict the ground truth very accurately with relative $L^2$ errors of $L^2_u = 0.00370 $ and $L^2_f = 0.0075$. The model learns the hyperparameters to be $(l_x, \sigma_f, l_t, \alhpa) =$ (0.32882, 1.53232, 1.20066, 1.00004). The predictions only have small errors on the domain edges and are nearly error free in the central part of the grid. The results can be seen in figure \ref{fig:results_heatequation}. The jitter applied to the diagonal elements of the gram matrix $K$ was set to $10^{-6}$. With a jitter value in the range of $10^{-7}$, smaller optimization minima could be found with slightly smaller $L_2$ errors. However, the predictive variance would be smaller than zero (numerical errors) in some central regions and the optimization landscape would get increasingly rough.
+with $\alpha$ as the thermal diffusivity. Here we use the same forcing term $f(x,t) = e^{-t}(4\pi^2-1)\sin{(2\pi x)}$, parameter $\alpha = 1$ and boundary conditions as were used in \cite{RAISSI} in order to compare the accuracy of our implementation with their result. The model managed to predict the ground truth very accurately with relative $L^2$ errors of $L^2_u = 0.00370 $ and $L^2_f = 0.0075$. The model learns the hyperparameters to be $(l_x, \sigma_f, l_t, \alpha) =$ (0.32882, 1.53232, 1.20066, 1.00004). The predictions only have small errors on the domain edges and are nearly error free in the central part of the grid. The results can be seen in figure \ref{fig:results_heatequation}. For comparison, the vanilla model reached relative errors of $L^2_u = 0.0172$ and $L^2_f = 0.0196$. 
+The jitter applied to the diagonal elements of the gram matrix $K$ was set to $10^{-6}$. With a jitter value in the range of $10^{-7}$, smaller optimization minima could be found with slightly smaller $L_2$ errors. However, the predictive variance would be smaller than zero (numerical errors) in some central regions and the optimization landscape would get increasingly rough.
 \begin{figure}
     \centering
-    \includegraphics[width=0.7\textwidth]{../final_examples/heat_equation/merged_plots.png}
+    \includegraphics[width=1\textwidth]{../final_examples/heat_equation/merged_plots.png}
     \caption{(a) \& (b) Calculated predictive mean $\mu_u$ and $\mu_f$.\\ 
     (c) \& (d) Calculated standard deviation $\sigma_{u}$ and $\sigma_f$.\\
     (e) \& (f) Absolute difference between calculated predictive mean and ground truth $|u_{true}-\mu_u|$ and $|f_{true}-\mu_f|$\\
     The training and validation points were sampled from $\{\bm{x_u},u(\bm{y_u})\}$ and $\{\bm{x_f},u(\bm{y_f})\}$ respectively. The noise was set to $\sigma_{n_u}^2 = \sigma_{n_f}^2 = 10^{-8}$ and the jitter to $10^-6$}
     ~\label{fig:results_heatequation}
 \end{figure}
-We now want to explore more about how the extra parameter introduced by the partial differential equation, represented as $\alpha$ in this example, affects the results. Especially its impact on the value of the negative mll in the optimization process. In order to do this, the results of an optimization run were recorded. The starting value for $\alpha$ was sampled from an uniform distribution in the interval $\left[0,10\right]$. The successful runs were recorded. While holding the values of the other hyperparameters fixed, the value of the mll was plotted against $\alpha$. In figure \ref{fig:results_optrun} the results are shown. The big influence of $\alha$ gets very clear. The value of the mll explodes when away from $\alpha = 1$. To accommodate the wide range of values, the y-axis was plotted on a logarithmic scale.
+We now want to explore more about how the extra parameter introduced by the partial differential equation, represented as $\alpha$ in this example, affects the results. Especially its impact on the value of the negative mll in the optimization process. In order to do this, the results of an optimization run were recorded. The starting value for $\alpha$ was sampled from an uniform distribution in the interval $\left[0,2 \right]$. The successful runs were recorded. While holding the values of the other hyperparameters ($l_x$, $\sigma_f$, $l_t$) fixed, the value of the mll was plotted against $\alpha$. In figure \ref{fig:results_optrun} the results are shown. The big influence of $\alpha$ gets very clear. The value of the mll explodes when away from $\alpha = 1$. To accommodate the wide range of values, the y-axis was plotted on a logarithmic scale.
 \begin{figure}
     \centering
-    \includegraphics[width=0.7\textwidth]{../final_examples/heat_equation/merged_plots.png}
-    \caption{Results of an optimization run with $n_{restarts}$ = 1000}
+    \includegraphics[width=0.75\textwidth]{../final_examples/heat_equation/heat_equation_optim_distribution.png}
+    \caption{Results of an optimization run with $n_{restarts}$ = 800. All the successful(converged) optimization runs are shown here. In (a) we use a logarithmic y-axis to better show the exploding values of the mll when away from $\alpha = 1$. In (b) all values below a value of y = 10 are shown with a standard y-axis.}
     ~\label{fig:results_optrun}
 \end{figure}
 \newpage 
-\subsection{Wave Equation}
+\subsection{2D time dependent Wave Equation}
 For the third example we will look at the two-dimensional time dependent wave equation. The wave equation is a hyperbolic partial differential equation that describes the propagation of waves of various types. In our case we define the wave equation on a square domain [0,L]×[0,L]. The wave equation is then given by:
 \begin{equation}
     \begin{aligned}
-    \frac{\partial^2 u(x,y,t)}{\partial t^2} - c^2\left(\frac{\partial^2}{\partial x^2} +\frac{\partial^2}{\partial y^2}\right)u(x,y,t) = f(x,y,t) \\ 
+{\displaystyle {\begin{cases}    \frac{\partial^2 u(x,y,t)}{\partial t^2} - c^2\left(\frac{\partial^2}{\partial x^2} +\frac{\partial^2}{\partial y^2}\right)u(x,y,t) = f(x,y,t) \\ 
     u(0,x,y) = 0\\ 
     u(0,y,t)=u(L_x,y,t)=0 \; \mathrm{for} \;0 \leq y \leq L_y\\
     u(x,0,t)=u(x,L_y,t)=0 \; \mathrm{for}\; 0 \leq x \leq L_x
+    \end{cases}}}
     \end{aligned}
 \end{equation}
 with $c$ as the wave speed. The ground truth was calculated with $c = 1$, $L_x = L_y = 2$ and with the forcing term:
 \begin{align}
-  f(x,y,t) = 5\sin(t\pi)*e^{(-5((x - 1/2)^2 + (y - 1/2)^2)/\sigma^2}  
+  f(x,y,t) = 5\sin(t\pi)*e^{-5((x - 1/2)^2 + (y - 1/2)^2)/\sigma^2}  
 \end{align}
-with $\sigma^2 = 1$. The training points were sampled from the domain [0,2]×[0,2]×[0,4]. With the increase in dimensions we also need significantly more training points to account for the bigger domain. Especially if the function varies a lot over time. Before, in the 2d case, 20 training points were sufficient to achieve good predictions. For this example around $n_{train} = 400$ training points, for both $u$ and $f$, were needed to get good predictions.
-The relative $L^2$ error for the prediction of $u(x,y,t)$ was 0.0163 and $c$ was optimized to $c = 1.0081$. To further increase the accuracy we added extra training points for $u$ on the boundary of the domain. In figure \ref{fig:training_points_wave} the distribution of the training points is shown. This is a very straight forward way of increasing the accuracy. Specifically for boundary value problems, data on the domain edges can, in some cases, be easily accessible. For example, one could look at the example above as a membrane, which is fixed on a square. Therefore, the edges would be clamped down and the amplitude would be zero. With the incorporation of 320 training points on the boundary of $u$, the relative error of the predictive mean would decrease to a value of $L^2_u = 0.00355$. The hyperparameter $c$ was optimized to $c = 0.9974$. We can observe, that the accuracy of the hyperparameter did not increase with the additional boundary points. However, the overall accuracy of the prediction was improved notably.
+with $\sigma^2 = 1$. The training points were sampled from the domain $x$, $y$, $t$ [0,2]×[0,2]×[0,4]. With the increase in dimensions we also need significantly more training points to account for the bigger domain. Especially if the function varies a lot over time. Before, in the 2d case, 20 training points were sufficient to achieve good predictions. For this example around $n_{train} = 400$ training points, for both $u$ and $f$ separately, were used.
+The relative $L^2$ error for the prediction of $u(x,y,t)$ was 0.0163 and $c$ was optimized to $c = 1.0081$. To further increase the accuracy we added extra training points for $u$ on the boundary of the domain. In figure \ref{fig:training_points_wave} the distribution of the training points is shown. This is a very straight forward way of increasing the accuracy. Specifically for boundary value problems  data on the domain edges can, in some cases, be easily accessible. For example, one could look at the example above as a membrane, which is fixed on a square. Therefore, the edges would be clamped down and the amplitude would be zero. With the incorporation of 320 training points on the boundary of $u$, the relative error of the predictive mean would decrease to a value of $L^2_u = 0.00355$. The hyperparameter $c$ was optimized to $c = 0.9974$. We can observe, that the accuracy of the hyperparameter did not increase with the additional boundary points. However, the overall accuracy of the prediction was improved notably. In figure \ref{fig:wave_contour} and \ref{fig:wave_surface} the prediction and the ground truth are shown side by side. We can see that we get a very exact prediction. For a better visual comparison, a video for the time evolution of the prediction in the $x-y$ domain as a heatmap and as a 3d surface plot were created. These two files can be found \href{https://github.com/TobiLeitgeb/Code_bac/tree/main/final_examples/wave_equation/movie files}{here}.
 
 %0.016 400 data points no boundary points
 \begin{figure}
     \centering
-    \includegraphics[width=0.7\textwidth]{../final_examples/wave_equation/training_points.png}
-    \caption{Plot of the positions of the training points in the 3d domain of the wave equation example, with $n_{train}$ = 400 and with 320 extra training points on the boundary.}
+    \includegraphics[width=0.5\textwidth]{../final_examples/wave_equation/training_points.png}
+    \caption{Plot of the positions of the training points in the 3d domain of the wave equation example, with $n_{train}$ = 400 and with 320 extra training points on the boundary. The points were sampled by use of a Sobol sequence.}
     ~\label{fig:training_points_wave}
 \end{figure}
 
 \begin{figure}
     \centering
     \includegraphics[width=1\textwidth]{../final_examples/wave_equation/wave_3d.png}
-    \caption{Plots for the informed model. (a) \& (b) predictive mean $\bm{\mu_u}$ and $\bm{\mu_f}$ with training points in red. (c) \& (d) predictive standard deviations $\bm{\sigma_u}$ and $\bm{\sigma_f}$. (e) \& (f) difference between the predictive mean $\bm{\mu}$ and the ground truths $u$ and $f$. The MSEs for the informed model are $MSE_u =  \cdot 10^{-7}$ and $MSE_f =  \cdot 10^{-3}$. The relative $L^2$ errors are $L^2_u = $ and $L^2_f = $.}
-    ~\label{fig:wave}
+    \caption{Temporal evolution of predictive mean $\mu$ and ground truth for $u$ in the $x-y$ domain shown as heat-map at time $t$ in the interval $t=[0,4]$. The total relative $L^2$ error for $\mu_u$ was 0.00355. For better visualization, the temporal evolution can also be found at Github \href{https://github.com/TobiLeitgeb/Code_bac/tree/main/final_examples/wave_equation/movie files}{here}.}
+
+    ~\label{fig:wave_contour}
 \end{figure}
-\subsection{Poisson Equation}
-In our last example we will look at a case where we do not incorporate additional ODE parameters $\phi$ in the form of hyperparameters into the kernel. This is to better look at the general predictive performance of the informed model in comparison to the vanilla model. The informed, aswell as the vanilla model will both not incorporate ARD, therefore there will only be one singel length scale $l$ for both spatial dimensions. With this example we now have the same amount of optimizable hyperparameters. \\
+\begin{figure}
+    \centering
+    \includegraphics[width=1\textwidth]{../final_examples/wave_equation/wave_3d_durfacec.png}
+    \caption{Temporal evolution of predictive mean $\mu$ and ground truth for $u$ shown as 3D surface plots with axis $x-y-u(x,y,t)$ at time $t$ in the interval $t=[0,4]$. The total relative $L^2$ error for $\mu_u$ was 0.00355. For better visualization, the temporal evolution can also be found at Github \href{https://github.com/TobiLeitgeb/Code_bac/tree/main/final_examples/wave_equation/movie files}{here}.}
+    ~\label{fig:wave_surface}
+\end{figure}
+\newpage
+\subsection{2D Poisson Equation}
+In our last example we will look at a case where we do not incorporate additional ODE parameters $\phi$ in the form of hyperparameters into the kernel. This is to better look at the general predictive performance of the informed model in comparison to the vanilla model. The informed, as well as the vanilla model will both not incorporate ARD, therefore there will only be one single length scale $l$ for both spatial dimensions. With this example we now have the same amount of optimizable hyperparameters. \\
 \\
  We will look at the Poisson equation in two spatial dimensions with a
-forcing term and with dirichlet boundary conditions:
+forcing term and with Dirichlet boundary conditions:
 \begin{equation}
     \begin{aligned}
-        \nabla^2 u(x,y) = f(x,y) \\ u[0,x] = 0 \\ u(t,0) = 0; u(t,L) = 0
+    {\displaystyle {\begin{cases}\Delta u(x,y)&=f(x,y) \; {\text{in}} \; \Omega \\\quad u&=0 \;{\text{on}} \; \partial \Omega \end{cases}}}
+        %\nabla^2 u(x,y) = f(x,y) \\ u[0,x] = 0 \\ u(t,0) = 0; u(t,L) = 0
     \end{aligned}
 \end{equation}
- Overall, the performance of the infomed model is significantly better. The relative error for $L^2_u$ is and $L^2_f$ is. The predictive mean, the predictive variance and the calculated difference between the prediction and the ground truth are shown in figure \ref{fig:poisson}. Comparing this to the vanilla model with relative errors of $L^2_u = 0.0989$ and $L^2_f = 0.0728$ we can see that the informed model is more than an order of magnitude more accurate. The predictive mean and the difference to the ground truth can be seen in figure \ref{fig:poisson_GPY}. The better prediction is also reflected in the MSEs. The MSEs for the informed model are $MSE_u = . \cdot 10^{-7}$ and $MSE_f =  \cdot 10^{-3}$. The MSEs for the vanilla model are $MSE_{u,va} = 9.862  \cdot 10^{-5}$ and $MSE_{f,va} = 0.130$.\\
+with $\Omega$ being the unit square $[0,1]^2$. For the forcing term we use $f(x,y) = 20 \cdot \sin(x\pi)\cos(x\pi)\sin(y\pi)$.
+Overall, the performance of the informed model is significantly better. The relative error for $L^2_u$ is and $L^2_f$ is. The predictive mean, the predictive variance and the calculated difference between the prediction and the ground truth are shown in figure \ref{fig:poisson}. Comparing this to the vanilla model with relative errors of $L^2_u = 0.0989$ and $L^2_f = 0.0728$ we can see that the informed model is more than an order of magnitude more accurate. The predictive mean and the difference to the ground truth can be seen in figure \ref{fig:poisson_GPY}. The better prediction is also reflected in the MSEs. The MSEs for the informed model are $MSE_u = . \cdot 10^{-7}$ and $MSE_f =  \cdot 10^{-3}$. The MSEs for the vanilla model are $MSE_{u,va} = 9.862  \cdot 10^{-5}$ and $MSE_{f,va} = 0.130$.\\
 \\
 \begin{figure}[htbp!]
     \centering
@@ -491,11 +501,12 @@ The area that strikes the most when looking at the prediction with the informed 
     \caption{Plots for the investigation of the domain boundaries}
     \label{fig:poisson_boundaries}
 \end{figure}
-With this example we can see that the informed models better performance is not only due to the additional hyperparameters. How big the role of the joint GP is, is hard to say, but it is clear that the informed model is notably more accurate than the vanilla model. The most notable difference between the informed and the vanilla model are the predictions at the boundary of the domain. The informed model is able to predict the domain boundaries very accuratly.  \\
+With this example we can see that the informed models better performance is not only due to the additional hyperparameters. How big the role of the joint $\mathcal{GP}$ is, is hard to say, but it is clear that the informed model is notably more accurate than the vanilla model. The most notable difference between the informed and the vanilla model are the predictions at the boundary of the domain. The informed model is able to predict the domain boundaries very accurately, while the vanilla model fails to do so.\\
+\newpage
 \section{Conclusion and Outlook}
 
 \section{Appendix}
-\subsection{Numerical implementation of the Kernel}
+
 
 \bibliographystyle{plain}
 
