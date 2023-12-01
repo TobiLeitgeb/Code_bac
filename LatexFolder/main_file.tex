@@ -62,7 +62,7 @@
 
 \end{abstract}
 
-\section{Introduction}
+\section{Introduction (!Only placeholder atm!)}
 Our situation is that we have obtained measurements, potentially noisy, of both the $u$ and $f$. However, we do not have knowledge of the ODE parameters
 $\phi$. This is a typical situation in for example lab work, where we have
 measurements and want to determine an underlying physical parameter or
@@ -291,7 +291,7 @@ with $\bm{\kappa_u}$ and $\bm{\kappa_f}$ being:
         \bm{\kappa_f} = [k_{fu}(\bm{x_*},\bm{X_u})k_{ff}(\bm{x_*,\bm{X_f}})]
     \end{aligned}
 \end{equation}
-
+\new
 \section{Numerical implementation}
 In this section we will present the computational implementation in python of the kernel, the log marginal likelihood and of the predictive distribution. For greatly improving the computation time as well as the usage of automatic differentiation the jax library~\cite{jax2018github} was used. A general introduction can be found \href{https://jax.readthedocs.io/en/latest/notebooks/quickstart.html}{here}, as well as a specific introduction to kernel derivatives with jax \href{https://jejjohnson.github.io/research_notebook/content/notes/kernels/kernel_derivatives.html}{here}. Goal of this section is to give a short overview of the computational methods used for the implementation of the Gaussian process regression and the construction of the kernel.\\
 
@@ -302,12 +302,13 @@ For constructing and deriving the kernel as described in equations \ref{eq:kff} 
 \begin{aligned}
     k_{ff}(\bm{x},\bm{x'};\bm{\theta}, \bm{\phi}) &= \mathcal{L}_{\bm{x}}^\phi \mathcal{L}_{\bm{x'}}^\phi k_{uu}(\bm{x},\bm{x'};\bm{\theta})\\
     &= \left[ m\frac{\partial^2 }{\partial t^2} + \gamma \frac{\partial }{\partial t} + k \right] \left[ m\frac{\partial^2 }{\partial t'^2} + \gamma \frac{\partial }{\partial t'} + k \right] k_{uu} \\
-    &= \left[m^2 \frac{\partial^4 }{\partial t^2 \partial t'^2} + m\gamma \frac{\partial^3 }{\partial t^2 \partial t'} + m\gamma \frac{\partial^3 }{\partial t'^2 \partial t} + \gamma^2 \frac{\partial^2 }{\partial t \partial t'} + k\gamma \frac{\partial }{\partial t'} + k\gamma \frac{\partial }{\partial t} +mk \frac{\partial^2 }{\partial t'^2} +mk \frac{\partial^2 }{\partial t^2} + k^2 \right] k_{uu}\\
+    &= \left[m^2 \frac{\partial^4 }{\partial t^2 \partial t'^2} + m\gamma \frac{\partial^3 }{\partial t^2 \partial t'} + m\gamma \frac{\partial^3 }{\partial t'^2 \partial t} + \gamma^2 \frac{\partial^2 }{\partial t \partial t'}\\
+    &+ k\gamma \frac{\partial }{\partial t'} + k\gamma \frac{\partial }{\partial t} +mk \frac{\partial^2 }{\partial t'^2} +mk \frac{\partial^2 }{\partial t^2} + k^2 \right] ]k_{uu}\\
     &= \left[m^2 \frac{\partial^4 }{\partial t^2 \partial t'^2}  + \gamma^2 \frac{\partial^2 }{\partial t \partial t'}  +2mk \frac{\partial^2 }{\partial t'^2} + k^2 \right] k_{uu}\\
 \end{aligned}
 \label{eq:kernel_analytical}
 \end{equation}
- with $k_{uu} = \sigma_f^2  \exp\left({-\frac{0.5}{l^2} {(t-t')}^2}\right)$ being the general SE kernel introduced in section \ref{subsec: Kernels}. Note that this can be done with any other kernel as well. The analytical computation is shown in~\ref{code:kernel_analytical}.\\
+ with $k_{uu} = \sigma_f^2  \exp\left({-\frac{0.5}{l^2} {(t-t')}^2}\right)$ being the general SE kernel introduced in section \ref{subsec: Kernels}. Note that this can be done with any other differentiable kernel as well. The analytical computation is shown in~\ref{code:kernel_analytical}.\\
 \lstinputlisting[firstline=97,lastline=113,caption={Analytical computation of the derivatives}, label={code:kernel_analytical}, breaklines = False]{../PI_GP_regressor/kernels/kernel_oscillator_3variables.py}
 For the SE kernel the computations are rather simple and can easily be done analytically. However, if one chooses a complex kernel, the analytical computation can become rather complicated and time-consuming. Therefore, we also implemented the kernel derivatives with help of autograd. In particular, we used the jax library for the automatic differentiation. The code for the autograd computation of the derivatives is shown in \ref{code:kernel_autograds}. The big advantage of this approach is that it is sufficient to do the calculations as done in~\ref{eq:kernel_analytical} and implement it as shown in the code. With this the choice of the general kernel $k_{uu}$ is only restricted within the jax library. This means that the kernel can be any function that is traceable by the jax autograd and jit functions. 
 \lstinputlisting[firstline=17,lastline=33,caption={Computation of the derivatives using autograd}, label={code:kernel_autograds}, breaklines = False]{../PI_GP_regressor/kernels/kernel_oscillator_3variables.py}
@@ -326,11 +327,11 @@ with $\bm{L}$ being a lower triangular matrix \cite{RasmussenCarlEdward}. With t
     \bm{u}^\intercal \bm{K}^{-1}\bm{v} = \bm{u}^\intercal (\bm{LL^{\intercal}})^{-1} \bm{v} = \bm{u}^\intercal \bm{L^{\intercal} \backslash (L\backslash v)}
 \end{equation}
 shown with two general vectors $\bm{u}$ and $\bm{v}$ and $\backslash$ as the left matrix divide operator. For this we used that we can rewrite $(\bm{LL^{\intercal}})^{-1} \bm{v}$ as a solution $\bm{x}$ of a linear system of the form $\bm{LL^{\intercal}} \bm{x}=\bm{v}$, which we now solve for $\bm{x}$. This is a very stable and efficient way of calculating the equation. In \cite{RasmussenCarlEdward}, this specific numerical implementation utilizing a Cholesky decomposition is also used. The implementation of the log marginal likelihood is shown in~\ref{code:mll}.\\
-\lstinputlisting[firstline=111,lastline=119,caption={Log marginal likelihood}, label={code:mll}]{../PI_GP_regressor/main_class.py}
+\lstinputlisting[firstline=113,lastline=121,caption={Log marginal likelihood}, label={code:mll}]{../PI_GP_regressor/main_class.py}
 
 For the predictive distribution we again rewrote equation \ref{eq:predictive_mean_cov} as described in equation \ref{eq:inv_K}. The implementation of the predictive distribution is shown in~\ref{code:predictive_distribution}.\\
-\lstinputlisting[firstline=257,lastline=273,caption={Predictive distribution}, label={code:predictive_distribution}]{../PI_GP_regressor/main_class.py}
-
+\lstinputlisting[firstline=259,lastline=275,caption={Predictive distribution}, label={code:predictive_distribution}]{../PI_GP_regressor/main_class.py}
+\newpage
 \section{Results}
 In the following we will call the physics informed model, the
 informed model and the vanilla model the model without the physics informed
@@ -420,7 +421,7 @@ The jitter applied to the diagonal elements of the gram matrix $K$ was set to $1
     The training and validation points were sampled from $\{\bm{x_u},u(\bm{y_u})\}$ and $\{\bm{x_f},u(\bm{y_f})\}$ respectively. The noise was set to $\sigma_{n_u}^2 = \sigma_{n_f}^2 = 10^{-8}$ and the jitter to $10^-6$}
     ~\label{fig:results_heatequation}
 \end{figure}
-We now want to explore more about how the extra parameter introduced by the partial differential equation, represented as $\alpha$ in this example, affects the results. Especially its impact on the value of the negative mll in the optimization process. In order to do this, the results of an optimization run were recorded. The starting value for $\alpha$ was sampled from an uniform distribution in the interval $\left[0,2 \right]$. The successful runs were recorded. While holding the values of the other hyperparameters ($l_x$, $\sigma_f$, $l_t$) fixed, the value of the mll was plotted against $\alpha$. In figure \ref{fig:results_optrun} the results are shown. The big influence of $\alpha$ gets very clear. The value of the mll explodes when away from $\alpha = 1$. To accommodate the wide range of values, the y-axis was plotted on a logarithmic scale.
+We now want to explore more about how the extra parameter introduced by the partial differential equation, represented as $\alpha$ in this example, affects the results. Especially its impact on the value of the negative mll in the optimization process. In order to do this, the results of an optimization run were recorded. The starting value for $\alpha$ was sampled from an uniform distribution in the interval $\left[0,2 \right]$. The successful runs were recorded. While holding the values of the other hyperparameters ($l_x$, $\sigma_f$, $l_t$) fixed, the value of the mll was plotted against $\alpha$. In figure \ref{fig:results_optrun} the results are shown. The big influence of $\alpha$ gets very clear. The value of the mll explodes when away from $\alpha = 1$. To accommodate for the very big values of the mll, the y-axis was plotted on a logarithmic scale. We can clearly see that for smaller values, meaning a better optimization result, the values clearly tend to $\alpha = 1$.
 \begin{figure}
     \centering
     \includegraphics[width=0.75\textwidth]{../final_examples/heat_equation/heat_equation_optim_distribution.png}
