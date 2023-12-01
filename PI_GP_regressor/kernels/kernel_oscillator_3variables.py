@@ -1,3 +1,9 @@
+
+#----------------------------------------
+# author: Tobias Leitgeb
+# This file contains the implementation of the kernel for a damped oscillator. The computation of the kernel is done with JAX. Once with automatic differentiation and once with the analytical derivatives.
+
+#----------------------------------------
 import jax.numpy as jnp
 from jax import grad, jit, vmap
 import numpy as np

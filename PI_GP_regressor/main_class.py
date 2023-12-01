@@ -1,5 +1,7 @@
+#----------------------------------------
 # author: Tobias Leitgeb
-
+# This file contains a class for a physics informed GP regressor. 
+#----------------------------------------
 import GPy
 from jax import numpy as jnp
 from jax import jit, grad, vmap, jacfwd
@@ -16,7 +18,62 @@ jax.config.update('jax_platform_name', 'cpu')
 
 
 class PhysicsInformedGP_regressor():
-    """class for the GP"""
+    """
+    A class representing a Gaussian Process (GP) regressor with physics-informed properties.
+
+    Attributes:
+        _name_kernel (str): The name of the kernel used in the GP.
+        gram_matrix (callable): The function that computes the Gram matrix of the kernel.
+        k_uu (callable): The function that computes the kernel matrix between training inputs.
+        k_uf (callable): The function that computes the kernel matrix between training inputs and test inputs.
+        k_fu (callable): The function that computes the kernel matrix between test inputs and training inputs.
+        k_ff (callable): The function that computes the kernel matrix between test inputs.
+        timedependence (bool): Flag indicating whether the problem has time dependence.
+        params (dict): Dictionary of hyperparameters for the kernel.
+        MSE (dict): Dictionary to store the mean squared error for training and test data.
+        rel_l2_error (dict): Dictionary to store the relative L2 error for training and test data.
+        xlabel (str): The label for the x-axis in plots.
+        ylabel (str): The label for the y-axis in plots.
+        ARD (bool): Flag indicating whether Automatic Relevance Determination (ARD) is used.
+        jitter (float): Small value added to the diagonal of the kernel matrix for numerical stability.
+        D (int): The dimensionality of the problem.
+
+    Methods:
+        __init__(self, kernel: callable, timedependence: bool, params: list, Dimensions, ARD=True) -> None:
+            Initializes the PhysicsInformedGP_regressor object.
+        __str__(self) -> str:
+            Returns a string representation of the PhysicsInformedGP_regressor object.
+        set_name_kernel(self, name: str) -> None:
+            Sets the name of the kernel.
+        set_axis_labels(self, xlabel: str, ylabel: str) -> None:
+            Sets the axis labels for the plots.
+        set_training_data(self, filename: str, n_training_points, noise, seeds_training: list = [40, 14]) -> None:
+            Sets the training data and the raw data.
+        set_validation_data(self, n_validation_points) -> None:
+            Sets the validation set.
+        set_params(self, new_params: list) -> None:
+            Sets the hyperparameters of the kernel.
+        get_params(self) -> np.ndarray:
+            Returns the hyperparameters of the kernel.
+        log_marginal_likelohood(self, params) -> float:
+            Computes the log marginal likelihood of the GP.
+        log_marginal_likelihood_to_optimize(self) -> callable:
+            Returns the log marginal likelihood as a function of the hyperparameters.
+        grad_log_marginal_likelihood(self) -> callable:
+            Computes the gradient of the log marginal likelihood.
+        train(self, method: str, n_restarts: int, n_threads: int, opt_dictionary: dict) -> None:
+            Optimizes the hyperparameters of the kernel.
+        optimization_restarts_parallel_CG(self, n_restarts: int, n_threads: int, opt_dictionary: dict) -> dict:
+            Performs the optimization of the hyperparameters in parallel using the CG method.
+        optimization_restarts_parallel_TNC(self, n_restarts: int, n_threads: int, opt_dictionary: dict) -> dict:
+            Performs the optimization of the hyperparameters in parallel using the TNC method.
+        optimization_restarts_parallel_NM(self, n_restarts: int, n_threads: int, opt_dictionary: dict) -> dict:
+            Performs the optimization of the hyperparameters in parallel using the Nelder-Mead method.
+        optimization_restarts_parallel_LBFGSB(self, n_restarts: int, n_threads: int, opt_dictionary: dict) -> dict:
+            Performs the optimization of the hyperparameters in parallel using the L-BFGS-B method.
+    """
+class PhysicsInformedGP_regressor():
+    
     _name_kernel = ""
 
     def __init__(self, kernel: callable, timedependence: bool, params: list,Dimensions, ARD = True) -> None:
@@ -327,7 +384,7 @@ class PhysicsInformedGP_regressor():
         assert ground_truth.shape == predicted_solution.shape, "Please provide a valid ground truth and predicted solution"
         return np.linalg.norm(ground_truth-predicted_solution)/np.linalg.norm(ground_truth)
     
-    ##----------------------------- PLOT FUNCTIONS ---------------------------------##
+    ##----------------------------- PLOTING FUNCTIONS ---------------------------------##
     def use_GPy(self, X_star, save_path: str = None, heat_map: bool = False):
         """uses the GPy library to compute the GP"""
         if not self.timedependence:

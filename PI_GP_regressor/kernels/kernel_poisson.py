@@ -1,3 +1,7 @@
+#----------------------------------------
+# author: Tobias Leitgeb
+# This file contains the implementation of the kernel for the poisson equation laplace u = f. 
+#----------------------------------------
 import jax.numpy as jnp
 from jax import grad, jit, vmap
 

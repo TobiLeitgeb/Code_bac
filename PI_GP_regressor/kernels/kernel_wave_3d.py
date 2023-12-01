@@ -1,3 +1,7 @@
+#----------------------------------------
+# author: Tobias Leitgeb
+# This file contains the implementation of the kernel for the 2d time dependent wave equation d^2u/dt^2 - c^2 d^2u/dx^2 = f(x,t). 
+#----------------------------------------
 import jax.numpy as jnp
 from jax import grad, jit, vmap
 

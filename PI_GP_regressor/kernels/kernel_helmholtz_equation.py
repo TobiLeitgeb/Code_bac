@@ -1,3 +1,10 @@
+#----------------------------------------
+# author: Tobias Leitgeb
+# This file contains the implementation of the kernel for the helmholtz equation d^2u/dx^2 + d^2u/dy^2 + k^2 u = f.
+#The computation of the kernel is done with JAX. Once with automatic differentiation and once with the analytical derivatives. 
+# Could contain an errro. The example with a helmholtz equation did not work and was not used in the thesis.
+#----------------------------------------
+
 import jax.numpy as jnp
 from jax import grad, jit, vmap
 

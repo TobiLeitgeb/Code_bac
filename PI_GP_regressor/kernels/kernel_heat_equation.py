@@ -1,4 +1,7 @@
-# This file contains the functions to compute the gram matrix of the kernel.
+#----------------------------------------
+# author: Tobias Leitgeb
+# This file contains the implementation of the kernel for the heat equation dT/dt -alpha d^2T/dx^2 = f(x,t). The computation of the kernel is done with JAX. Once with automatic differentiation and once with the analytical derivatives. 
+#----------------------------------------
 
 from jax import numpy as jnp
 from jax import jit, grad, vmap
