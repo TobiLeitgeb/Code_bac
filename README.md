@@ -4,7 +4,7 @@ The kernel folder contains specific kernels for different ODEs. Before using the
 # A general way of using the class is presented here:
 
 
-
+```python
 kernel_list = [gram_Matrix, k_uu, k_uf, k_fu, k_ff]
 hyperparameters = ["l_x", "sigma_f"]  # list of the hyperparameters
 model = PhysicsInformedGP_regressor(kernel_list,timedependence=True, params = hyperparameters,Dimensions=2)  #initialize the model
