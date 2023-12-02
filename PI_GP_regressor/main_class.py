@@ -72,7 +72,6 @@ class PhysicsInformedGP_regressor():
         optimization_restarts_parallel_LBFGSB(self, n_restarts: int, n_threads: int, opt_dictionary: dict) -> dict:
             Performs the optimization of the hyperparameters in parallel using the L-BFGS-B method.
     """
-class PhysicsInformedGP_regressor():
     
     _name_kernel = ""
 
