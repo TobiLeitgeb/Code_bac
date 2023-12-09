@@ -168,8 +168,11 @@ class PhysicsInformedGP_regressor():
 
     def log_marginal_likelohood(self, params):
         """computes the log marginal likelihood of the GP"""
-        K = self.gram_matrix(self.X_u, self.X_f, params, self.noise)
+        #First compute the whole block-kernel matrix as defined in chap 3)
+        K = self.gram_matrix(self.X_u, self.X_f, params, self.noise) 
+        #cholesky decomposition with extra jitter for numerical stability
         L = jnp.linalg.cholesky(K + self.jitter * jnp.eye(len(K)))
+        #compute alpha as defined in chap 4.2)
         alpha = jnp.linalg.solve(L.T, jnp.linalg.solve(L, self.targets))
         mll = 1/2 * jnp.dot(self.targets.T, alpha) + 0.5*jnp.sum(
             jnp.log(jnp.diagonal(L))) + len(self.X_u)/2 * jnp.log(2*jnp.pi)
@@ -315,17 +318,19 @@ class PhysicsInformedGP_regressor():
     def predict_u(self, X_star):
         """calculates the mean and variance of the GP at the points X_star"""
         params = self.get_params()
-
+        #compute the kernel matrix
         K = self.gram_matrix(self.X_u, self.X_f, params, self.noise) 
+        #cholesky decomposition with extra jitter for numerical stability
         L = jnp.linalg.cholesky(K+ jnp.eye(len(K)) * self.jitter)
         
         q_1 = self.k_uu(X_star, self.X_u, params) 
         q_2 = self.k_uf(X_star, self.X_f, params)
         kappa = jnp.hstack((q_1, q_2))
-        #predictive mean
+        #calculate alpha as defined in chap 4.2)
         alpha = jnp.linalg.solve(L.T, jnp.linalg.solve(L, self.targets))
+        #calculate the predictive mean
         f_star = kappa@alpha
-        #predictive variance
+        #calculate predictive variance
         alpha_var = jnp.linalg.solve(L.T, jnp.linalg.solve(L, kappa.T))
         cov_f_star = self.k_uu(X_star, X_star, params) - kappa@alpha_var
         var = jnp.diag(cov_f_star)
@@ -334,17 +339,18 @@ class PhysicsInformedGP_regressor():
     def predict_f(self, X_star):
         """predicts the mean and variance of the GP at the points X_star"""
         params = self.get_params()
-
+        #compute the kernel matrix
         K = self.gram_matrix(self.X_u, self.X_f, params, self.noise)
+        #cholesky decomposition with extra jitter for numerical stability
         L = jnp.linalg.cholesky(K + jnp.eye(len(K)) * self.jitter)
         
         q_1 = self.k_fu(X_star, self.X_u, params)
         q_2 = self.k_ff(X_star, self.X_f, params) 
         kappa = jnp.hstack((q_1, q_2))
-        #predictive mean
+        #calculate alpha as defined in chap 4.2)
         alpha = jnp.linalg.solve(L.T, jnp.linalg.solve(L, self.targets))
         f_star = kappa@alpha
-        #predictive cov
+        #calculate predictive variance
         alpha_var = jnp.linalg.solve(L.T, jnp.linalg.solve(L, kappa.T))
         cov_f_star = self.k_ff(X_star, X_star, params) - kappa@alpha_var
         var = jnp.diag(cov_f_star)
@@ -352,7 +358,7 @@ class PhysicsInformedGP_regressor():
         return f_star, var
 
     def error(self):
-        """computes the mean squared error of the computed model"""
+        """computes the mean squared error and the relative L^2 error of the computed model"""
         assert self.validation_set is not None, "Please set the validation set first"
         if self.timedependence:
             x_star, t_star = self.raw_data[0].reshape(
