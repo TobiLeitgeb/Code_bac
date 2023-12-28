@@ -3,5 +3,6 @@
         "PI_GP_regressor"
     ],
     "python.testing.unittestEnabled": false,
-    "python.testing.pytestEnabled": true
+    "python.testing.pytestEnabled": true,
+    "julia.environmentPath": "/Users/tobileitgeb/Code/Code_bac"
 }
