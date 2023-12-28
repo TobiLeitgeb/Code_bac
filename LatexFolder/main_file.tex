@@ -73,11 +73,7 @@ then introduce the physics informed framework and the optimization process. In t
 
 \section{Fundamentals}
 \subsection{Gaussian Process} %~\cite{pml1Book}\cite{RasmussenCarlEdward}
-As defined in~\cite{RasmussenCarlEdward} a Gaussian Process is a collection of random variables for which every finite set of variables have a joint multivariate Gaussian distribution. For a Regression model we define a function
-$f(\bm{x}): \mathcal{X}\rightarrow \mathbb{R}$ with the input set $\{\bm{X}\}$
-= $\{\bm{x_n} \in \mathcal{X} \}_{n=1}^N$. We now let $f:
-    \mathcal{X}\rightarrow \mathbb{R}$ be our Gaussian Process. To fully define the $\mathcal{GP}$ we need to specify a mean function $m(\bm{x})$ and a covariance function or
-kernel $k(\bm{x}, \bm{x'}): \mathcal{X} \times \mathcal{X} \rightarrow
+As defined in~\cite{RasmussenCarlEdward} a Gaussian Process is a collection of random variables for which every finite set of variables have a joint multivariate Gaussian distribution. We can now define a function $f(\bm{x}): \mathcal{X}\rightarrow \mathbb{R}$ with the input set $\{\bm{X}\}$ = $\{\bm{x_n} \in \mathcal{X} \}_{n=1}^N$. We now let $f: \mathcal{X}\rightarrow \mathbb{R}$ be our Gaussian Process. Therefore, similar to \cite{RasmussenCarlEdward}, a random variable drawn from the $\mathcal{GP}$ is the value of the function $f(\bm{x})$. To fully define the $\mathcal{GP}$ we need to specify a mean function $m(\bm{x})$ and a covariance function or kernel $k(\bm{x}, \bm{x'}): \mathcal{X} \times \mathcal{X} \rightarrow
     \mathbb{R}$ for $f(\bm{x})$:
 \begin{equation}
     \begin{aligned}
@@ -85,36 +81,35 @@ kernel $k(\bm{x}, \bm{x'}): \mathcal{X} \times \mathcal{X} \rightarrow
         k(\bm{x},\bm{x'}) & = \mathbb{E}[(f(\bm{x})-m(\bm{x}))(f(\bm{x'})-m(\bm{x'}))]
     \end{aligned}
 \end{equation}
-In this work the mean function $m(\bm{x})$ of the $\mathcal{GP}$ is set to zero.\\
-So what we are left with for  $m(\bm{x})$ and $ k(\bm{x},\bm{x'})$ is:
+In this work the mean function $m(\bm{x})$ of the $\mathcal{GP}$ is set to zero, which results in the following expressions for $m(\bm{x})$ and $ k(\bm{x},\bm{x'})$:
 \begin{equation}
     \begin{aligned}
         m(\bm{x})         & = 0                               \\
         k(\bm{x},\bm{x'}) & = \mathbb{E}[f(\bm{x})f(\bm{x'})]
     \end{aligned}
 \end{equation}
-We can now write our Gaussian Process $f(\bm{x})$ as:
+Our $\mathcal{GP}$ is now fully defined by the choice of the kernel $k(\bm{x},\bm{x'})$. We can now write our Gaussian Process $f(\bm{x})$ as:
 \begin{equation}
     f(\bm{x})\thicksim \mathcal{G} \mathcal{P}(0,k(\bm{x},\bm{x'}))
 \end{equation}
-It is important to note that $ k(\bm{x},\bm{x'})$ has to be positive definite and symmetric in order to be a valid kernel function.
-Because of the definition of a $\mathcal{GP}$ we can now generate a joint Gaussian distribution for a finite set of points $\bm{X_*}$:
+It is important to note that $ k(\bm{x},\bm{x'})$ has to be positive semi definite and symmetric in order to be a valid kernel function. Because of the definition of a $\mathcal{GP}$ we can now generate a joint Gaussian distribution for a finite set of points $\bm{X_*}$, which follow a Gaussian distribution with gram matrix $\bm{K_*}$:
 \begin{equation}
     \label{eq:f_star_random_vector}
     p(\bm{f_*|\bm{X_*}}) = \mathcal{N}(\bm{f_*}|\bm{0},\bm{K_*})
 \end{equation}
-with ${[\bm{K}]}_{i,j} = k(\bm{x_{i*}},\bm{x_{j*}})$.
+The gram matrix is generally defined as ${[\bm{K}]}_{i,j} = k(\bm{x_{i*}},\bm{x_{j*}})$.
 
 \subsection{Regression}\label{sec:Regression}
-The goal of regression is given a training dataset $\mathcal{D} =
+The goal of regression is given a training data-set $\mathcal{D} =
     \{(\bm{x_i},y_i)|i = 1,\ldots,N\}$ we want to make predictions for new test
-points $\bm{x_*}$ which are not in the training set. There are several methods which can be used to tackle this kind of problem. For example the basic linear regression using least squares and specific basis functions or a neural network that does regression. In this work we make use of the Gaussian process which is a non-parametric model. We will start with a Gaussian Process prior and then use the rules for Gaussian multivariate distributions to define a posterior predictive distribution, which we can then use to make predictions for new test points.
-
-The general setup for regression is that we make observations/measurements $y$ of an underlying function $f(\bm{x})$ at points $\bm{x}$ which are corrupted by a zero mean Gaussian noise with variance $\sigma_n^2$:
-\begin{equation}
-    \bm{y} = \bm{f}(\bm{X}) + \mathcal{N}(0|\sigma_n^2 \bm{I})
-\end{equation}
-When we set the $\mathcal{GP}$ Prior onto the function $f$ we have to add the normally distributed noise. To get the prior for the observations $\bm{y}$ we simply need to change the covariance function to cov($\bm{y_p,y_q}$) = $k(\bm{x_p,x_q}) + \sigma_n^2\delta_{pq}$.\\
+points $\bm{x_*}$ which are not in the training set. There are several methods which can be used to tackle this kind of problem. For example the basic linear regression using least squares and specific basis functions or a neural network that does regression. In this work we make use of the Gaussian process introduced before, which is a non-parametric model and allows us to tackle a wide range of regression problems. We will start with a Gaussian Process prior and then use the rules for Gaussian multivariate distributions to define a posterior predictive distribution, which we can then use to make predictions for new test points. The model selection will be done with the marginal log likelihood, which we will also define later.\\
+\\
+The general setup for a regression task is that we have observations/measurements $y$ of an underlying function $f(\bm{x})$ at points $\bm{x}$ which are corrupted by a zero mean Gaussian noise with variance $\sigma_n^2$:
+\begin{align}
+    y = f(\bm{x}) + \epsilon \\
+    \epsilon \thicksim \mathcal{N}(0|\sigma_n^2) \nonumber
+\end{align}
+When we set the $\mathcal{GP}$ Prior onto the function $f$ we have to add the normally distributed noise. To get the prior for the observations $\bm{y}$ we simply need to change the covariance function to cov($y_p,y_q$) = $k(\bm{x_p,x_q}) + \sigma_n^2\delta_{pq}$.\\
 As described before in equation~\ref{eq:f_star_random_vector} we can generate a Gaussian random vector for new test data $\bm{X_*}$. Both $\bm{y}$ and $\bm{f_*}$ are now multivariate Gaussian distributions. We can therefore introduce the joint distribution of the observed data and the values of $f$ at the test points $\bm{X_*}$ as:
 \begin{equation}
     \label{eq:joint_f,X_*}
@@ -131,16 +126,16 @@ As described before in equation~\ref{eq:f_star_random_vector} we can generate a 
         \right)
     \end{aligned}
 \end{equation}
-From this joint Gaussian prior we can then calculate the predictive posterior distribution by applying the rules for conditioning multivariate Gaussian distributions. A good description for this conditioning can be found in~\cite{bishop} (chapter 2.3.1). The predictive distribution is then given by:
+The gram matrix is now a block matrix with 4 different blocks. The two diagonal blocks are the evaluation of the kernel for the training locations $\bm{X}$ and the test locations $\bm{X_*}$ respectively. They are basically the general gram matrix when looking at both distribution separately. The off-diagonal blocks are the so called cross-covariance terms \cite{garnett_2023}, which couple the two marginal distributions together. The formulation of the joint distribution will be discussed in more detail later. From this joint Gaussian distribution we can then calculate the predictive posterior distribution for the test points by applying the rules for conditioning multivariate joint Gaussian distributions. A good description for this conditioning can be found in~\cite{bishop} (chapter 2.3.1). The predictive distribution is then given by:
 \begin{equation}
     \begin{aligned}
-        \label{eq:general_kernel}
+        \label{eq:general_joint_gp}
         p(\bm{f_*}|\bm{X},\bm{y},\bm{X_*}) & = \mathcal{N}(\bm{f_*|\bm{\mu_*}},\bm{\Sigma_*})                                                           \\
         \bm{\mu_*}                         & =  K(\bm{X_*},\bm{X}){[K(\bm{X},\bm{X}) + \sigma_n^2 \bm{I}]}^{-1} \bm{y}                                  \\
         \bm{\Sigma_*}                      & = K(\bm{X_*},\bm{X_*}) - K(\bm{X_*},\bm{X}){[K(\bm{X},\bm{X}) + \sigma_n^2 \bm{I}]}^{-1}K(\bm{X},\bm{X_*})
     \end{aligned}
 \end{equation}
-We now have obtained the posterior predictive mean $\bm{\mu_*}$ and the posterior covariance $\sigma$ for the new test inputs $\bm{X_*}$.
+We now have obtained the posterior predictive distribution, with predictive mean $\bm{\mu_*}$ and posterior covariance $\bm{\Sigma_*}$ for the new test inputs $\bm{X_*}$. With these two parts we have formulated a regression model, which can make predictions at locations $\bm{x_*}$ and can provide a measure for the uncertainty of the prediction. The calculations are reduced to basic matrix and vector products, with the inversion of the gram matrix as a limiting operation. We can see, that one has to invert a matrix of the size $NxN$ with $N$ being the number of training points in $\bm{X}$. For increasing $N$ this inversion gets computationally intensive very quick and therefore limits the scalability of the $\mathcal{GP}$-Regression.
 
 \subsection{Kernels} \label{subsec: Kernels}
 In~\cite{RasmussenCarlEdward} a kernel is defined as a function
@@ -148,21 +143,23 @@ $k(\bm{x},\bm{x'})$, which maps two input pairs $\bm{x} \in \mathcal{X}$ and
 $\bm{x'} \in \mathcal{X'}$ into $\mathbb{R}$. To be a valid covariance function
 the kernel needs to satisfy two main conditions. First it needs to be symmetric
 so that $k(\bm{x,x'}) = k(\bm{x,x'})$ and second it needs to be positive
-semi-definite (PSD) The general covariance function used in this work is the
+semi-definite (PSD). The general covariance function used in this work is the
 squared exponential covariance function (SE) as defined
 in~\cite{RasmussenCarlEdward}:
 \begin{equation}
+    \label{eq:SE_kernel}
     k(\bm{x_p}, \bm{x_q}) = \sigma_f^2  \exp({-0.5{(\bm{x_p}-\bm{x_q} )}^\intercal M (\bm{x_p}- \bm{x_q})})
 \end{equation}
 with the variance hyperparameter $\sigma_f^2$ and the matrix $M = {\mathrm{diag}(\bm{l})}^{-2}$ containing the vector with the characteristic length scales $l_i$. The hyperparameters are collected in the vector $\bm{\theta} = (\bm{l},\sigma_f^2)$. \\
-For the one dimensional case the SE covariance function simply becomes:
+For a case with one dimensional inputs x, the SE covariance function simply becomes:
 \begin{equation}
     k(x_p, x_q) = \sigma_f^2  \exp\left({-\frac{0.5}{l^2} {(x_p-x_q)}^2}\right)
 \end{equation}
-For a two-dimensional case with time being the second dimension, two independent length scale parameters are used for the separate space and time domains $\bm{l} = (l_x,l_t)$. For this case, we can re-write equation~\ref{eq:general_kernel} the covariance function with $\bm{x_p} = {(x_p, t_p)}^\intercal$ and  $\bm{x_q} = {(x_q, t_q)}^\intercal$ as the product of two single SE covariance functions:
+For a two-dimensional case, with a time coordinate being the second dimension, two independent length scale parameters are used for the separate space and time domains $\bm{l} = (l_x,l_t)$. For this case, we can re-write equation~\ref{eq:SE_kernel} with $\bm{x_p} = {(x_p, t_p)}^\intercal$ and  $\bm{x_q} = {(x_q, t_q)}^\intercal$ as the product of two single SE covariance functions:
 \begin{equation}
     k(\bm{x_p}, \bm{x_q}) = \sigma_f^2  \exp\left({-\frac{0.5}{l_x^2} {(x_p-x_q)}^2}\right) \exp\left({-\frac{0.5}{l_t^2} {(t_p-t_q)}^2}\right)
 \end{equation}
+The incorporation of different length-scale parameters is also called automatic relevance determination (ARD). We can also formulate the SE kernel for more dimensions and rewrite it as a combination of single SE kernels for ever dimension respectively.\\
 There are many kernels one can choose from. A good overview over some kernel functions, as well as how they can be modified, can be found in~\cite{Duvenaud} as well as in~\cite{görtler2019a}. Later we will modify the SE kernels with linear operators, more specifically with differential operators. For this the SE kernel is a good choice, because it is infinitely differentiable with rather simple and smooth derivatives. This is important for the overall numerical stability when calculating the gradients of the modified kernel in the optimization process.\\ 
 \subsection{Marginal likelihood}
 
@@ -291,7 +288,7 @@ with $\bm{\kappa_u}$ and $\bm{\kappa_f}$ being:
         \bm{\kappa_f} = [k_{fu}(\bm{x_*},\bm{X_u})k_{ff}(\bm{x_*,\bm{X_f}})]
     \end{aligned}
 \end{equation}
-\new
+\newpage
 \section{Numerical implementation}
 In this section we will present the computational implementation in python of the kernel, the log marginal likelihood and of the predictive distribution. For greatly improving the computation time as well as the usage of automatic differentiation the jax library~\cite{jax2018github} was used. A general introduction can be found \href{https://jax.readthedocs.io/en/latest/notebooks/quickstart.html}{here}, as well as a specific introduction to kernel derivatives with jax \href{https://jejjohnson.github.io/research_notebook/content/notes/kernels/kernel_derivatives.html}{here}. Goal of this section is to give a short overview of the computational methods used for the implementation of the Gaussian process regression and the construction of the kernel.\\
 
@@ -311,8 +308,8 @@ For constructing and deriving the kernel as described in equations \ref{eq:kff} 
  with $k_{uu} = \sigma_f^2  \exp\left({-\frac{0.5}{l^2} {(t-t')}^2}\right)$ being the general SE kernel introduced in section \ref{subsec: Kernels}. Note that this can be done with any other differentiable kernel as well. The analytical computation is shown in~\ref{code:kernel_analytical}.\\
 \lstinputlisting[firstline=97,lastline=113,caption={Analytical computation of the derivatives}, label={code:kernel_analytical}, breaklines = False]{../PI_GP_regressor/kernels/kernel_oscillator_3variables.py}
 For the SE kernel the computations are rather simple and can easily be done analytically. However, if one chooses a complex kernel, the analytical computation can become rather complicated and time-consuming. Therefore, we also implemented the kernel derivatives with help of autograd. In particular, we used the jax library for the automatic differentiation. The code for the autograd computation of the derivatives is shown in \ref{code:kernel_autograds}. The big advantage of this approach is that it is sufficient to do the calculations as done in~\ref{eq:kernel_analytical} and implement it as shown in the code. With this the choice of the general kernel $k_{uu}$ is only restricted within the jax library. This means that the kernel can be any function that is traceable by the jax autograd and jit functions. 
-\lstinputlisting[firstline=17,lastline=33,caption={Computation of the derivatives using autograd}, label={code:kernel_autograds}, breaklines = False]{../PI_GP_regressor/kernels/kernel_oscillator_3variables.py}
-When comparing the accuracy and the speed of the two approaches there was no notable difference. In particular, the two functions were nearly identical in terms of computation time. For the majority of the examples we used the analytical approach, because it is more transparent and easier to verify.
+\lstinputlisting[firstline=22,lastline=37,caption={Computation of the derivatives using autograd}, label={code:kernel_autograds}, breaklines = False]{../PI_GP_regressor/kernels/kernel_oscillator_3variables.py}
+When comparing the accuracy and the speed of the two approaches there was no notable difference. In particular, the two functions were nearly identical in terms of computation time. For the majority of the examples we used the analytical approach, because it is more transparent and easier to verify if the implementation is correct.
 
 
 \subsection{Log marginal likelihood and predictive distribution}
@@ -324,13 +321,22 @@ The Cholesky decomposition of a positive definite, symmetric matrix $\bm{A}$ is 
 with $\bm{L}$ being a lower triangular matrix \cite{RasmussenCarlEdward}. With this the general term involving the inversion of $\bm{K}$ can be written as:
 \begin{equation}
     \label{eq:inv_K}
-    \bm{u}^\intercal \bm{K}^{-1}\bm{v} = \bm{u}^\intercal (\bm{LL^{\intercal}})^{-1} \bm{v} = \bm{u}^\intercal \bm{L^{\intercal} \backslash (L\backslash v)}
+    \bm{u}^\intercal \bm{K}^{-1}\bm{v} = \bm{u}^\intercal (\bm{LL^{\intercal}})^{-1} \bm{v} = \bm{u}^\intercal \bm{L^{\intercal} \backslash (L\backslash \bm{v})} = \bm{u}^\intercal \bm{\alpha}
 \end{equation}
-shown with two general vectors $\bm{u}$ and $\bm{v}$ and $\backslash$ as the left matrix divide operator. For this we used that we can rewrite $(\bm{LL^{\intercal}})^{-1} \bm{v}$ as a solution $\bm{x}$ of a linear system of the form $\bm{LL^{\intercal}} \bm{x}=\bm{v}$, which we now solve for $\bm{x}$. This is a very stable and efficient way of calculating the equation. In \cite{RasmussenCarlEdward}, this specific numerical implementation utilizing a Cholesky decomposition is also used. The implementation of the log marginal likelihood is shown in~\ref{code:mll}.\\
+shown with two general vectors $\bm{u}$ and $\bm{v}$ and $\backslash$ as the left matrix divide operator. For this we used that we can rewrite $(\bm{LL^{\intercal}})^{-1} \bm{v}$ as a solution $\bm{\alpha}$ of a linear system of the form $\bm{LL^{\intercal}} \bm{\alpha}=\bm{v}$, which we now solve for $\bm{\alpha}$.
+% \begin{align}
+%     \bm{u^{\intercal}} (\bm{LL^{\intercal}})^{-1} \bm{v}\\
+%     \alpha = (\bm{LL^{\intercal}})^{-1} \bm{v}\\
+% \end{align}
+% We can now rewrite this as:
+% \begin{align}
+%     \bm{y} = \bm{LL^{\intercal}} \rightarrow \bm{\alpha} = \bm{L^{\intercal} /(L / y)}
+% \end{align}
+This is a very stable and efficient way of calculating the equation. In \cite{RasmussenCarlEdward}, this specific numerical implementation utilizing a Cholesky decomposition is also used. The implementation of the log marginal likelihood is shown in~\ref{code:mll}.\\
 \lstinputlisting[firstline=113,lastline=121,caption={Log marginal likelihood}, label={code:mll}]{../PI_GP_regressor/main_class.py}
 
 For the predictive distribution we again rewrote equation \ref{eq:predictive_mean_cov} as described in equation \ref{eq:inv_K}. The implementation of the predictive distribution is shown in~\ref{code:predictive_distribution}.\\
-\lstinputlisting[firstline=259,lastline=275,caption={Predictive distribution}, label={code:predictive_distribution}]{../PI_GP_regressor/main_class.py}
+\lstinputlisting[firstline=315,lastline=351,caption={Predictive distribution}, label={code:predictive_distribution}]{../PI_GP_regressor/main_class.py}
 \newpage
 \section{Results}
 In the following we will call the physics informed model, the
